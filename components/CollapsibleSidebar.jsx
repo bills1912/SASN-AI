@@ -372,15 +372,17 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
 
   return (
     <>
-      {/* Mobile Menu Button */}
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={() => setIsMobileOpen(true)}
-        className="fixed top-4 left-4 z-[60] lg:hidden bg-slate-900/90 backdrop-blur text-white hover:bg-slate-800 shadow-lg"
-      >
-        <Menu className="w-5 h-5" />
-      </Button>
+      {/* Mobile Menu Button - Only show when sidebar is closed */}
+      {!isMobileOpen && (
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => setIsMobileOpen(true)}
+          className="fixed top-4 left-4 z-[60] lg:hidden bg-slate-900/90 backdrop-blur text-white hover:bg-slate-800 shadow-lg"
+        >
+          <Menu className="w-5 h-5" />
+        </Button>
+      )}
 
       {/* Mobile Sidebar Overlay */}
       {isMobileOpen && (
