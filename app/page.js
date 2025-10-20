@@ -186,10 +186,20 @@ export default function App() {
     localStorage.removeItem('token');
     if (!rememberMe) {
       localStorage.removeItem('rememberMe');
+      localStorage.removeItem('savedEmail');
+      localStorage.removeItem('savedPassword');
     }
     setIsAuthenticated(false);
     setUser(null);
     setCurrentView('input-data');
+    // Reset form
+    if (!rememberMe) {
+      setUsername('');
+      setPassword('');
+      setRememberMe(false);
+    }
+    // Always generate new captcha on logout
+    generateCaptcha();
     toast({
       title: 'Logout Berhasil',
       description: 'Anda telah keluar dari sistem',
