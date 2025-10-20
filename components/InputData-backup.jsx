@@ -2,17 +2,20 @@
 
 import { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
-import { Button } from '@/components/ui/button'  ;
+import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
 import { Upload, FileText, Link as LinkIcon, Loader2, Target, Code2, TrendingUp } from 'lucide-react';
 
-export default function InputDataNew({ user }) {
+export default function InputData({ user }) {
+  const [documentContent, setDocumentContent] = useState('');
+  const [portfolioUrl, setPortfolioUrl] = useState('');
+  const [selectedNIP, setSelectedNIP] = useState('');
   const [profiles, setProfiles] = useState([]);
-  const [selectedProfile, setSelectedProfile] = useState(null);
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
 
@@ -33,7 +36,7 @@ export default function InputDataNew({ user }) {
         const data = await response.json();
         setProfiles(data.profiles);
         if (data.profiles.length > 0) {
-          setSelectedProfile(data.profiles[0]);
+          setSelectedNIP(data.profiles[0].nip);
         }
       }
     } catch (error) {
@@ -42,10 +45,10 @@ export default function InputDataNew({ user }) {
   };
 
   const generateTalentMapping = async () => {
-    if (!selectedProfile) {
+    if (!selectedNIP) {
       toast({
         title: 'Error',
-        description: 'Pilih pegawai terlebih dahulu',
+        description: 'Pilih ASN terlebih dahulu',
         variant: 'destructive'
       });
       return;
@@ -60,7 +63,7 @@ export default function InputDataNew({ user }) {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ nip: selectedProfile.nip })
+        body: JSON.stringify({ nip: selectedNIP })
       });
 
       if (response.ok) {
@@ -83,10 +86,10 @@ export default function InputDataNew({ user }) {
   };
 
   const generateSkillAnalysis = async () => {
-    if (!selectedProfile) {
+    if (!selectedNIP) {
       toast({
         title: 'Error',
-        description: 'Pilih pegawai terlebih dahulu',
+        description: 'Pilih ASN terlebih dahulu',
         variant: 'destructive'
       });
       return;
@@ -101,7 +104,7 @@ export default function InputDataNew({ user }) {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ nip: selectedProfile.nip })
+        body: JSON.stringify({ nip: selectedNIP })
       });
 
       if (response.ok) {
@@ -124,10 +127,10 @@ export default function InputDataNew({ user }) {
   };
 
   const generatePerformanceAnalysis = async () => {
-    if (!selectedProfile) {
+    if (!selectedNIP) {
       toast({
         title: 'Error',
-        description: 'Pilih pegawai terlebih dahulu',
+        description: 'Pilih ASN terlebih dahulu',
         variant: 'destructive'
       });
       return;
@@ -142,7 +145,7 @@ export default function InputDataNew({ user }) {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ nip: selectedProfile.nip })
+        body: JSON.stringify({ nip: selectedNIP })
       });
 
       if (response.ok) {
@@ -165,92 +168,58 @@ export default function InputDataNew({ user }) {
   };
 
   return (
-    <div className="max-w-7xl mx-auto space-y-6 px-4 md:px-6">
+    <div className="max-w-7xl mx-auto space-y-6">
       <div>
-        <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-2">Input Data & Analisis ASN</h1>
-        <p className="text-sm md:text-base text-muted-foreground">
-          Pilih pegawai dari daftar dan generate analisis talenta atau kinerja
+        <h1 className="text-3xl font-bold text-foreground mb-2">Input Data & Analisis ASN</h1>
+        <p className="text-muted-foreground">
+          Pilih ASN dan generate analisis talenta atau kinerja. Hasil analisis dapat dilihat di menu masing-masing.
         </p>
       </div>
 
-      {/* Select Pegawai */}
-      <Card className="p-4 md:p-6">
-        <div className="space-y-4">
+      {/* Select ASN */}
+      <Card className="p-6">
+        <div className="flex items-center justify-between">
           <div>
-            <Label className="text-base font-semibold">Pilih Pegawai untuk Analisis</Label>
-            <p className="text-sm text-muted-foreground mt-1 mb-3">
-              Data pegawai diambil dari API Instansi yang terintegrasi
+            <Label>Pilih ASN untuk Analisis</Label>
+            <p className="text-sm text-muted-foreground mt-1">
+              Pilih pegawai yang akan dianalisis
             </p>
           </div>
-          
-          <Select 
-            value={selectedProfile?.nip} 
-            onValueChange={(nip) => {
-              const profile = profiles.find(p => p.nip === nip);
-              setSelectedProfile(profile);
-            }}
-          >
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Pilih Pegawai" />
+          <Select value={selectedNIP} onValueChange={setSelectedNIP}>
+            <SelectTrigger className="w-[350px]">
+              <SelectValue placeholder="Pilih ASN" />
             </SelectTrigger>
             <SelectContent>
               {profiles.map(profile => (
                 <SelectItem key={profile.nip} value={profile.nip}>
-                  <div className="flex flex-col">
-                    <span className="font-medium">{profile.name}</span>
-                    <span className="text-xs text-muted-foreground">{profile.position} - {profile.agency}</span>
-                  </div>
+                  {profile.name} - {profile.position}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
-
-          {selectedProfile && (
-            <Card className="p-4 bg-muted/50 border-muted">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
-                <div>
-                  <p className="text-muted-foreground">NIP</p>
-                  <p className="font-medium">{selectedProfile.nip}</p>
-                </div>
-                <div>
-                  <p className="text-muted-foreground">Jabatan</p>
-                  <p className="font-medium">{selectedProfile.position}</p>
-                </div>
-                <div>
-                  <p className="text-muted-foreground">Instansi</p>
-                  <p className="font-medium">{selectedProfile.agency}</p>
-                </div>
-                <div>
-                  <p className="text-muted-foreground">Grade</p>
-                  <p className="font-medium">{selectedProfile.grade}</p>
-                </div>
-              </div>
-            </Card>
-          )}
         </div>
       </Card>
 
       {/* Analysis Actions */}
-      <div className="grid md:grid-cols-3 gap-4 md:gap-6">
+      <div className="grid md:grid-cols-3 gap-6">
         {/* Talent Mapping */}
-        <Card className="p-4 md:p-6">
+        <Card className="p-6">
           <div className="flex items-center space-x-3 mb-4">
-            <div className="w-10 h-10 md:w-12 md:h-12 rounded-lg bg-blue-500/10 flex items-center justify-center flex-shrink-0">
-              <Target className="w-5 h-5 md:w-6 md:h-6 text-blue-500" />
+            <div className="w-12 h-12 rounded-lg bg-blue-500/10 flex items-center justify-center">
+              <Target className="w-6 h-6 text-blue-500" />
             </div>
             <div>
-              <h3 className="text-base md:text-lg font-semibold text-foreground">Pemetaan Talenta</h3>
+              <h3 className="font-semibold text-foreground">Pemetaan Talenta</h3>
               <p className="text-xs text-muted-foreground">9-Box Grid Analysis</p>
             </div>
           </div>
-          <p className="text-xs md:text-sm text-muted-foreground mb-4">
-            Generate analisis pemetaan talenta dengan 9-box grid matrix
+          <p className="text-sm text-muted-foreground mb-4">
+            Generate analisis pemetaan talenta dengan 9-box grid matrix, mencakup performance vs potential analysis.
           </p>
           <Button
             onClick={generateTalentMapping}
-            disabled={loading || !selectedProfile}
+            disabled={loading || !selectedNIP}
             className="w-full"
-            size="sm"
           >
             {loading ? (
               <>
@@ -260,35 +229,34 @@ export default function InputDataNew({ user }) {
             ) : (
               <>
                 <Target className="w-4 h-4 mr-2" />
-                Generate Pemetaan
+                Generate Pemetaan Talenta
               </>
             )}
           </Button>
           <p className="text-xs text-muted-foreground mt-3 text-center">
-            Hasil: <span className="font-medium text-blue-500">Manajemen Talenta</span>
+            Hasil di: <span className="font-medium text-blue-500">Manajemen Talenta → Pemetaan Talenta</span>
           </p>
         </Card>
 
         {/* Skill Analysis */}
-        <Card className="p-4 md:p-6">
+        <Card className="p-6">
           <div className="flex items-center space-x-3 mb-4">
-            <div className="w-10 h-10 md:w-12 md:h-12 rounded-lg bg-purple-500/10 flex items-center justify-center flex-shrink-0">
-              <Code2 className="w-5 h-5 md:w-6 md:h-6 text-purple-500" />
+            <div className="w-12 h-12 rounded-lg bg-purple-500/10 flex items-center justify-center">
+              <Code2 className="w-6 h-6 text-purple-500" />
             </div>
             <div>
-              <h3 className="text-base md:text-lg font-semibold text-foreground">Analisis Skill</h3>
+              <h3 className="font-semibold text-foreground">Analisis Skill</h3>
               <p className="text-xs text-muted-foreground">Deep Skill Assessment</p>
             </div>
           </div>
-          <p className="text-xs md:text-sm text-muted-foreground mb-4">
-            Analisis mendalam technical & soft skills, identifikasi gaps
+          <p className="text-sm text-muted-foreground mb-4">
+            Generate analisis mendalam terhadap technical & soft skills, identifikasi skill gaps dan emerging skills.
           </p>
           <Button
             onClick={generateSkillAnalysis}
-            disabled={loading || !selectedProfile}
+            disabled={loading || !selectedNIP}
             className="w-full"
             variant="outline"
-            size="sm"
           >
             {loading ? (
               <>
@@ -298,35 +266,34 @@ export default function InputDataNew({ user }) {
             ) : (
               <>
                 <Code2 className="w-4 h-4 mr-2" />
-                Generate Analisis
+                Generate Analisis Skill
               </>
             )}
           </Button>
           <p className="text-xs text-muted-foreground mt-3 text-center">
-            Hasil: <span className="font-medium text-purple-500">Analisis Skill</span>
+            Hasil di: <span className="font-medium text-purple-500">Manajemen Talenta → Analisis Skill</span>
           </p>
         </Card>
 
         {/* Performance Analysis */}
-        <Card className="p-4 md:p-6">
+        <Card className="p-6">
           <div className="flex items-center space-x-3 mb-4">
-            <div className="w-10 h-10 md:w-12 md:h-12 rounded-lg bg-cyan-500/10 flex items-center justify-center flex-shrink-0">
-              <TrendingUp className="w-5 h-5 md:w-6 md:h-6 text-cyan-500" />
+            <div className="w-12 h-12 rounded-lg bg-cyan-500/10 flex items-center justify-center">
+              <TrendingUp className="w-6 h-6 text-cyan-500" />
             </div>
             <div>
-              <h3 className="text-base md:text-lg font-semibold text-foreground">Analisis Kinerja</h3>
+              <h3 className="font-semibold text-foreground">Analisis Kinerja</h3>
               <p className="text-xs text-muted-foreground">Performance Assessment</p>
             </div>
           </div>
-          <p className="text-xs md:text-sm text-muted-foreground mb-4">
-            Analisis kinerja komprehensif dengan quadrant classification
+          <p className="text-sm text-muted-foreground mb-4">
+            Generate analisis kinerja komprehensif dengan quadrant classification dan development recommendations.
           </p>
           <Button
             onClick={generatePerformanceAnalysis}
-            disabled={loading || !selectedProfile}
+            disabled={loading || !selectedNIP}
             className="w-full"
             variant="outline"
-            size="sm"
           >
             {loading ? (
               <>
@@ -336,33 +303,39 @@ export default function InputDataNew({ user }) {
             ) : (
               <>
                 <TrendingUp className="w-4 h-4 mr-2" />
-                Generate Analisis
+                Generate Analisis Kinerja
               </>
             )}
           </Button>
           <p className="text-xs text-muted-foreground mt-3 text-center">
-            Hasil: <span className="font-medium text-cyan-500">Penilaian Kinerja</span>
+            Hasil di: <span className="font-medium text-cyan-500">Penilaian Kinerja</span>
           </p>
         </Card>
       </div>
 
       {/* Info Card */}
-      <Card className="p-4 md:p-6 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border-blue-500/20">
+      <Card className="p-6 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border-blue-500/20">
         <div className="flex items-start space-x-3">
           <div className="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center flex-shrink-0 mt-1">
             <svg className="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
-          <div className="flex-1">
-            <h3 className="font-semibold text-foreground mb-2 text-sm md:text-base">Tentang Analisis AI</h3>
-            <p className="text-xs md:text-sm text-muted-foreground mb-3">
-              Sistem menggunakan AI (GPT-4o) untuk analisis mendalam. Data diambil dari API Instansi yang terintegrasi.
+          <div>
+            <h3 className="font-semibold text-foreground mb-2">Tentang Analisis AI</h3>
+            <p className="text-sm text-muted-foreground mb-3">
+              Sistem ini menggunakan AI (GPT-4o) untuk menganalisis data ASN secara mendalam. Setiap analisis akan:
             </p>
-            <div className="mt-3 p-3 bg-background/50 rounded-lg border border-border">
+            <ul className="text-sm text-muted-foreground space-y-1 ml-4">
+              <li>• Mengekstrak dan menganalisis kompetensi, skill, dan prestasi</li>
+              <li>• Memberikan penilaian objektif berdasarkan data komprehensif</li>
+              <li>• Menghasilkan rekomendasi pengembangan yang actionable</li>
+              <li>• Menyimpan hasil untuk dapat dilihat di menu terkait</li>
+            </ul>
+            <div className="mt-4 p-3 bg-background/50 rounded-lg border border-border">
               <p className="text-xs font-medium text-foreground mb-1">Workflow:</p>
               <p className="text-xs text-muted-foreground">
-                1. Pilih Pegawai → 2. Generate Analisis → 3. Lihat hasil di menu terkait
+                1. Pilih ASN → 2. Generate Analisis → 3. Lihat hasil di menu Manajemen Talenta atau Penilaian Kinerja
               </p>
             </div>
           </div>
