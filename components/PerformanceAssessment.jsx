@@ -27,45 +27,6 @@ export default function PerformanceAssessment({ user, currentView, selectedProfi
     }
   }, [globalSelectedProfile, currentView]);
 
-  const loadProfiles = async () => {
-    try {
-      const token = localStorage.getItem('token');
-      const response = await fetch('/api/talent/profiles', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setProfiles(data.profiles);
-        if (data.profiles.length > 0) {
-          setSelectedNIP(data.profiles[0].nip);
-        }
-      }
-    } catch (error) {
-      console.error('Error loading profiles:', error);
-    }
-  };
-
-  const loadProfileData = async (nip) => {
-    try {
-      const token = localStorage.getItem('token');
-      const response = await fetch(`/api/talent/profile/${nip}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setSelectedProfile(data.profile);
-      }
-    } catch (error) {
-      console.error('Error loading profile:', error);
-    }
-  };
-
   const loadNews = async () => {
     try {
       const token = localStorage.getItem('token');
