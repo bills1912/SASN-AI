@@ -46,6 +46,8 @@ export default function PerformanceAssessment({ user, currentView, selectedProfi
   };
 
   const loadAnalysisData = async (nip) => {
+    if (!nip) return;
+    
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
