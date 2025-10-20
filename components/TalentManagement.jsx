@@ -7,26 +7,21 @@ import { useToast } from '@/hooks/use-toast';
 import { TrendingUp, Award, Target, Code2, Loader2, AlertCircle } from 'lucide-react';
 import ReactECharts from 'echarts-for-react';
 
-export default function TalentManagement({ user, currentView }) {
-  const [profiles, setProfiles] = useState([]);
-  const [selectedNIP, setSelectedNIP] = useState('');
-  const [selectedProfile, setSelectedProfile] = useState(null);
+export default function TalentManagement({ user, currentView, selectedProfile: globalSelectedProfile }) {
+  const [selectedProfile, setSelectedProfile] = useState(globalSelectedProfile);
   const [talentMapping, setTalentMapping] = useState(null);
   const [skillAnalysis, setSkillAnalysis] = useState(null);
   const [loading, setLoading] = useState(false);
   const [hasGeneratedData, setHasGeneratedData] = useState(false);
   const { toast } = useToast();
 
+  // Sync with global selected profile
   useEffect(() => {
-    loadProfiles();
-  }, []);
-
-  useEffect(() => {
-    if (selectedNIP) {
-      loadProfile(selectedNIP);
-      loadAnalysisData(selectedNIP);
+    if (globalSelectedProfile) {
+      setSelectedProfile(globalSelectedProfile);
+      loadAnalysisData(globalSelectedProfile.nip);
     }
-  }, [selectedNIP, currentView]);
+  }, [globalSelectedProfile, currentView]);
 
   const loadProfiles = async () => {
     try {
