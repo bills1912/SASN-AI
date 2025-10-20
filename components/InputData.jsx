@@ -255,6 +255,7 @@ export default function InputDataNew({ user, selectedProfile: globalSelectedProf
               onValueChange={(nip) => {
                 const profile = profiles.find(p => p.nip === nip);
                 setSelectedProfile(profile);
+                setGlobalSelectedProfile?.(profile);
               }}
             >
               <SelectTrigger className="w-full">
