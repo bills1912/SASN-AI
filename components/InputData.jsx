@@ -10,9 +10,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useToast } from '@/hooks/use-toast';
 import { Upload, FileText, Link as LinkIcon, Loader2, Target, Code2, TrendingUp } from 'lucide-react';
 
-export default function InputDataNew({ user }) {
+export default function InputDataNew({ user, selectedProfile: globalSelectedProfile, setSelectedProfile: setGlobalSelectedProfile }) {
   const [profiles, setProfiles] = useState([]);
-  const [selectedProfile, setSelectedProfile] = useState(null);
+  const [selectedProfile, setSelectedProfile] = useState(globalSelectedProfile);
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
   
@@ -23,6 +23,13 @@ export default function InputDataNew({ user }) {
   useEffect(() => {
     loadProfiles();
   }, []);
+
+  // Sync with global selected profile
+  useEffect(() => {
+    if (globalSelectedProfile) {
+      setSelectedProfile(globalSelectedProfile);
+    }
+  }, [globalSelectedProfile]);
 
   const loadProfiles = async () => {
     try {
