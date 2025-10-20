@@ -597,9 +597,9 @@ export default function App() {
         />
 
         {/* Main Content with proper boundaries */}
-        <div className="flex-1 overflow-auto lg:ml-0">
-          {/* Content container with proper spacing from sidebar */}
-          <div className="p-4 md:p-6">
+        <div className="flex-1 overflow-auto lg:ml-0 w-full">
+          {/* Content container with proper spacing from sidebar and mobile menu button */}
+          <div className="p-4 md:p-6 pt-16 lg:pt-6">
             {currentView === 'input-data' && <InputData user={user} />}
             {(currentView === 'talent-management' || currentView.startsWith('talent-') || currentView.startsWith('analysis-') || currentView.startsWith('job-') || currentView.startsWith('skill-') || currentView.startsWith('development-')) && (
               <TalentManagement user={user} currentView={currentView} />
