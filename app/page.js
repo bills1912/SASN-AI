@@ -227,14 +227,20 @@ export default function App() {
     });
   };
 
-  const toggleTheme = () => {
-    const newTheme = theme === 'dark' ? 'light' : 'dark';
+  const toggleTheme = (newTheme) => {
     setTheme(newTheme);
     localStorage.setItem('theme', newTheme);
-    document.documentElement.classList.toggle('dark', newTheme === 'dark');
+    applyTheme(newTheme);
+    
+    const themeNames = {
+      'light': 'Terang',
+      'dark': 'Gelap', 
+      'system': 'Sistem'
+    };
+    
     toast({
       title: 'Tema Diubah',
-      description: `Tema ${newTheme === 'dark' ? 'gelap' : 'terang'} diaktifkan`,
+      description: `Tema ${themeNames[newTheme]} diaktifkan`,
     });
   };
 
