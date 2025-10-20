@@ -264,9 +264,9 @@ export default function InputDataNew({ user, selectedProfile: globalSelectedProf
               <SelectContent className="max-w-[calc(100vw-2rem)]">
                 {profiles.map(profile => (
                   <SelectItem key={profile.nip} value={profile.nip}>
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between w-full">
+                    <div className="flex items-center w-full">
                       <span className="font-medium truncate">{profile.name}</span>
-                      <span className="text-xs text-muted-foreground">{profile.position}</span>
+                      <span className="hidden md:inline text-xs text-muted-foreground ml-auto pl-3">{profile.position}</span>
                     </div>
                   </SelectItem>
                 ))}
