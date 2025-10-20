@@ -27,7 +27,8 @@ export default function App() {
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [resetEmail, setResetEmail] = useState('');
   const [currentView, setCurrentView] = useState('input-data');
-  const [theme, setTheme] = useState('dark');
+  const [theme, setTheme] = useState('system'); // default to system
+  const [selectedProfile, setSelectedProfile] = useState(null); // Global selected profile
   const { toast } = useToast();
 
   // Generate captcha
