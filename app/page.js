@@ -89,6 +89,18 @@ export default function App() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    
+    // Validate captcha
+    if (captchaInput !== captchaText) {
+      toast({
+        title: 'Captcha Salah',
+        description: 'Silakan masukkan captcha dengan benar',
+        variant: 'destructive'
+      });
+      generateCaptcha();
+      return;
+    }
+    
     setLoginLoading(true);
 
     try {
@@ -104,6 +116,7 @@ export default function App() {
 
       if (response.ok) {
         localStorage.setItem('token', data.token);
+        localStorage.setItem('rememberMe', rememberMe.toString());
         setUser(data.user);
         setIsAuthenticated(true);
         toast({
@@ -116,6 +129,7 @@ export default function App() {
           description: data.error || 'Username atau password salah',
           variant: 'destructive'
         });
+        generateCaptcha();
       }
     } catch (error) {
       toast({
@@ -123,9 +137,23 @@ export default function App() {
         description: 'Terjadi kesalahan saat login',
         variant: 'destructive'
       });
+      generateCaptcha();
     } finally {
       setLoginLoading(false);
     }
+  };
+
+  const handleForgotPassword = async (e) => {
+    e.preventDefault();
+    
+    // Simulate password reset
+    toast({
+      title: 'Email Terkirim',
+      description: `Link reset password telah dikirim ke ${resetEmail}`,
+    });
+    
+    setShowForgotPassword(false);
+    setResetEmail('');
   };
 
   const handleLogout = () => {
