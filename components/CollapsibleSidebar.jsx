@@ -121,7 +121,13 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
           <div key={item.id}>
             {item.section === 'main' && (
               <button
-                onClick={() => setCurrentView(item.id)}
+                onClick={() => {
+                  setCurrentView(item.id);
+                  // Auto close mobile sidebar
+                  if (isMobile) {
+                    setIsMobileOpen(false);
+                  }
+                }}
                 title={isCollapsed ? item.label : ''}
                 className={cn(
                   "w-full flex items-center transition-colors",
