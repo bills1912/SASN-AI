@@ -52,8 +52,12 @@ export default function InputDataNew({ user }) {
     }
 
     setLoading(true);
+    console.log('Generating talent mapping for NIP:', selectedProfile.nip);
+    
     try {
       const token = localStorage.getItem('token');
+      console.log('Token:', token ? 'exists' : 'missing');
+      
       const response = await fetch('/api/talent/talent-mapping', {
         method: 'POST',
         headers: {
@@ -63,15 +67,21 @@ export default function InputDataNew({ user }) {
         body: JSON.stringify({ nip: selectedProfile.nip })
       });
 
+      console.log('Response status:', response.status);
+      const data = await response.json();
+      console.log('Response data:', data);
+
       if (response.ok) {
         toast({
-          title: 'Pemetaan Talenta Berhasil',
+          title: 'Pemetaan Talenta Berhasil! ✓',
           description: 'Hasil dapat dilihat di menu Manajemen Talenta → Pemetaan Talenta',
+          duration: 5000,
         });
       } else {
-        throw new Error('Gagal generate talent mapping');
+        throw new Error(data.error || 'Gagal generate talent mapping');
       }
     } catch (error) {
+      console.error('Error generating talent mapping:', error);
       toast({
         title: 'Error',
         description: error.message,
@@ -93,6 +103,8 @@ export default function InputDataNew({ user }) {
     }
 
     setLoading(true);
+    console.log('Generating skill analysis for NIP:', selectedProfile.nip);
+    
     try {
       const token = localStorage.getItem('token');
       const response = await fetch('/api/talent/skill-analysis', {
@@ -104,15 +116,20 @@ export default function InputDataNew({ user }) {
         body: JSON.stringify({ nip: selectedProfile.nip })
       });
 
+      console.log('Skill analysis response status:', response.status);
+      const data = await response.json();
+
       if (response.ok) {
         toast({
-          title: 'Analisis Skill Berhasil',
+          title: 'Analisis Skill Berhasil! ✓',
           description: 'Hasil dapat dilihat di menu Manajemen Talenta → Analisis Skill',
+          duration: 5000,
         });
       } else {
-        throw new Error('Gagal generate skill analysis');
+        throw new Error(data.error || 'Gagal generate skill analysis');
       }
     } catch (error) {
+      console.error('Error generating skill analysis:', error);
       toast({
         title: 'Error',
         description: error.message,
@@ -134,6 +151,8 @@ export default function InputDataNew({ user }) {
     }
 
     setLoading(true);
+    console.log('Generating performance analysis for NIP:', selectedProfile.nip);
+    
     try {
       const token = localStorage.getItem('token');
       const response = await fetch('/api/performance/analyze', {
@@ -145,15 +164,20 @@ export default function InputDataNew({ user }) {
         body: JSON.stringify({ nip: selectedProfile.nip })
       });
 
+      console.log('Performance analysis response status:', response.status);
+      const data = await response.json();
+
       if (response.ok) {
         toast({
-          title: 'Analisis Kinerja Berhasil',
+          title: 'Analisis Kinerja Berhasil! ✓',
           description: 'Hasil dapat dilihat di menu Penilaian Kinerja',
+          duration: 5000,
         });
       } else {
-        throw new Error('Gagal generate performance analysis');
+        throw new Error(data.error || 'Gagal generate performance analysis');
       }
     } catch (error) {
+      console.error('Error generating performance analysis:', error);
       toast({
         title: 'Error',
         description: error.message,
