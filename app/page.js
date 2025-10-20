@@ -19,16 +19,41 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
+  const [captchaText, setCaptchaText] = useState('');
+  const [captchaInput, setCaptchaInput] = useState('');
   const [loginLoading, setLoginLoading] = useState(false);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [resetEmail, setResetEmail] = useState('');
   const [currentView, setCurrentView] = useState('input-data');
   const [theme, setTheme] = useState('dark');
   const { toast } = useToast();
 
+  // Generate captcha
+  const generateCaptcha = () => {
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
+    let captcha = '';
+    for (let i = 0; i < 6; i++) {
+      captcha += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    setCaptchaText(captcha);
+    setCaptchaInput('');
+  };
+
   useEffect(() => {
-    // Check for existing token
+    // Generate initial captcha
+    generateCaptcha();
+    
+    // Check for existing token or remember me
     const token = localStorage.getItem('token');
-    if (token) {
+    const remembered = localStorage.getItem('rememberMe');
+    
+    if (token && remembered === 'true') {
       verifyToken(token);
+    } else if (!remembered) {
+      localStorage.removeItem('token');
+      setLoading(false);
     } else {
       setLoading(false);
     }
