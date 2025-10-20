@@ -7,15 +7,13 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import CollapsibleSidebar from '@/components/CollapsibleSidebar';
-import LandingPage from '@/components/LandingPage';
 import TalentManagement from '@/components/TalentManagement';
 import PerformanceAssessment from '@/components/PerformanceAssessment';
 import InputData from '@/components/InputData';
-import { Moon, Sun } from 'lucide-react';
+import { CheckCircle, Target, TrendingUp, BarChart3 } from 'lucide-react';
 
 export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [showLanding, setShowLanding] = useState(true);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [username, setUsername] = useState('');
@@ -52,7 +50,6 @@ export default function App() {
         const data = await response.json();
         setUser(data.user);
         setIsAuthenticated(true);
-        setShowLanding(false);
       } else {
         localStorage.removeItem('token');
       }
@@ -83,7 +80,6 @@ export default function App() {
         localStorage.setItem('token', data.token);
         setUser(data.user);
         setIsAuthenticated(true);
-        setShowLanding(false);
         toast({
           title: 'Login Berhasil',
           description: `Selamat datang, ${data.user.name}!`,
@@ -109,7 +105,6 @@ export default function App() {
   const handleLogout = () => {
     localStorage.removeItem('token');
     setIsAuthenticated(false);
-    setShowLanding(true);
     setUser(null);
     setCurrentView('input-data');
     toast({
@@ -140,69 +135,142 @@ export default function App() {
     );
   }
 
-  // Landing Page
-  if (showLanding && !isAuthenticated) {
-    return <LandingPage onGetStarted={() => setShowLanding(false)} />;
-  }
-
-  // Login Page
+  // Full Page Login (Landing + Login Combined)
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-900 via-slate-900 to-slate-800 flex items-center justify-center p-4">
-        <Card className="w-full max-w-md p-6 md:p-8 bg-slate-900/50 backdrop-blur border-slate-700">
-          <div className="text-center mb-8">
-            <div className="flex items-center justify-center mb-4">
-              <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center">
-                <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100 dark:from-slate-900 dark:via-blue-900 dark:to-slate-800 flex items-center justify-center p-4 md:p-0">
+        <div className="w-full h-screen flex flex-col md:flex-row">
+          {/* Left Side - Information */}
+          <div className="flex-1 flex items-center justify-center p-8 md:p-16">
+            <div className="max-w-xl w-full space-y-8">
+              {/* Logo & Title */}
+              <div>
+                <h1 className="text-4xl md:text-6xl font-bold mb-4">
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500">
+                    Sistem AI untuk
+                  </span>
+                  <br />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500">
+                    Manajemen ASN
+                  </span>
+                </h1>
+                <p className="text-lg text-slate-600 dark:text-slate-300">
+                  Platform terintegrasi untuk analisis talenta dan penilaian kinerja ASN berbasis Artificial Intelligence
+                </p>
+              </div>
+
+              {/* Features */}
+              <div className="space-y-6">
+                <div className="flex items-start space-x-4">
+                  <div className="flex-shrink-0">
+                    <CheckCircle className="w-6 h-6 text-purple-500" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-slate-800 dark:text-white mb-1">
+                      Analisis Talenta Komprehensif
+                    </h3>
+                    <p className="text-sm text-slate-600 dark:text-slate-400">
+                      Pemetaan kompetensi dan potensi ASN menggunakan AI
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start space-x-4">
+                  <div className="flex-shrink-0">
+                    <CheckCircle className="w-6 h-6 text-purple-500" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-slate-800 dark:text-white mb-1">
+                      Penilaian Kinerja Real-time
+                    </h3>
+                    <p className="text-sm text-slate-600 dark:text-slate-400">
+                      Evaluasi kinerja berbasis data dan rekomendasi AI
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start space-x-4">
+                  <div className="flex-shrink-0">
+                    <CheckCircle className="w-6 h-6 text-purple-500" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-slate-800 dark:text-white mb-1">
+                      Dashboard Analytics
+                    </h3>
+                    <p className="text-sm text-slate-600 dark:text-slate-400">
+                      Visualisasi data dan insights untuk pengambilan keputusan
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
-            <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">Selamat Datang</h1>
-            <p className="text-slate-400">Login ke sistem ASN Talent AI</p>
           </div>
 
-          <form onSubmit={handleLogin} className="space-y-6">
-            <div>
-              <Label htmlFor="username" className="text-slate-300">Email</Label>
-              <Input
-                id="username"
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                required
-                className="mt-2 bg-slate-800/50 border-slate-700 text-white"
-                placeholder="Masukkan email"
-              />
+          {/* Right Side - Login */}
+          <div className="flex-1 flex items-center justify-center p-8 md:p-16 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm">
+            <div className="w-full max-w-md space-y-8">
+              <div className="text-center">
+                <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-500 mb-6">
+                  <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                </div>
+                <h2 className="text-3xl font-bold text-slate-800 dark:text-white mb-2">
+                  Selamat Datang
+                </h2>
+                <p className="text-slate-600 dark:text-slate-400">
+                  Login ke sistem ASN Talent AI
+                </p>
+              </div>
+
+              <form onSubmit={handleLogin} className="space-y-6">
+                <div>
+                  <Label htmlFor="username" className="text-slate-700 dark:text-slate-300 font-medium">
+                    Email
+                  </Label>
+                  <Input
+                    id="username"
+                    type="text"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    required
+                    className="mt-2 h-12 bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-700"
+                    placeholder="asn@bkn.go.id"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="password" className="text-slate-700 dark:text-slate-300 font-medium">
+                    Password
+                  </Label>
+                  <Input
+                    id="password"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    className="mt-2 h-12 bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-700"
+                    placeholder="••••••••"
+                  />
+                </div>
+
+                <Button
+                  type="submit"
+                  disabled={loginLoading}
+                  className="w-full h-12 text-base font-medium bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700"
+                >
+                  {loginLoading ? 'Memproses...' : 'Login'}
+                </Button>
+              </form>
+
+              <div className="text-center">
+                <p className="text-sm text-slate-500 dark:text-slate-400">
+                  Demo Mode: Gunakan email dan password apapun untuk login
+                </p>
+              </div>
             </div>
-
-            <div>
-              <Label htmlFor="password" className="text-slate-300">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="mt-2 bg-slate-800/50 border-slate-700 text-white"
-                placeholder="Masukkan password"
-              />
-            </div>
-
-            <Button
-              type="submit"
-              disabled={loginLoading}
-              className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700"
-            >
-              {loginLoading ? 'Memproses...' : 'Login'}
-            </Button>
-          </form>
-
-          <div className="mt-6 p-4 bg-slate-800/30 rounded-lg border border-slate-700">
-            <p className="text-xs text-slate-400 mb-2">Demo Mode:</p>
-            <p className="text-xs text-slate-300">Gunakan email dan password apapun untuk login</p>
           </div>
-        </Card>
+        </div>
       </div>
     );
   }
