@@ -133,6 +133,16 @@ export default function App() {
       if (response.ok) {
         localStorage.setItem('token', data.token);
         localStorage.setItem('rememberMe', rememberMe.toString());
+        
+        // Save credentials if remember me is checked
+        if (rememberMe) {
+          localStorage.setItem('savedEmail', username);
+          localStorage.setItem('savedPassword', password);
+        } else {
+          localStorage.removeItem('savedEmail');
+          localStorage.removeItem('savedPassword');
+        }
+        
         setUser(data.user);
         setIsAuthenticated(true);
         toast({
