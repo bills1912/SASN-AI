@@ -627,12 +627,26 @@ export default function App() {
         <div className="flex-1 overflow-auto lg:ml-0 w-full">
           {/* Content container with proper spacing from sidebar and mobile menu button */}
           <div className="p-4 md:p-6 pt-16 lg:pt-6">
-            {currentView === 'input-data' && <InputData user={user} />}
+            {currentView === 'input-data' && (
+              <InputData 
+                user={user} 
+                selectedProfile={selectedProfile}
+                setSelectedProfile={setSelectedProfile}
+              />
+            )}
             {(currentView === 'talent-management' || currentView.startsWith('talent-') || currentView.startsWith('analysis-') || currentView.startsWith('job-') || currentView.startsWith('skill-') || currentView.startsWith('development-')) && (
-              <TalentManagement user={user} currentView={currentView} />
+              <TalentManagement 
+                user={user} 
+                currentView={currentView}
+                selectedProfile={selectedProfile}
+              />
             )}
             {(currentView === 'performance-assessment' || currentView.startsWith('performance-')) && (
-              <PerformanceAssessment user={user} currentView={currentView} />
+              <PerformanceAssessment 
+                user={user} 
+                currentView={currentView}
+                selectedProfile={selectedProfile}
+              />
             )}
           </div>
         </div>
