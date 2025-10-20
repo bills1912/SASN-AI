@@ -288,8 +288,10 @@ export default function App() {
           toggleTheme={toggleTheme}
         />
 
-        <div className="flex-1 overflow-auto">
-          <div className="p-4 md:p-6 lg:ml-0">
+        {/* Main Content with proper boundaries */}
+        <div className="flex-1 overflow-auto lg:ml-0">
+          {/* Content container with proper spacing from sidebar */}
+          <div className="p-4 md:p-6">
             {currentView === 'input-data' && <InputData user={user} />}
             {(currentView === 'talent-management' || currentView.startsWith('talent-') || currentView.startsWith('analysis-') || currentView.startsWith('job-') || currentView.startsWith('skill-') || currentView.startsWith('development-')) && (
               <TalentManagement user={user} currentView={currentView} />
