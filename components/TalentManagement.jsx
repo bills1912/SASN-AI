@@ -87,6 +87,7 @@ export default function TalentManagement({ user, currentView }) {
         if (mappingResponse.ok) {
           const data = await mappingResponse.json();
           setTalentMapping(data.mapping);
+          setHasGeneratedData(true);
         }
       }
 
@@ -104,6 +105,7 @@ export default function TalentManagement({ user, currentView }) {
         if (skillResponse.ok) {
           const data = await skillResponse.json();
           setSkillAnalysis(data.analysis);
+          setHasGeneratedData(true);
         }
       }
     } catch (error) {
