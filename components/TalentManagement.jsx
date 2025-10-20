@@ -14,6 +14,7 @@ export default function TalentManagement({ user, currentView }) {
   const [talentMapping, setTalentMapping] = useState(null);
   const [skillAnalysis, setSkillAnalysis] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [hasGeneratedData, setHasGeneratedData] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
