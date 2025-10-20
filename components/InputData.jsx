@@ -210,37 +210,73 @@ export default function InputDataNew({ user }) {
         </p>
       </div>
 
-      {/* Select Pegawai */}
+      {/* Select Pegawai - Only for Admin */}
       <Card className="p-4 md:p-6">
         <div className="space-y-4">
           <div>
-            <Label className="text-base font-semibold">Pilih Pegawai untuk Analisis</Label>
-            <p className="text-sm text-muted-foreground mt-1 mb-3">
-              Data pegawai diambil dari API Instansi yang terintegrasi
-            </p>
+            <div className="flex items-center justify-between mb-3">
+              <div>
+                <Label className="text-base font-semibold">
+                  {isAdmin ? 'Pilih Pegawai untuk Analisis' : 'Data Pegawai Anda'}
+                </Label>
+                <p className="text-sm text-muted-foreground mt-1">
+                  {isAdmin 
+                    ? 'Data pegawai diambil dari API Instansi yang terintegrasi' 
+                    : 'Informasi profil dan analisis pribadi Anda'
+                  }
+                </p>
+              </div>
+              {isAdmin && (
+                <div className="px-3 py-1 bg-blue-500/20 border border-blue-500/30 rounded-full">
+                  <p className="text-xs font-medium text-blue-400">Admin</p>
+                </div>
+              )}
+              {!isAdmin && (
+                <div className="px-3 py-1 bg-purple-500/20 border border-purple-500/30 rounded-full">
+                  <p className="text-xs font-medium text-purple-400">Pegawai</p>
+                </div>
+              )}
+            </div>
           </div>
           
-          <Select 
-            value={selectedProfile?.nip} 
-            onValueChange={(nip) => {
-              const profile = profiles.find(p => p.nip === nip);
-              setSelectedProfile(profile);
-            }}
-          >
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Pilih Pegawai" />
-            </SelectTrigger>
-            <SelectContent>
-              {profiles.map(profile => (
-                <SelectItem key={profile.nip} value={profile.nip}>
-                  <div className="flex items-center justify-between w-full pr-2">
-                    <span className="font-medium truncate mr-3">{profile.name}</span>
-                    <span className="text-xs text-muted-foreground whitespace-nowrap">{profile.position} - {profile.agency}</span>
+          {/* Dropdown for Admin, Display only for User */}
+          {isAdmin ? (
+            <Select 
+              value={selectedProfile?.nip} 
+              onValueChange={(nip) => {
+                const profile = profiles.find(p => p.nip === nip);
+                setSelectedProfile(profile);
+              }}
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Pilih Pegawai" />
+              </SelectTrigger>
+              <SelectContent>
+                {profiles.map(profile => (
+                  <SelectItem key={profile.nip} value={profile.nip}>
+                    <div className="flex items-center justify-between w-full pr-2">
+                      <span className="font-medium truncate mr-3">{profile.name}</span>
+                      <span className="text-xs text-muted-foreground whitespace-nowrap">{profile.position} - {profile.agency}</span>
+                    </div>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          ) : (
+            selectedProfile && (
+              <div className="p-4 bg-gradient-to-br from-purple-500/10 to-pink-500/10 rounded-lg border border-purple-500/20">
+                <div className="flex items-center space-x-3">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white text-xl font-bold">
+                    {selectedProfile.name.charAt(0)}
                   </div>
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+                  <div>
+                    <p className="font-semibold text-foreground text-lg">{selectedProfile.name}</p>
+                    <p className="text-sm text-muted-foreground">{selectedProfile.position}</p>
+                  </div>
+                </div>
+              </div>
+            )
+          )}
 
           {selectedProfile && (
             <Card className="p-4 bg-muted/50 border-muted">
