@@ -6,7 +6,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
-import Sidebar from '@/components/Sidebar';
+import CollapsibleSidebar from '@/components/CollapsibleSidebar';
+import LandingPage from '@/components/LandingPage';
 import TalentManagement from '@/components/TalentManagement';
 import PerformanceAssessment from '@/components/PerformanceAssessment';
 import InputData from '@/components/InputData';
@@ -14,6 +15,7 @@ import { Moon, Sun } from 'lucide-react';
 
 export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [showLanding, setShowLanding] = useState(true);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [username, setUsername] = useState('');
@@ -50,6 +52,7 @@ export default function App() {
         const data = await response.json();
         setUser(data.user);
         setIsAuthenticated(true);
+        setShowLanding(false);
       } else {
         localStorage.removeItem('token');
       }
@@ -80,6 +83,7 @@ export default function App() {
         localStorage.setItem('token', data.token);
         setUser(data.user);
         setIsAuthenticated(true);
+        setShowLanding(false);
         toast({
           title: 'Login Berhasil',
           description: `Selamat datang, ${data.user.name}!`,
@@ -105,6 +109,7 @@ export default function App() {
   const handleLogout = () => {
     localStorage.removeItem('token');
     setIsAuthenticated(false);
+    setShowLanding(true);
     setUser(null);
     setCurrentView('input-data');
     toast({
@@ -135,10 +140,16 @@ export default function App() {
     );
   }
 
+  // Landing Page
+  if (showLanding && !isAuthenticated) {
+    return <LandingPage onGetStarted={() => setShowLanding(false)} />;
+  }
+
+  // Login Page
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-900 via-slate-900 to-slate-800 flex items-center justify-center p-4">
-        <Card className="w-full max-w-md p-8 bg-slate-900/50 backdrop-blur border-slate-700">
+        <Card className="w-full max-w-md p-6 md:p-8 bg-slate-900/50 backdrop-blur border-slate-700">
           <div className="text-center mb-8">
             <div className="flex items-center justify-center mb-4">
               <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center">
@@ -147,13 +158,13 @@ export default function App() {
                 </svg>
               </div>
             </div>
-            <h1 className="text-3xl font-bold text-white mb-2">ASTA-CITA AI</h1>
-            <p className="text-slate-400">Sistem Manajemen Talenta & Kinerja ASN</p>
+            <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">Selamat Datang</h1>
+            <p className="text-slate-400">Login ke sistem ASN Talent AI</p>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-6">
             <div>
-              <Label htmlFor="username" className="text-slate-300">Username</Label>
+              <Label htmlFor="username" className="text-slate-300">Email</Label>
               <Input
                 id="username"
                 type="text"
@@ -161,7 +172,7 @@ export default function App() {
                 onChange={(e) => setUsername(e.target.value)}
                 required
                 className="mt-2 bg-slate-800/50 border-slate-700 text-white"
-                placeholder="Masukkan username"
+                placeholder="Masukkan email"
               />
             </div>
 
@@ -188,19 +199,19 @@ export default function App() {
           </form>
 
           <div className="mt-6 p-4 bg-slate-800/30 rounded-lg border border-slate-700">
-            <p className="text-xs text-slate-400 mb-2">Demo Credentials:</p>
-            <p className="text-xs text-slate-300">Admin: admin / admin123</p>
-            <p className="text-xs text-slate-300">ASN: asn001 / asn123</p>
+            <p className="text-xs text-slate-400 mb-2">Demo Mode:</p>
+            <p className="text-xs text-slate-300">Gunakan email dan password apapun untuk login</p>
           </div>
         </Card>
       </div>
     );
   }
 
+  // Main App
   return (
     <div className={`min-h-screen ${theme === 'dark' ? 'dark' : ''}`}>
       <div className="flex min-h-screen bg-background">
-        <Sidebar
+        <CollapsibleSidebar
           currentView={currentView}
           setCurrentView={setCurrentView}
           user={user}
@@ -210,12 +221,14 @@ export default function App() {
         />
 
         <div className="flex-1 overflow-auto">
-          <div className="p-6">
+          <div className="p-4 md:p-6 lg:ml-0">
             {currentView === 'input-data' && <InputData user={user} />}
             {(currentView === 'talent-management' || currentView.startsWith('talent-') || currentView.startsWith('analysis-') || currentView.startsWith('job-') || currentView.startsWith('skill-') || currentView.startsWith('development-')) && (
               <TalentManagement user={user} currentView={currentView} />
             )}
-            {currentView === 'performance-assessment' && <PerformanceAssessment user={user} />}
+            {(currentView === 'performance-assessment' || currentView.startsWith('performance-')) && (
+              <PerformanceAssessment user={user} currentView={currentView} />
+            )}
           </div>
         </div>
       </div>
