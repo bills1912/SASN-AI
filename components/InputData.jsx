@@ -48,11 +48,13 @@ export default function InputDataNew({ user, selectedProfile: globalSelectedProf
           const userProfile = data.profiles.find(p => p.nip === userNIP);
           setProfiles(userProfile ? [userProfile] : []);
           setSelectedProfile(userProfile || null);
+          setGlobalSelectedProfile?.(userProfile || null);
         } else {
           // Admin sees all profiles
           setProfiles(data.profiles);
           if (data.profiles.length > 0) {
             setSelectedProfile(data.profiles[0]);
+            setGlobalSelectedProfile?.(data.profiles[0]);
           }
         }
       }
