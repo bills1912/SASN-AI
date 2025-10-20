@@ -231,18 +231,6 @@ export default function PerformanceAssessment({ user, currentView, selectedProfi
             Hasil analisis kinerja berbasis AI untuk pegawai ASN
           </p>
         </div>
-        <Select value={selectedNIP} onValueChange={setSelectedNIP}>
-          <SelectTrigger className="w-full md:w-[280px]">
-            <SelectValue placeholder="Pilih ASN" />
-          </SelectTrigger>
-          <SelectContent>
-            {profiles.map(profile => (
-              <SelectItem key={profile.nip} value={profile.nip}>
-                {profile.name} - {profile.nip}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
       </div>
 
       {/* Profile Card with 3D effect */}
