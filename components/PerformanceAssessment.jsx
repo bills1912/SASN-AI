@@ -2,15 +2,12 @@
 
 import { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, AlertCircle, Activity, Target, Award, AlertTriangle, TrendingUp, Newspaper } from 'lucide-react';
 import ReactECharts from 'echarts-for-react';
 
-export default function PerformanceAssessment({ user, currentView }) {
-  const [profiles, setProfiles] = useState([]);
-  const [selectedNIP, setSelectedNIP] = useState('');
-  const [selectedProfile, setSelectedProfile] = useState(null);
+export default function PerformanceAssessment({ user, currentView, selectedProfile: globalSelectedProfile }) {
+  const [selectedProfile, setSelectedProfile] = useState(globalSelectedProfile);
   const [performanceData, setPerformanceData] = useState(null);
   const [performanceAnalysis, setPerformanceAnalysis] = useState(null);
   const [news, setNews] = useState([]);
@@ -19,16 +16,16 @@ export default function PerformanceAssessment({ user, currentView }) {
   const { toast } = useToast();
 
   useEffect(() => {
-    loadProfiles();
     loadNews();
   }, []);
 
+  // Sync with global selected profile
   useEffect(() => {
-    if (selectedNIP) {
-      loadProfileData(selectedNIP);
-      loadAnalysisData(selectedNIP);
+    if (globalSelectedProfile) {
+      setSelectedProfile(globalSelectedProfile);
+      loadAnalysisData(globalSelectedProfile.nip);
     }
-  }, [selectedNIP, currentView]);
+  }, [globalSelectedProfile, currentView]);
 
   const loadProfiles = async () => {
     try {
