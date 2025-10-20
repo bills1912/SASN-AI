@@ -300,65 +300,182 @@ export default function App() {
           {/* Right Side - Login */}
           <div className="flex-1 flex items-center justify-center p-8 md:p-12">
             <div className="w-full max-w-md space-y-6">
-              <div className="text-center">
-                <div className="inline-flex items-center justify-center w-16 h-16 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 mb-4">
-                  <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
-                </div>
-                <h2 className="text-2xl font-bold text-white mb-1">
-                  Selamat Datang
-                </h2>
-                <p className="text-sm text-slate-400">
-                  Login ke sistem ASN Talent AI
-                </p>
-              </div>
+              {!showForgotPassword ? (
+                <>
+                  <div className="text-center">
+                    <div className="inline-flex items-center justify-center w-16 h-16 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 mb-4">
+                      <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                      </svg>
+                    </div>
+                    <h2 className="text-2xl font-bold text-white mb-1">
+                      Selamat Datang
+                    </h2>
+                    <p className="text-sm text-slate-400">
+                      Login ke sistem ASN Talent AI
+                    </p>
+                  </div>
 
-              <form onSubmit={handleLogin} className="space-y-4">
-                <div>
-                  <Label htmlFor="username" className="text-slate-300 font-medium text-sm">
-                    Email
-                  </Label>
-                  <Input
-                    id="username"
-                    type="text"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    required
-                    className="mt-1.5 h-11 bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500"
-                    placeholder="asn@bkn.go.id"
-                  />
-                </div>
+                  <form onSubmit={handleLogin} className="space-y-4">
+                    <div>
+                      <Label htmlFor="username" className="text-slate-300 font-medium text-sm">
+                        Email
+                      </Label>
+                      <Input
+                        id="username"
+                        type="text"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        required
+                        className="mt-1.5 h-11 bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500"
+                        placeholder="asn@bkn.go.id"
+                      />
+                    </div>
 
-                <div>
-                  <Label htmlFor="password" className="text-slate-300 font-medium text-sm">
-                    Password
-                  </Label>
-                  <Input
-                    id="password"
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    className="mt-1.5 h-11 bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500"
-                    placeholder="••••••••"
-                  />
-                </div>
+                    <div>
+                      <Label htmlFor="password" className="text-slate-300 font-medium text-sm">
+                        Password
+                      </Label>
+                      <div className="relative mt-1.5">
+                        <Input
+                          id="password"
+                          type={showPassword ? "text" : "password"}
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          required
+                          className="h-11 bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500 pr-10"
+                          placeholder="••••••••"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword(!showPassword)}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-300"
+                        >
+                          {showPassword ? (
+                            <EyeOff className="w-5 h-5" />
+                          ) : (
+                            <Eye className="w-5 h-5" />
+                          )}
+                        </button>
+                      </div>
+                    </div>
 
-                <Button
-                  type="submit"
-                  disabled={loginLoading}
-                  className="w-full h-11 text-sm font-medium bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 mt-6"
-                >
-                  {loginLoading ? 'Memproses...' : 'Login'}
-                </Button>
-              </form>
+                    {/* Captcha */}
+                    <div>
+                      <Label className="text-slate-300 font-medium text-sm">
+                        Captcha
+                      </Label>
+                      <div className="flex items-center gap-2 mt-1.5">
+                        <div className="flex-1 h-11 bg-slate-800 border border-slate-700 rounded-md flex items-center justify-center font-mono text-lg font-bold text-white tracking-widest select-none" style={{
+                          letterSpacing: '0.3em',
+                          background: 'linear-gradient(135deg, #1e293b 0%, #334155 100%)',
+                          textShadow: '2px 2px 4px rgba(0,0,0,0.3)'
+                        }}>
+                          {captchaText}
+                        </div>
+                        <Button
+                          type="button"
+                          onClick={generateCaptcha}
+                          variant="outline"
+                          className="h-11 px-3 border-slate-700 text-slate-300 hover:bg-slate-800 hover:text-white"
+                        >
+                          <RefreshCw className="w-4 h-4" />
+                        </Button>
+                      </div>
+                      <Input
+                        type="text"
+                        value={captchaInput}
+                        onChange={(e) => setCaptchaInput(e.target.value)}
+                        required
+                        className="mt-2 h-11 bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500"
+                        placeholder="Masukkan captcha"
+                      />
+                    </div>
 
-              <div className="text-center">
-                <p className="text-xs text-slate-500">
-                  Demo Mode: Gunakan email dan password apapun untuk login
-                </p>
-              </div>
+                    {/* Remember Me */}
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id="remember"
+                          checked={rememberMe}
+                          onCheckedChange={setRememberMe}
+                          className="border-slate-600"
+                        />
+                        <label
+                          htmlFor="remember"
+                          className="text-sm text-slate-400 cursor-pointer"
+                        >
+                          Ingat saya
+                        </label>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setShowForgotPassword(true)}
+                        className="text-sm text-blue-400 hover:text-blue-300"
+                      >
+                        Lupa password?
+                      </button>
+                    </div>
+
+                    <Button
+                      type="submit"
+                      disabled={loginLoading}
+                      className="w-full h-11 text-sm font-medium bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 mt-6"
+                    >
+                      {loginLoading ? 'Memproses...' : 'Login'}
+                    </Button>
+                  </form>
+
+                  <div className="text-center">
+                    <p className="text-xs text-slate-500">
+                      Demo Mode: Gunakan email dan password apapun untuk login
+                    </p>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="text-center">
+                    <h2 className="text-2xl font-bold text-white mb-1">
+                      Lupa Password
+                    </h2>
+                    <p className="text-sm text-slate-400">
+                      Masukkan email Anda untuk reset password
+                    </p>
+                  </div>
+
+                  <form onSubmit={handleForgotPassword} className="space-y-4">
+                    <div>
+                      <Label htmlFor="resetEmail" className="text-slate-300 font-medium text-sm">
+                        Email
+                      </Label>
+                      <Input
+                        id="resetEmail"
+                        type="email"
+                        value={resetEmail}
+                        onChange={(e) => setResetEmail(e.target.value)}
+                        required
+                        className="mt-1.5 h-11 bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500"
+                        placeholder="asn@bkn.go.id"
+                      />
+                    </div>
+
+                    <Button
+                      type="submit"
+                      className="w-full h-11 text-sm font-medium bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700"
+                    >
+                      Kirim Link Reset
+                    </Button>
+
+                    <button
+                      type="button"
+                      onClick={() => setShowForgotPassword(false)}
+                      className="w-full text-sm text-slate-400 hover:text-white text-center"
+                    >
+                      Kembali ke login
+                    </button>
+                  </form>
+                </>
+              )}
             </div>
           </div>
         </div>
