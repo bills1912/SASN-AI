@@ -68,11 +68,31 @@ export default function App() {
       setRememberMe(true);
     }
 
-    // Load theme preference
-    const savedTheme = localStorage.getItem('theme') || 'dark';
+    // Load theme preference and apply
+    const savedTheme = localStorage.getItem('theme') || 'system';
     setTheme(savedTheme);
-    document.documentElement.classList.toggle('dark', savedTheme === 'dark');
+    applyTheme(savedTheme);
   }, []);
+
+  // Apply theme based on preference
+  const applyTheme = (themeMode) => {
+    if (themeMode === 'system') {
+      const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.classList.toggle('dark', systemPrefersDark);
+    } else {
+      document.documentElement.classList.toggle('dark', themeMode === 'dark');
+    }
+  };
+
+  // Listen to system theme changes when in system mode
+  useEffect(() => {
+    if (theme === 'system') {
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      const handleChange = () => applyTheme('system');
+      mediaQuery.addEventListener('change', handleChange);
+      return () => mediaQuery.removeEventListener('change', handleChange);
+    }
+  }, [theme]);
 
   // Generate new captcha whenever user comes to login page
   useEffect(() => {
