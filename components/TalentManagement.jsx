@@ -2,13 +2,12 @@
 
 import { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, TrendingUp, Award, Target, Code2 } from 'lucide-react';
+import { TrendingUp, Award, Target, Code2, Loader2, AlertCircle } from 'lucide-react';
 import ReactECharts from 'echarts-for-react';
 
-export default function TalentManagement({ user }) {
+export default function TalentManagement({ user, currentView }) {
   const [profiles, setProfiles] = useState([]);
   const [selectedNIP, setSelectedNIP] = useState('');
   const [selectedProfile, setSelectedProfile] = useState(null);
@@ -20,6 +19,13 @@ export default function TalentManagement({ user }) {
   useEffect(() => {
     loadProfiles();
   }, []);
+
+  useEffect(() => {
+    if (selectedNIP) {
+      loadProfile(selectedNIP);
+      loadAnalysisData(selectedNIP);
+    }
+  }, [selectedNIP, currentView]);
 
   const loadProfiles = async () => {
     try {
@@ -60,92 +66,56 @@ export default function TalentManagement({ user }) {
     }
   };
 
-  const generateTalentMapping = async () => {
-    if (!selectedNIP) return;
-
+  const loadAnalysisData = async (nip) => {
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('/api/talent/talent-mapping', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({ nip: selectedNIP })
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        setTalentMapping(data.mapping);
-        setSelectedProfile(data.profile);
-        toast({
-          title: 'Pemetaan Talenta Berhasil',
-          description: 'Analisis talenta telah selesai dilakukan',
+      
+      // Load talent mapping if needed
+      if (currentView === 'talent-mapping' || currentView === 'analysis-summary' || 
+          currentView === 'job-recommendation' || currentView === 'development-area') {
+        const mappingResponse = await fetch('/api/talent/talent-mapping', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ nip })
         });
-      } else {
-        throw new Error(data.error || 'Gagal generate talent mapping');
+
+        if (mappingResponse.ok) {
+          const data = await mappingResponse.json();
+          setTalentMapping(data.mapping);
+        }
+      }
+
+      // Load skill analysis if needed
+      if (currentView === 'skill-analysis') {
+        const skillResponse = await fetch('/api/talent/skill-analysis', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ nip })
+        });
+
+        if (skillResponse.ok) {
+          const data = await skillResponse.json();
+          setSkillAnalysis(data.analysis);
+        }
       }
     } catch (error) {
-      toast({
-        title: 'Error',
-        description: error.message,
-        variant: 'destructive'
-      });
+      console.error('Error loading analysis:', error);
     } finally {
       setLoading(false);
     }
   };
-
-  const generateSkillAnalysis = async () => {
-    if (!selectedNIP) return;
-
-    setLoading(true);
-    try {
-      const token = localStorage.getItem('token');
-      const response = await fetch('/api/talent/skill-analysis', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({ nip: selectedNIP })
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        setSkillAnalysis(data.analysis);
-        setSelectedProfile(data.profile);
-        toast({
-          title: 'Analisis Skill Berhasil',
-          description: 'Analisis skill telah selesai dilakukan',
-        });
-      } else {
-        throw new Error(data.error || 'Gagal generate skill analysis');
-      }
-    } catch (error) {
-      toast({
-        title: 'Error',
-        description: error.message,
-        variant: 'destructive'
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (selectedNIP) {
-      loadProfile(selectedNIP);
-    }
-  }, [selectedNIP]);
 
   const get9BoxChartOption = () => {
     if (!talentMapping) return {};
 
-    const { performance, potential, quadrant } = talentMapping;
+    const { performance, potential } = talentMapping;
 
     return {
       title: {
@@ -266,13 +236,33 @@ export default function TalentManagement({ user }) {
     };
   };
 
+  if (loading) {
+    return (
+      <div className="max-w-7xl mx-auto">
+        <div className="flex items-center justify-center h-96">
+          <div className="text-center">
+            <Loader2 className="w-12 h-12 animate-spin text-blue-500 mx-auto mb-4" />
+            <p className="text-muted-foreground">Memuat data analisis...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-7xl mx-auto space-y-6">
       <div className="flex justify-between items-start">
         <div>
-          <h1 className="text-3xl font-bold text-foreground mb-2">Manajemen Talenta</h1>
+          <h1 className="text-3xl font-bold text-foreground mb-2">
+            {currentView === 'talent-mapping' && 'Pemetaan Talenta'}
+            {currentView === 'analysis-summary' && 'Ringkasan Analisis'}
+            {currentView === 'job-recommendation' && 'Rekomendasi Jabatan'}
+            {currentView === 'skill-analysis' && 'Analisis Skill'}
+            {currentView === 'development-area' && 'Area Pengembangan'}
+            {currentView === 'talent-management' && 'Manajemen Talenta'}
+          </h1>
           <p className="text-muted-foreground">
-            Pemetaan talenta berbasis AI dengan analisis mendalam menggunakan 9-Box Grid Matrix
+            Hasil analisis talenta berbasis AI untuk pegawai ASN
           </p>
         </div>
         <Select value={selectedNIP} onValueChange={setSelectedNIP}>
@@ -313,20 +303,8 @@ export default function TalentManagement({ user }) {
         </Card>
       )}
 
-      {/* Action Buttons */}
-      <div className="flex gap-4">
-        <Button onClick={generateTalentMapping} disabled={loading || !selectedNIP}>
-          {loading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Target className="w-4 h-4 mr-2" />}
-          Generate Pemetaan Talenta
-        </Button>
-        <Button onClick={generateSkillAnalysis} disabled={loading || !selectedNIP} variant="outline">
-          {loading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Code2 className="w-4 h-4 mr-2" />}
-          Analisis Skill
-        </Button>
-      </div>
-
-      {/* Talent Mapping Results */}
-      {talentMapping && (
+      {/* TALENT MAPPING VIEW */}
+      {currentView === 'talent-mapping' && talentMapping && (
         <div className="grid md:grid-cols-2 gap-6">
           {/* 9-Box Grid */}
           <Card className="p-6">
@@ -372,8 +350,49 @@ export default function TalentManagement({ user }) {
               </div>
             </div>
           </Card>
+        </div>
+      )}
 
-          {/* Career Path */}
+      {/* ANALYSIS SUMMARY VIEW */}
+      {currentView === 'analysis-summary' && talentMapping && (
+        <div className="grid md:grid-cols-2 gap-6">
+          <Card className="p-6">
+            <h3 className="text-lg font-semibold text-foreground mb-4">Ringkasan Pemetaan Talenta</h3>
+            <div className="space-y-4">
+              <div>
+                <p className="text-sm font-medium text-foreground mb-2">Kategori Talenta</p>
+                <p className="text-2xl font-bold text-blue-400">{talentMapping.talentBox}</p>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div className="p-3 bg-blue-500/10 rounded-lg">
+                  <p className="text-xs text-muted-foreground">Performance</p>
+                  <p className="text-lg font-semibold text-foreground">{talentMapping.performance.level}</p>
+                </div>
+                <div className="p-3 bg-purple-500/10 rounded-lg">
+                  <p className="text-xs text-muted-foreground">Potential</p>
+                  <p className="text-lg font-semibold text-foreground">{talentMapping.potential.level}</p>
+                </div>
+              </div>
+            </div>
+          </Card>
+
+          <Card className="p-6 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border-blue-500/20">
+            <h3 className="text-lg font-semibold text-foreground mb-4">AI Recommendations</h3>
+            <ul className="space-y-2">
+              {talentMapping.recommendations.slice(0, 5).map((rec, idx) => (
+                <li key={idx} className="flex items-start space-x-2">
+                  <span className="text-blue-400 mt-1">✓</span>
+                  <span className="text-sm text-muted-foreground">{rec}</span>
+                </li>
+              ))}
+            </ul>
+          </Card>
+        </div>
+      )}
+
+      {/* JOB RECOMMENDATION VIEW */}
+      {currentView === 'job-recommendation' && talentMapping && (
+        <div className="grid md:grid-cols-2 gap-6">
           <Card className="p-6">
             <div className="flex items-center space-x-2 mb-4">
               <TrendingUp className="w-5 h-5 text-blue-500" />
@@ -389,7 +408,6 @@ export default function TalentManagement({ user }) {
             </ul>
           </Card>
 
-          {/* Suitable Positions */}
           <Card className="p-6">
             <div className="flex items-center space-x-2 mb-4">
               <Award className="w-5 h-5 text-cyan-500" />
@@ -407,36 +425,11 @@ export default function TalentManagement({ user }) {
               ))}
             </div>
           </Card>
-
-          {/* Development Areas */}
-          <Card className="p-6 md:col-span-2">
-            <h3 className="text-lg font-semibold text-foreground mb-4">Area Pengembangan</h3>
-            <div className="grid md:grid-cols-2 gap-4">
-              {talentMapping.developmentAreas.map((area, idx) => (
-                <div key={idx} className="p-4 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-lg border border-purple-500/20">
-                  <p className="text-foreground">{area}</p>
-                </div>
-              ))}
-            </div>
-          </Card>
-
-          {/* AI Recommendations */}
-          <Card className="p-6 md:col-span-2 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border-blue-500/20">
-            <h3 className="text-lg font-semibold text-foreground mb-4">Rekomendasi AI</h3>
-            <ul className="space-y-2">
-              {talentMapping.recommendations.map((rec, idx) => (
-                <li key={idx} className="flex items-start space-x-2">
-                  <span className="text-blue-400 mt-1">✓</span>
-                  <span className="text-muted-foreground">{rec}</span>
-                </li>
-              ))}
-            </ul>
-          </Card>
         </div>
       )}
 
-      {/* Skill Analysis Results */}
-      {skillAnalysis && (
+      {/* SKILL ANALYSIS VIEW */}
+      {currentView === 'skill-analysis' && skillAnalysis && (
         <div className="grid md:grid-cols-2 gap-6">
           {/* Skill Radar */}
           <Card className="p-6">
@@ -527,6 +520,47 @@ export default function TalentManagement({ user }) {
             </div>
           </Card>
         </div>
+      )}
+
+      {/* DEVELOPMENT AREA VIEW */}
+      {currentView === 'development-area' && talentMapping && (
+        <div className="space-y-6">
+          <Card className="p-6">
+            <h3 className="text-lg font-semibold text-foreground mb-4">Area Pengembangan</h3>
+            <div className="grid md:grid-cols-2 gap-4">
+              {talentMapping.developmentAreas.map((area, idx) => (
+                <div key={idx} className="p-4 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-lg border border-purple-500/20">
+                  <p className="text-foreground">{area}</p>
+                </div>
+              ))}
+            </div>
+          </Card>
+
+          <Card className="p-6 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border-blue-500/20">
+            <h3 className="text-lg font-semibold text-foreground mb-4">Rekomendasi Pengembangan</h3>
+            <ul className="space-y-2">
+              {talentMapping.recommendations.map((rec, idx) => (
+                <li key={idx} className="flex items-start space-x-2">
+                  <span className="text-blue-400 mt-1">✓</span>
+                  <span className="text-muted-foreground">{rec}</span>
+                </li>
+              ))}
+            </ul>
+          </Card>
+        </div>
+      )}
+
+      {/* NO DATA STATE */}
+      {!talentMapping && !skillAnalysis && (
+        <Card className="p-12">
+          <div className="text-center">
+            <AlertCircle className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+            <h3 className="text-lg font-semibold text-foreground mb-2">Belum Ada Data Analisis</h3>
+            <p className="text-muted-foreground mb-4">
+              Silakan generate analisis terlebih dahulu di menu <span className="font-semibold text-blue-500">Input Data</span>
+            </p>
+          </div>
+        </Card>
       )}
     </div>
   );
