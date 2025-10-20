@@ -35,9 +35,18 @@ export default function InputDataNew({ user }) {
 
       if (response.ok) {
         const data = await response.json();
-        setProfiles(data.profiles);
-        if (data.profiles.length > 0) {
-          setSelectedProfile(data.profiles[0]);
+        
+        // If individual user, filter only their profile
+        if (!isAdmin && userNIP) {
+          const userProfile = data.profiles.find(p => p.nip === userNIP);
+          setProfiles(userProfile ? [userProfile] : []);
+          setSelectedProfile(userProfile || null);
+        } else {
+          // Admin sees all profiles
+          setProfiles(data.profiles);
+          if (data.profiles.length > 0) {
+            setSelectedProfile(data.profiles[0]);
+          }
         }
       }
     } catch (error) {
