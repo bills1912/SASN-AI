@@ -158,6 +158,9 @@ export default function App() {
 
   const handleLogout = () => {
     localStorage.removeItem('token');
+    if (!rememberMe) {
+      localStorage.removeItem('rememberMe');
+    }
     setIsAuthenticated(false);
     setUser(null);
     setCurrentView('input-data');
