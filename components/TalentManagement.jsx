@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import { TrendingUp, Award, Target, Code2, Loader2, AlertCircle } from 'lucide-react';
 import ReactECharts from 'echarts-for-react';
