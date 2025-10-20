@@ -203,6 +203,50 @@ export default function App() {
                   </div>
                 </div>
               </div>
+
+              {/* Partner Institutions */}
+              <div className="pt-8 border-t border-slate-300 dark:border-slate-700">
+                <h3 className="text-lg font-semibold text-slate-800 dark:text-white mb-6 text-center">
+                  Lembaga Partner
+                </h3>
+                <div className="grid grid-cols-3 gap-6 items-center">
+                  <div className="flex items-center justify-center p-3 bg-white/80 dark:bg-slate-800/80 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+                    <img 
+                      src="https://customer-assets.emergentagent.com/job_3fe8df70-7265-4c86-97fd-875d5fa187eb/artifacts/fx0bhszm_Logo_Setneg_RI.svg.png" 
+                      alt="Sekretariat Negara RI" 
+                      className="h-16 w-auto object-contain"
+                    />
+                  </div>
+                  <div className="flex items-center justify-center p-3 bg-white/80 dark:bg-slate-800/80 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+                    <img 
+                      src="https://customer-assets.emergentagent.com/job_3fe8df70-7265-4c86-97fd-875d5fa187eb/artifacts/ambe7iyn_1554355505_Logo-LAN-Baru-Transparan.png" 
+                      alt="Lembaga Administrasi Negara" 
+                      className="h-16 w-auto object-contain"
+                    />
+                  </div>
+                  <div className="flex items-center justify-center p-3 bg-white/80 dark:bg-slate-800/80 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+                    <img 
+                      src="https://customer-assets.emergentagent.com/job_3fe8df70-7265-4c86-97fd-875d5fa187eb/artifacts/ixe1euh2_Lambang_Badan_Pusat_Statistik_%28BPS%29_Indonesia.svg.png" 
+                      alt="Badan Pusat Statistik" 
+                      className="h-16 w-auto object-contain"
+                    />
+                  </div>
+                  <div className="flex items-center justify-center p-3 bg-white/80 dark:bg-slate-800/80 rounded-lg shadow-sm hover:shadow-md transition-shadow col-start-1">
+                    <img 
+                      src="https://customer-assets.emergentagent.com/job_3fe8df70-7265-4c86-97fd-875d5fa187eb/artifacts/9m5rcvx3_Logo_PANRB.png" 
+                      alt="Kementerian PANRB" 
+                      className="h-16 w-auto object-contain"
+                    />
+                  </div>
+                  <div className="flex items-center justify-center p-3 bg-white/80 dark:bg-slate-800/80 rounded-lg shadow-sm hover:shadow-md transition-shadow col-start-2">
+                    <img 
+                      src="https://customer-assets.emergentagent.com/job_3fe8df70-7265-4c86-97fd-875d5fa187eb/artifacts/qdsh946f_Logo_Badan_Kepegawaian_Negara.png" 
+                      alt="Badan Kepegawaian Negara" 
+                      className="h-16 w-auto object-contain"
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
