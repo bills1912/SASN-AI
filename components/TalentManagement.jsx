@@ -226,18 +226,6 @@ export default function TalentManagement({ user, currentView, selectedProfile: g
             Hasil analisis talenta berbasis AI untuk pegawai ASN
           </p>
         </div>
-        <Select value={selectedNIP} onValueChange={setSelectedNIP}>
-          <SelectTrigger className="w-[280px]">
-            <SelectValue placeholder="Pilih ASN" />
-          </SelectTrigger>
-          <SelectContent>
-            {profiles.map(profile => (
-              <SelectItem key={profile.nip} value={profile.nip}>
-                {profile.name} - {profile.nip}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
       </div>
 
       {/* Profile Summary */}
