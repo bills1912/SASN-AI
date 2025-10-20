@@ -212,7 +212,9 @@ export default function App() {
         <div className="flex-1 overflow-auto">
           <div className="p-6">
             {currentView === 'input-data' && <InputData user={user} />}
-            {currentView === 'talent-management' && <TalentManagement user={user} />}
+            {(currentView === 'talent-management' || currentView.startsWith('talent-') || currentView.startsWith('analysis-') || currentView.startsWith('job-') || currentView.startsWith('skill-') || currentView.startsWith('development-')) && (
+              <TalentManagement user={user} currentView={currentView} />
+            )}
             {currentView === 'performance-assessment' && <PerformanceAssessment user={user} />}
           </div>
         </div>
