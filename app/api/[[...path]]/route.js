@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import clientPromise from '@/lib/mongodb';
-import openai from '@/lib/openai';
+import openai, { USE_MOCK_MODE } from '@/lib/openai';
 import { authenticateUser, generateMockToken, verifyMockToken } from '@/lib/mockAuth';
 import { 
   mockASNProfiles, 
@@ -11,6 +11,11 @@ import {
   getAllASNProfiles,
   getAllPerformanceData
 } from '@/lib/mockBKNData';
+import {
+  getMockTalentMapping,
+  getMockSkillAnalysis,
+  getMockPerformanceAnalysis
+} from '@/lib/mockAIResponses';
 
 // Helper to extract path segments
 function getPathSegments(request) {
