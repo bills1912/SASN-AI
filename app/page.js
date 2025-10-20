@@ -138,66 +138,66 @@ export default function App() {
   // Full Page Login (Landing + Login Combined)
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100 dark:from-slate-900 dark:via-blue-900 dark:to-slate-800 flex items-center justify-center p-4 md:p-0">
+      <div className="min-h-screen bg-[#0f1d3d] flex items-center justify-center p-4 md:p-0">
         <div className="w-full h-screen flex flex-col md:flex-row">
           {/* Left Side - Information */}
-          <div className="flex-1 flex items-center justify-center p-8 md:p-16">
-            <div className="max-w-xl w-full space-y-8">
+          <div className="flex-1 flex items-center justify-center p-8 md:p-12">
+            <div className="max-w-lg w-full space-y-6">
               {/* Logo & Title */}
               <div>
-                <h1 className="text-4xl md:text-6xl font-bold mb-4">
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500">
+                <h1 className="text-4xl md:text-5xl font-bold mb-3">
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">
                     Sistem AI untuk
                   </span>
                   <br />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500">
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">
                     Manajemen ASN
                   </span>
                 </h1>
-                <p className="text-lg text-slate-600 dark:text-slate-300">
+                <p className="text-base text-slate-300">
                   Platform terintegrasi untuk analisis talenta dan penilaian kinerja ASN berbasis Artificial Intelligence
                 </p>
               </div>
 
               {/* Features */}
-              <div className="space-y-6">
-                <div className="flex items-start space-x-4">
+              <div className="space-y-4">
+                <div className="flex items-start space-x-3">
                   <div className="flex-shrink-0">
-                    <CheckCircle className="w-6 h-6 text-purple-500" />
+                    <CheckCircle className="w-5 h-5 text-purple-400" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-slate-800 dark:text-white mb-1">
+                    <h3 className="font-semibold text-white text-sm mb-0.5">
                       Analisis Talenta Komprehensif
                     </h3>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">
+                    <p className="text-xs text-slate-400">
                       Pemetaan kompetensi dan potensi ASN menggunakan AI
                     </p>
                   </div>
                 </div>
 
-                <div className="flex items-start space-x-4">
+                <div className="flex items-start space-x-3">
                   <div className="flex-shrink-0">
-                    <CheckCircle className="w-6 h-6 text-purple-500" />
+                    <CheckCircle className="w-5 h-5 text-purple-400" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-slate-800 dark:text-white mb-1">
+                    <h3 className="font-semibold text-white text-sm mb-0.5">
                       Penilaian Kinerja Real-time
                     </h3>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">
+                    <p className="text-xs text-slate-400">
                       Evaluasi kinerja berbasis data dan rekomendasi AI
                     </p>
                   </div>
                 </div>
 
-                <div className="flex items-start space-x-4">
+                <div className="flex items-start space-x-3">
                   <div className="flex-shrink-0">
-                    <CheckCircle className="w-6 h-6 text-purple-500" />
+                    <CheckCircle className="w-5 h-5 text-purple-400" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-slate-800 dark:text-white mb-1">
+                    <h3 className="font-semibold text-white text-sm mb-0.5">
                       Dashboard Analytics
                     </h3>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">
+                    <p className="text-xs text-slate-400">
                       Visualisasi data dan insights untuk pengambilan keputusan
                     </p>
                   </div>
@@ -205,71 +205,61 @@ export default function App() {
               </div>
 
               {/* Partner Institutions */}
-              <div className="pt-8 border-t border-slate-300 dark:border-slate-700">
-                <h3 className="text-lg font-semibold text-slate-800 dark:text-white mb-6 text-center">
+              <div className="pt-6 border-t border-slate-700">
+                <h3 className="text-sm font-semibold text-white mb-4 text-center">
                   Lembaga Partner
                 </h3>
-                <div className="grid grid-cols-3 gap-6 items-center">
-                  <div className="flex items-center justify-center p-3 bg-white/80 dark:bg-slate-800/80 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-                    <img 
-                      src="https://customer-assets.emergentagent.com/job_3fe8df70-7265-4c86-97fd-875d5fa187eb/artifacts/fx0bhszm_Logo_Setneg_RI.svg.png" 
-                      alt="Sekretariat Negara RI" 
-                      className="h-16 w-auto object-contain"
-                    />
-                  </div>
-                  <div className="flex items-center justify-center p-3 bg-white/80 dark:bg-slate-800/80 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-                    <img 
-                      src="https://customer-assets.emergentagent.com/job_3fe8df70-7265-4c86-97fd-875d5fa187eb/artifacts/ambe7iyn_1554355505_Logo-LAN-Baru-Transparan.png" 
-                      alt="Lembaga Administrasi Negara" 
-                      className="h-16 w-auto object-contain"
-                    />
-                  </div>
-                  <div className="flex items-center justify-center p-3 bg-white/80 dark:bg-slate-800/80 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-                    <img 
-                      src="https://customer-assets.emergentagent.com/job_3fe8df70-7265-4c86-97fd-875d5fa187eb/artifacts/ixe1euh2_Lambang_Badan_Pusat_Statistik_%28BPS%29_Indonesia.svg.png" 
-                      alt="Badan Pusat Statistik" 
-                      className="h-16 w-auto object-contain"
-                    />
-                  </div>
-                  <div className="flex items-center justify-center p-3 bg-white/80 dark:bg-slate-800/80 rounded-lg shadow-sm hover:shadow-md transition-shadow col-start-1">
-                    <img 
-                      src="https://customer-assets.emergentagent.com/job_3fe8df70-7265-4c86-97fd-875d5fa187eb/artifacts/9m5rcvx3_Logo_PANRB.png" 
-                      alt="Kementerian PANRB" 
-                      className="h-16 w-auto object-contain"
-                    />
-                  </div>
-                  <div className="flex items-center justify-center p-3 bg-white/80 dark:bg-slate-800/80 rounded-lg shadow-sm hover:shadow-md transition-shadow col-start-2">
-                    <img 
-                      src="https://customer-assets.emergentagent.com/job_3fe8df70-7265-4c86-97fd-875d5fa187eb/artifacts/qdsh946f_Logo_Badan_Kepegawaian_Negara.png" 
-                      alt="Badan Kepegawaian Negara" 
-                      className="h-16 w-auto object-contain"
-                    />
-                  </div>
+                <div className="flex flex-wrap items-center justify-center gap-4">
+                  <img 
+                    src="https://customer-assets.emergentagent.com/job_3fe8df70-7265-4c86-97fd-875d5fa187eb/artifacts/fx0bhszm_Logo_Setneg_RI.svg.png" 
+                    alt="Sekretariat Negara RI" 
+                    className="h-10 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity"
+                  />
+                  <img 
+                    src="https://customer-assets.emergentagent.com/job_3fe8df70-7265-4c86-97fd-875d5fa187eb/artifacts/ambe7iyn_1554355505_Logo-LAN-Baru-Transparan.png" 
+                    alt="Lembaga Administrasi Negara" 
+                    className="h-10 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity"
+                  />
+                  <img 
+                    src="https://customer-assets.emergentagent.com/job_3fe8df70-7265-4c86-97fd-875d5fa187eb/artifacts/ixe1euh2_Lambang_Badan_Pusat_Statistik_%28BPS%29_Indonesia.svg.png" 
+                    alt="Badan Pusat Statistik" 
+                    className="h-10 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity"
+                  />
+                  <img 
+                    src="https://customer-assets.emergentagent.com/job_3fe8df70-7265-4c86-97fd-875d5fa187eb/artifacts/9m5rcvx3_Logo_PANRB.png" 
+                    alt="Kementerian PANRB" 
+                    className="h-10 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity"
+                  />
+                  <img 
+                    src="https://customer-assets.emergentagent.com/job_3fe8df70-7265-4c86-97fd-875d5fa187eb/artifacts/qdsh946f_Logo_Badan_Kepegawaian_Negara.png" 
+                    alt="Badan Kepegawaian Negara" 
+                    className="h-10 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity"
+                  />
                 </div>
               </div>
             </div>
           </div>
 
           {/* Right Side - Login */}
-          <div className="flex-1 flex items-center justify-center p-8 md:p-16 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm">
-            <div className="w-full max-w-md space-y-8">
+          <div className="flex-1 flex items-center justify-center p-8 md:p-12">
+            <div className="w-full max-w-md space-y-6">
               <div className="text-center">
-                <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-500 mb-6">
-                  <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 mb-4">
+                  <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                   </svg>
                 </div>
-                <h2 className="text-3xl font-bold text-slate-800 dark:text-white mb-2">
+                <h2 className="text-2xl font-bold text-white mb-1">
                   Selamat Datang
                 </h2>
-                <p className="text-slate-600 dark:text-slate-400">
+                <p className="text-sm text-slate-400">
                   Login ke sistem ASN Talent AI
                 </p>
               </div>
 
-              <form onSubmit={handleLogin} className="space-y-6">
+              <form onSubmit={handleLogin} className="space-y-4">
                 <div>
-                  <Label htmlFor="username" className="text-slate-700 dark:text-slate-300 font-medium">
+                  <Label htmlFor="username" className="text-slate-300 font-medium text-sm">
                     Email
                   </Label>
                   <Input
@@ -278,13 +268,13 @@ export default function App() {
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     required
-                    className="mt-2 h-12 bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-700"
+                    className="mt-1.5 h-11 bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500"
                     placeholder="asn@bkn.go.id"
                   />
                 </div>
 
                 <div>
-                  <Label htmlFor="password" className="text-slate-700 dark:text-slate-300 font-medium">
+                  <Label htmlFor="password" className="text-slate-300 font-medium text-sm">
                     Password
                   </Label>
                   <Input
@@ -293,7 +283,7 @@ export default function App() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    className="mt-2 h-12 bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-700"
+                    className="mt-1.5 h-11 bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500"
                     placeholder="••••••••"
                   />
                 </div>
@@ -301,14 +291,14 @@ export default function App() {
                 <Button
                   type="submit"
                   disabled={loginLoading}
-                  className="w-full h-12 text-base font-medium bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700"
+                  className="w-full h-11 text-sm font-medium bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 mt-6"
                 >
                   {loginLoading ? 'Memproses...' : 'Login'}
                 </Button>
               </form>
 
               <div className="text-center">
-                <p className="text-sm text-slate-500 dark:text-slate-400">
+                <p className="text-xs text-slate-500">
                   Demo Mode: Gunakan email dan password apapun untuk login
                 </p>
               </div>
