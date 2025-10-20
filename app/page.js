@@ -58,11 +58,27 @@ export default function App() {
       setLoading(false);
     }
 
+    // Load saved credentials if remember me is enabled
+    if (remembered === 'true') {
+      const savedEmail = localStorage.getItem('savedEmail');
+      const savedPassword = localStorage.getItem('savedPassword');
+      if (savedEmail) setUsername(savedEmail);
+      if (savedPassword) setPassword(savedPassword);
+      setRememberMe(true);
+    }
+
     // Load theme preference
     const savedTheme = localStorage.getItem('theme') || 'dark';
     setTheme(savedTheme);
     document.documentElement.classList.toggle('dark', savedTheme === 'dark');
   }, []);
+
+  // Generate new captcha whenever user comes to login page
+  useEffect(() => {
+    if (!isAuthenticated) {
+      generateCaptcha();
+    }
+  }, [isAuthenticated]);
 
   const verifyToken = async (token) => {
     try {
