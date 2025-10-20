@@ -23,46 +23,9 @@ export default function TalentManagement({ user, currentView, selectedProfile: g
     }
   }, [globalSelectedProfile, currentView]);
 
-  const loadProfiles = async () => {
-    try {
-      const token = localStorage.getItem('token');
-      const response = await fetch('/api/talent/profiles', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setProfiles(data.profiles);
-        if (data.profiles.length > 0) {
-          setSelectedNIP(data.profiles[0].nip);
-        }
-      }
-    } catch (error) {
-      console.error('Error loading profiles:', error);
-    }
-  };
-
-  const loadProfile = async (nip) => {
-    try {
-      const token = localStorage.getItem('token');
-      const response = await fetch(`/api/talent/profile/${nip}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setSelectedProfile(data.profile);
-      }
-    } catch (error) {
-      console.error('Error loading profile:', error);
-    }
-  };
-
   const loadAnalysisData = async (nip) => {
+    if (!nip) return;
+    
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
