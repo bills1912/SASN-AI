@@ -334,7 +334,7 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
         variant="ghost"
         size="icon"
         onClick={() => setIsMobileOpen(true)}
-        className="fixed top-4 left-4 z-50 lg:hidden bg-slate-900/90 backdrop-blur text-white hover:bg-slate-800"
+        className="fixed top-4 left-4 z-[60] lg:hidden bg-slate-900/90 backdrop-blur text-white hover:bg-slate-800 shadow-lg"
       >
         <Menu className="w-5 h-5" />
       </Button>
@@ -342,14 +342,14 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
       {/* Mobile Sidebar Overlay */}
       {isMobileOpen && (
         <div 
-          className="fixed inset-0 bg-black/50 z-50 lg:hidden"
+          className="fixed inset-0 bg-black/50 z-[55] lg:hidden"
           onClick={() => setIsMobileOpen(false)}
         />
       )}
 
       {/* Mobile Sidebar */}
       <div className={cn(
-        "fixed top-0 left-0 h-full bg-slate-900 z-50 transform transition-transform duration-300 lg:hidden",
+        "fixed top-0 left-0 h-full bg-slate-900 z-[56] transform transition-transform duration-300 lg:hidden overflow-y-auto",
         isMobileOpen ? "translate-x-0 w-72" : "-translate-x-full w-0"
       )}>
         <SidebarContent isMobile={true} />
