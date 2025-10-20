@@ -160,7 +160,14 @@ Return the analysis in JSON format with these fields:
       
       const performanceData = getPerformanceData(nip);
       
-      const prompt = `Based on this ASN profile, perform a comprehensive talent mapping analysis:
+      let mapping;
+      
+      if (USE_MOCK_MODE) {
+        // Use mock AI response for demonstration
+        mapping = getMockTalentMapping(profile);
+      } else {
+        // Use actual OpenAI API
+        const prompt = `Based on this ASN profile, perform a comprehensive talent mapping analysis:
 
 Profile:
 - Name: ${profile.name}
@@ -198,23 +205,24 @@ Return JSON:
   "recommendations": ["detailed recommendations"]
 }`;
       
-      const response = await openai.chat.completions.create({
-        model: process.env.OPENAI_MODEL || 'gpt-4o',
-        messages: [
-          {
-            role: 'system',
-            content: 'You are an expert in talent management and 9-box grid analysis for civil service personnel.'
-          },
-          {
-            role: 'user',
-            content: prompt
-          }
-        ],
-        temperature: 0.3,
-        response_format: { type: "json_object" }
-      });
+        const response = await openai.chat.completions.create({
+          model: process.env.OPENAI_MODEL || 'gpt-4o',
+          messages: [
+            {
+              role: 'system',
+              content: 'You are an expert in talent management and 9-box grid analysis for civil service personnel.'
+            },
+            {
+              role: 'user',
+              content: prompt
+            }
+          ],
+          temperature: 0.3,
+          response_format: { type: "json_object" }
+        });
       
-      const mapping = JSON.parse(response.choices[0].message.content);
+        mapping = JSON.parse(response.choices[0].message.content);
+      }
       
       // Save to MongoDB
       const client = await clientPromise;
