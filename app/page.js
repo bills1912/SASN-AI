@@ -302,32 +302,42 @@ export default function App() {
                 <h3 className="text-sm font-semibold text-white mb-4 text-center">
                   Lembaga Partner
                 </h3>
-                <div className="flex flex-wrap items-center justify-center gap-4">
-                  <img 
-                    src="https://customer-assets.emergentagent.com/job_3fe8df70-7265-4c86-97fd-875d5fa187eb/artifacts/fx0bhszm_Logo_Setneg_RI.svg.png" 
-                    alt="Sekretariat Negara RI" 
-                    className="h-10 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity"
-                  />
-                  <img 
-                    src="https://customer-assets.emergentagent.com/job_3fe8df70-7265-4c86-97fd-875d5fa187eb/artifacts/ambe7iyn_1554355505_Logo-LAN-Baru-Transparan.png" 
-                    alt="Lembaga Administrasi Negara" 
-                    className="h-10 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity"
-                  />
-                  <img 
-                    src="https://customer-assets.emergentagent.com/job_3fe8df70-7265-4c86-97fd-875d5fa187eb/artifacts/ixe1euh2_Lambang_Badan_Pusat_Statistik_%28BPS%29_Indonesia.svg.png" 
-                    alt="Badan Pusat Statistik" 
-                    className="h-10 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity"
-                  />
-                  <img 
-                    src="https://customer-assets.emergentagent.com/job_3fe8df70-7265-4c86-97fd-875d5fa187eb/artifacts/9m5rcvx3_Logo_PANRB.png" 
-                    alt="Kementerian PANRB" 
-                    className="h-10 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity"
-                  />
-                  <img 
-                    src="https://customer-assets.emergentagent.com/job_3fe8df70-7265-4c86-97fd-875d5fa187eb/artifacts/qdsh946f_Logo_Badan_Kepegawaian_Negara.png" 
-                    alt="Badan Kepegawaian Negara" 
-                    className="h-10 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity"
-                  />
+                <div className="flex flex-wrap items-center justify-center gap-3">
+                  <div className="p-3 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all">
+                    <img 
+                      src="https://customer-assets.emergentagent.com/job_3fe8df70-7265-4c86-97fd-875d5fa187eb/artifacts/fx0bhszm_Logo_Setneg_RI.svg.png" 
+                      alt="Sekretariat Negara RI" 
+                      className="h-10 w-auto object-contain"
+                    />
+                  </div>
+                  <div className="p-3 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all">
+                    <img 
+                      src="https://customer-assets.emergentagent.com/job_3fe8df70-7265-4c86-97fd-875d5fa187eb/artifacts/ambe7iyn_1554355505_Logo-LAN-Baru-Transparan.png" 
+                      alt="Lembaga Administrasi Negara" 
+                      className="h-10 w-auto object-contain"
+                    />
+                  </div>
+                  <div className="p-3 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all">
+                    <img 
+                      src="https://customer-assets.emergentagent.com/job_3fe8df70-7265-4c86-97fd-875d5fa187eb/artifacts/ixe1euh2_Lambang_Badan_Pusat_Statistik_%28BPS%29_Indonesia.svg.png" 
+                      alt="Badan Pusat Statistik" 
+                      className="h-10 w-auto object-contain"
+                    />
+                  </div>
+                  <div className="p-3 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all">
+                    <img 
+                      src="https://customer-assets.emergentagent.com/job_3fe8df70-7265-4c86-97fd-875d5fa187eb/artifacts/9m5rcvx3_Logo_PANRB.png" 
+                      alt="Kementerian PANRB" 
+                      className="h-10 w-auto object-contain"
+                    />
+                  </div>
+                  <div className="p-3 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all">
+                    <img 
+                      src="https://customer-assets.emergentagent.com/job_3fe8df70-7265-4c86-97fd-875d5fa187eb/artifacts/qdsh946f_Logo_Badan_Kepegawaian_Negara.png" 
+                      alt="Badan Kepegawaian Negara" 
+                      className="h-10 w-auto object-contain"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
