@@ -5,12 +5,13 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
 import CollapsibleSidebar from '@/components/CollapsibleSidebar';
 import TalentManagement from '@/components/TalentManagement';
 import PerformanceAssessment from '@/components/PerformanceAssessment';
 import InputData from '@/components/InputData';
-import { CheckCircle, Target, TrendingUp, BarChart3 } from 'lucide-react';
+import { CheckCircle, Target, TrendingUp, BarChart3, Eye, EyeOff, RefreshCw } from 'lucide-react';
 
 export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
