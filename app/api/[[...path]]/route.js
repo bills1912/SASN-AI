@@ -350,7 +350,14 @@ async function handlePerformanceAssessment(segments, request, method) {
         return NextResponse.json({ error: 'Data not found' }, { status: 404 });
       }
       
-      const prompt = `Analyze this ASN's performance data comprehensively:
+      let analysis;
+      
+      if (USE_MOCK_MODE) {
+        // Use mock AI response for demonstration
+        analysis = getMockPerformanceAnalysis(profile, performanceData);
+      } else {
+        // Use actual OpenAI API
+        const prompt = `Analyze this ASN's performance data comprehensively:
 
 Profile: ${JSON.stringify(profile)}
 Performance Data: ${JSON.stringify(performanceData)}
@@ -378,23 +385,24 @@ Return JSON:
   "developmentPlan": [{"quarter": "Q1-Q4", "focus": "area", "activities": ["list"]}]
 }`;
       
-      const response = await openai.chat.completions.create({
-        model: process.env.OPENAI_MODEL || 'gpt-4o',
-        messages: [
-          {
-            role: 'system',
-            content: 'You are an expert in performance management and organizational development for civil servants.'
-          },
-          {
-            role: 'user',
-            content: prompt
-          }
-        ],
-        temperature: 0.3,
-        response_format: { type: "json_object" }
-      });
+        const response = await openai.chat.completions.create({
+          model: process.env.OPENAI_MODEL || 'gpt-4o',
+          messages: [
+            {
+              role: 'system',
+              content: 'You are an expert in performance management and organizational development for civil servants.'
+            },
+            {
+              role: 'user',
+              content: prompt
+            }
+          ],
+          temperature: 0.3,
+          response_format: { type: "json_object" }
+        });
       
-      const analysis = JSON.parse(response.choices[0].message.content);
+        analysis = JSON.parse(response.choices[0].message.content);
+      }
       
       // Save to MongoDB
       const client = await clientPromise;
