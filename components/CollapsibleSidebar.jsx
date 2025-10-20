@@ -357,20 +357,27 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
 
       {/* Desktop Sidebar */}
       <div className={cn(
-        "hidden lg:flex flex-col h-screen bg-slate-900 border-r border-slate-800 transition-all duration-300",
+        "hidden lg:flex flex-col h-screen bg-slate-900 border-r border-slate-800 transition-all duration-300 relative",
         isCollapsed ? "w-20" : "w-72"
       )}>
-        {/* Collapse Toggle Button */}
+        {/* Collapse Toggle Button - IMPROVED & HIGHLIGHTED */}
         <Button
           variant="ghost"
-          size="icon"
           onClick={() => setIsCollapsed(!isCollapsed)}
           className={cn(
-            "absolute -right-3 top-6 z-10 w-6 h-6 rounded-full bg-slate-800 border border-slate-700 text-slate-400 hover:text-white hover:bg-slate-700",
-            "hidden lg:flex items-center justify-center"
+            "absolute -right-12 top-6 z-20 flex items-center justify-center transition-all duration-300",
+            "bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700",
+            "text-white shadow-lg hover:shadow-xl",
+            "rounded-lg border-2 border-blue-500/50",
+            "w-10 h-10"
           )}
+          title={isCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
         >
-          {isCollapsed ? <ChevronRight className="w-3 h-3" /> : <ChevronLeft className="w-3 h-3" />}
+          {isCollapsed ? (
+            <ChevronRight className="w-5 h-5" />
+          ) : (
+            <ChevronLeft className="w-5 h-5" />
+          )}
         </Button>
 
         <SidebarContent />
