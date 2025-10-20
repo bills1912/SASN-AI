@@ -231,10 +231,10 @@ export default function App() {
   // Full Page Login (Landing + Login Combined)
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-[#0f1d3d] flex items-center justify-center p-4 md:p-0">
-        <div className="w-full h-screen flex flex-col md:flex-row">
-          {/* Left Side - Information */}
-          <div className="flex-1 flex items-center justify-center p-8 md:p-12">
+      <div className="min-h-screen bg-[#0f1d3d] flex items-center justify-center p-0">
+        <div className="w-full min-h-screen flex flex-col md:flex-row">
+          {/* Left Side - Information (Hidden on mobile) */}
+          <div className="hidden md:flex flex-1 items-center justify-center p-8 md:p-12">
             <div className="max-w-lg w-full space-y-6">
               {/* Logo & Title */}
               <div>
@@ -343,11 +343,23 @@ export default function App() {
             </div>
           </div>
 
-          {/* Right Side - Login */}
-          <div className="flex-1 flex items-center justify-center p-8 md:p-12">
+          {/* Right Side - Login (Full screen on mobile) */}
+          <div className="flex-1 flex items-center justify-center p-6 md:p-12 min-h-screen">
             <div className="w-full max-w-md space-y-6">
               {!showForgotPassword ? (
                 <>
+                  {/* Mobile Header */}
+                  <div className="text-center md:hidden mb-6">
+                    <h1 className="text-2xl font-bold mb-2">
+                      <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">
+                        ASTA-CITA AI
+                      </span>
+                    </h1>
+                    <p className="text-xs text-slate-400">
+                      Sistem Manajemen ASN
+                    </p>
+                  </div>
+
                   <div className="text-center">
                     <div className="inline-flex items-center justify-center w-16 h-16 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 mb-4">
                       <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -476,6 +488,48 @@ export default function App() {
                     <p className="text-xs text-slate-500">
                       Demo Mode: Gunakan email dan password apapun untuk login
                     </p>
+                  </div>
+
+                  {/* Mobile Partner Logos */}
+                  <div className="md:hidden pt-4 border-t border-slate-700">
+                    <p className="text-xs text-slate-400 text-center mb-3">Lembaga Partner</p>
+                    <div className="flex flex-wrap items-center justify-center gap-2">
+                      <div className="p-2 rounded-md bg-white/10 backdrop-blur-sm border border-white/20">
+                        <img 
+                          src="https://customer-assets.emergentagent.com/job_3fe8df70-7265-4c86-97fd-875d5fa187eb/artifacts/fx0bhszm_Logo_Setneg_RI.svg.png" 
+                          alt="Setneg" 
+                          className="h-6 w-auto object-contain"
+                        />
+                      </div>
+                      <div className="p-2 rounded-md bg-white/10 backdrop-blur-sm border border-white/20">
+                        <img 
+                          src="https://customer-assets.emergentagent.com/job_3fe8df70-7265-4c86-97fd-875d5fa187eb/artifacts/ambe7iyn_1554355505_Logo-LAN-Baru-Transparan.png" 
+                          alt="LAN" 
+                          className="h-6 w-auto object-contain"
+                        />
+                      </div>
+                      <div className="p-2 rounded-md bg-white/10 backdrop-blur-sm border border-white/20">
+                        <img 
+                          src="https://customer-assets.emergentagent.com/job_3fe8df70-7265-4c86-97fd-875d5fa187eb/artifacts/ixe1euh2_Lambang_Badan_Pusat_Statistik_%28BPS%29_Indonesia.svg.png" 
+                          alt="BPS" 
+                          className="h-6 w-auto object-contain"
+                        />
+                      </div>
+                      <div className="p-2 rounded-md bg-white/10 backdrop-blur-sm border border-white/20">
+                        <img 
+                          src="https://customer-assets.emergentagent.com/job_3fe8df70-7265-4c86-97fd-875d5fa187eb/artifacts/9m5rcvx3_Logo_PANRB.png" 
+                          alt="PANRB" 
+                          className="h-6 w-auto object-contain"
+                        />
+                      </div>
+                      <div className="p-2 rounded-md bg-white/10 backdrop-blur-sm border border-white/20">
+                        <img 
+                          src="https://customer-assets.emergentagent.com/job_3fe8df70-7265-4c86-97fd-875d5fa187eb/artifacts/qdsh946f_Logo_Badan_Kepegawaian_Negara.png" 
+                          alt="BKN" 
+                          className="h-6 w-auto object-contain"
+                        />
+                      </div>
+                    </div>
                   </div>
                 </>
               ) : (
