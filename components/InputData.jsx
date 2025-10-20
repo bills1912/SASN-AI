@@ -15,6 +15,10 @@ export default function InputDataNew({ user }) {
   const [selectedProfile, setSelectedProfile] = useState(null);
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
+  
+  // Check if user is admin or individual
+  const isAdmin = user?.role === 'admin';
+  const userNIP = user?.nip;
 
   useEffect(() => {
     loadProfiles();
