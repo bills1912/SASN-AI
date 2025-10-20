@@ -253,7 +253,14 @@ Return JSON:
         return NextResponse.json({ error: 'Profile not found' }, { status: 404 });
       }
       
-      const prompt = `Perform a deep skill analysis for this ASN:
+      let analysis;
+      
+      if (USE_MOCK_MODE) {
+        // Use mock AI response for demonstration
+        analysis = getMockSkillAnalysis(profile);
+      } else {
+        // Use actual OpenAI API
+        const prompt = `Perform a deep skill analysis for this ASN:
 
 Technical Skills: ${JSON.stringify(profile.skills.technical)}
 Soft Skills: ${JSON.stringify(profile.skills.soft)}
@@ -277,23 +284,24 @@ Return JSON:
   "overallScore": 0-100
 }`;
       
-      const response = await openai.chat.completions.create({
-        model: process.env.OPENAI_MODEL || 'gpt-4o',
-        messages: [
-          {
-            role: 'system',
-            content: 'You are an expert in skill assessment and competency development for civil servants.'
-          },
-          {
-            role: 'user',
-            content: prompt
-          }
-        ],
-        temperature: 0.3,
-        response_format: { type: "json_object" }
-      });
+        const response = await openai.chat.completions.create({
+          model: process.env.OPENAI_MODEL || 'gpt-4o',
+          messages: [
+            {
+              role: 'system',
+              content: 'You are an expert in skill assessment and competency development for civil servants.'
+            },
+            {
+              role: 'user',
+              content: prompt
+            }
+          ],
+          temperature: 0.3,
+          response_format: { type: "json_object" }
+        });
       
-      const analysis = JSON.parse(response.choices[0].message.content);
+        analysis = JSON.parse(response.choices[0].message.content);
+      }
       
       return NextResponse.json({ analysis, profile });
     } catch (error) {
