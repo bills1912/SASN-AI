@@ -196,9 +196,9 @@ export default function InputDataNew({ user }) {
             <SelectContent>
               {profiles.map(profile => (
                 <SelectItem key={profile.nip} value={profile.nip}>
-                  <div className="flex flex-col">
-                    <span className="font-medium">{profile.name}</span>
-                    <span className="text-xs text-muted-foreground">{profile.position} - {profile.agency}</span>
+                  <div className="flex items-center justify-between w-full pr-2">
+                    <span className="font-medium truncate mr-3">{profile.name}</span>
+                    <span className="text-xs text-muted-foreground whitespace-nowrap">{profile.position} - {profile.agency}</span>
                   </div>
                 </SelectItem>
               ))}
