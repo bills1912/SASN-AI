@@ -7,6 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
 import { Upload, FileText, Link as LinkIcon, Loader2, Target, Code2, TrendingUp } from 'lucide-react';
 
@@ -43,20 +44,11 @@ export default function InputData({ user }) {
     }
   };
 
-  const handleDocumentAnalysis = async () => {
-    if (!documentContent.trim()) {
-      toast({
-        title: 'Error',
-        description: 'Mohon masukkan konten dokumen',
-        variant: 'destructive'
-      });
-      return;
-    }
-
+  const generateTalentMapping = async () => {
     if (!selectedNIP) {
       toast({
         title: 'Error',
-        description: 'Mohon masukkan NIP',
+        description: 'Pilih ASN terlebih dahulu',
         variant: 'destructive'
       });
       return;
@@ -65,28 +57,22 @@ export default function InputData({ user }) {
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('/api/talent/analyze-document', {
+      const response = await fetch('/api/talent/talent-mapping', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({
-          content: documentContent,
-          nip: selectedNIP
-        })
+        body: JSON.stringify({ nip: selectedNIP })
       });
-
-      const data = await response.json();
 
       if (response.ok) {
         toast({
-          title: 'Analisis Berhasil',
-          description: 'Dokumen telah dianalisis dengan AI',
+          title: 'Pemetaan Talenta Berhasil',
+          description: 'Hasil dapat dilihat di menu Manajemen Talenta → Pemetaan Talenta',
         });
-        setDocumentContent('');
       } else {
-        throw new Error(data.error || 'Gagal menganalisis dokumen');
+        throw new Error('Gagal generate talent mapping');
       }
     } catch (error) {
       toast({
@@ -99,20 +85,11 @@ export default function InputData({ user }) {
     }
   };
 
-  const handlePortfolioAnalysis = async () => {
-    if (!portfolioUrl.trim()) {
-      toast({
-        title: 'Error',
-        description: 'Mohon masukkan URL portfolio',
-        variant: 'destructive'
-      });
-      return;
-    }
-
+  const generateSkillAnalysis = async () => {
     if (!selectedNIP) {
       toast({
         title: 'Error',
-        description: 'Mohon masukkan NIP',
+        description: 'Pilih ASN terlebih dahulu',
         variant: 'destructive'
       });
       return;
@@ -121,28 +98,63 @@ export default function InputData({ user }) {
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('/api/talent/analyze-portfolio', {
+      const response = await fetch('/api/talent/skill-analysis', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({
-          portfolioUrl,
-          nip: selectedNIP
-        })
+        body: JSON.stringify({ nip: selectedNIP })
       });
-
-      const data = await response.json();
 
       if (response.ok) {
         toast({
-          title: 'Analisis Berhasil',
-          description: 'Portfolio telah dianalisis dengan AI',
+          title: 'Analisis Skill Berhasil',
+          description: 'Hasil dapat dilihat di menu Manajemen Talenta → Analisis Skill',
         });
-        setPortfolioUrl('');
       } else {
-        throw new Error(data.error || 'Gagal menganalisis portfolio');
+        throw new Error('Gagal generate skill analysis');
+      }
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: error.message,
+        variant: 'destructive'
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const generatePerformanceAnalysis = async () => {
+    if (!selectedNIP) {
+      toast({
+        title: 'Error',
+        description: 'Pilih ASN terlebih dahulu',
+        variant: 'destructive'
+      });
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch('/api/performance/analyze', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ nip: selectedNIP })
+      });
+
+      if (response.ok) {
+        toast({
+          title: 'Analisis Kinerja Berhasil',
+          description: 'Hasil dapat dilihat di menu Penilaian Kinerja',
+        });
+      } else {
+        throw new Error('Gagal generate performance analysis');
       }
     } catch (error) {
       toast({
@@ -156,136 +168,148 @@ export default function InputData({ user }) {
   };
 
   return (
-    <div className="max-w-6xl mx-auto space-y-6">
+    <div className="max-w-7xl mx-auto space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-foreground mb-2">Input Data ASN</h1>
+        <h1 className="text-3xl font-bold text-foreground mb-2">Input Data & Analisis ASN</h1>
         <p className="text-muted-foreground">
-          Input data dokumen penilaian, portfolio, dan informasi lainnya untuk analisis talenta berbasis AI
+          Pilih ASN dan generate analisis talenta atau kinerja. Hasil analisis dapat dilihat di menu masing-masing.
         </p>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-6">
-        {/* Document Analysis */}
+      {/* Select ASN */}
+      <Card className="p-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <Label>Pilih ASN untuk Analisis</Label>
+            <p className="text-sm text-muted-foreground mt-1">
+              Pilih pegawai yang akan dianalisis
+            </p>
+          </div>
+          <Select value={selectedNIP} onValueChange={setSelectedNIP}>
+            <SelectTrigger className="w-[350px]">
+              <SelectValue placeholder="Pilih ASN" />
+            </SelectTrigger>
+            <SelectContent>
+              {profiles.map(profile => (
+                <SelectItem key={profile.nip} value={profile.nip}>
+                  {profile.name} - {profile.position}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      </Card>
+
+      {/* Analysis Actions */}
+      <div className="grid md:grid-cols-3 gap-6">
+        {/* Talent Mapping */}
         <Card className="p-6">
           <div className="flex items-center space-x-3 mb-4">
-            <div className="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center">
-              <FileText className="w-5 h-5 text-blue-500" />
+            <div className="w-12 h-12 rounded-lg bg-blue-500/10 flex items-center justify-center">
+              <Target className="w-6 h-6 text-blue-500" />
             </div>
             <div>
-              <h2 className="text-lg font-semibold text-foreground">Analisis Dokumen</h2>
-              <p className="text-sm text-muted-foreground">Upload dokumen penilaian kinerja</p>
+              <h3 className="font-semibold text-foreground">Pemetaan Talenta</h3>
+              <p className="text-xs text-muted-foreground">9-Box Grid Analysis</p>
             </div>
           </div>
-
-          <div className="space-y-4">
-            <div>
-              <Label htmlFor="nip-doc">NIP Pegawai</Label>
-              <Input
-                id="nip-doc"
-                placeholder="Contoh: 199002152015031002"
-                value={selectedNIP}
-                onChange={(e) => setSelectedNIP(e.target.value)}
-                className="mt-2"
-              />
-            </div>
-
-            <div>
-              <Label htmlFor="document">Konten Dokumen</Label>
-              <Textarea
-                id="document"
-                rows={10}
-                placeholder="Paste konten dokumen penilaian kinerja, sertifikat, atau dokumen lainnya..."
-                value={documentContent}
-                onChange={(e) => setDocumentContent(e.target.value)}
-                className="mt-2"
-              />
-            </div>
-
-            <Button
-              onClick={handleDocumentAnalysis}
-              disabled={loading}
-              className="w-full"
-            >
-              {loading ? (
-                <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Menganalisis...
-                </>
-              ) : (
-                <>
-                  <Upload className="w-4 h-4 mr-2" />
-                  Analisis Dokumen
-                </>
-              )}
-            </Button>
-          </div>
+          <p className="text-sm text-muted-foreground mb-4">
+            Generate analisis pemetaan talenta dengan 9-box grid matrix, mencakup performance vs potential analysis.
+          </p>
+          <Button
+            onClick={generateTalentMapping}
+            disabled={loading || !selectedNIP}
+            className="w-full"
+          >
+            {loading ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Menganalisis...
+              </>
+            ) : (
+              <>
+                <Target className="w-4 h-4 mr-2" />
+                Generate Pemetaan Talenta
+              </>
+            )}
+          </Button>
+          <p className="text-xs text-muted-foreground mt-3 text-center">
+            Hasil di: <span className="font-medium text-blue-500">Manajemen Talenta → Pemetaan Talenta</span>
+          </p>
         </Card>
 
-        {/* Portfolio Analysis */}
+        {/* Skill Analysis */}
         <Card className="p-6">
           <div className="flex items-center space-x-3 mb-4">
-            <div className="w-10 h-10 rounded-lg bg-cyan-500/10 flex items-center justify-center">
-              <LinkIcon className="w-5 h-5 text-cyan-500" />
+            <div className="w-12 h-12 rounded-lg bg-purple-500/10 flex items-center justify-center">
+              <Code2 className="w-6 h-6 text-purple-500" />
             </div>
             <div>
-              <h2 className="text-lg font-semibold text-foreground">Analisis Portfolio</h2>
-              <p className="text-sm text-muted-foreground">Analisis LinkedIn atau portfolio online</p>
+              <h3 className="font-semibold text-foreground">Analisis Skill</h3>
+              <p className="text-xs text-muted-foreground">Deep Skill Assessment</p>
             </div>
           </div>
+          <p className="text-sm text-muted-foreground mb-4">
+            Generate analisis mendalam terhadap technical & soft skills, identifikasi skill gaps dan emerging skills.
+          </p>
+          <Button
+            onClick={generateSkillAnalysis}
+            disabled={loading || !selectedNIP}
+            className="w-full"
+            variant="outline"
+          >
+            {loading ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Menganalisis...
+              </>
+            ) : (
+              <>
+                <Code2 className="w-4 h-4 mr-2" />
+                Generate Analisis Skill
+              </>
+            )}
+          </Button>
+          <p className="text-xs text-muted-foreground mt-3 text-center">
+            Hasil di: <span className="font-medium text-purple-500">Manajemen Talenta → Analisis Skill</span>
+          </p>
+        </Card>
 
-          <div className="space-y-4">
+        {/* Performance Analysis */}
+        <Card className="p-6">
+          <div className="flex items-center space-x-3 mb-4">
+            <div className="w-12 h-12 rounded-lg bg-cyan-500/10 flex items-center justify-center">
+              <TrendingUp className="w-6 h-6 text-cyan-500" />
+            </div>
             <div>
-              <Label htmlFor="nip-portfolio">NIP Pegawai</Label>
-              <Input
-                id="nip-portfolio"
-                placeholder="Contoh: 199002152015031002"
-                value={selectedNIP}
-                onChange={(e) => setSelectedNIP(e.target.value)}
-                className="mt-2"
-              />
+              <h3 className="font-semibold text-foreground">Analisis Kinerja</h3>
+              <p className="text-xs text-muted-foreground">Performance Assessment</p>
             </div>
-
-            <div>
-              <Label htmlFor="portfolio-url">URL Portfolio</Label>
-              <Input
-                id="portfolio-url"
-                type="url"
-                placeholder="https://linkedin.com/in/username atau portfolio URL"
-                value={portfolioUrl}
-                onChange={(e) => setPortfolioUrl(e.target.value)}
-                className="mt-2"
-              />
-            </div>
-
-            <div className="bg-muted/50 rounded-lg p-4 space-y-2">
-              <p className="text-sm font-medium text-foreground">Sumber yang Didukung:</p>
-              <ul className="text-sm text-muted-foreground space-y-1">
-                <li>• LinkedIn Profile</li>
-                <li>• Personal Website/Portfolio</li>
-                <li>• GitHub Profile</li>
-                <li>• Professional Portfolio Sites</li>
-              </ul>
-            </div>
-
-            <Button
-              onClick={handlePortfolioAnalysis}
-              disabled={loading}
-              className="w-full"
-              variant="outline"
-            >
-              {loading ? (
-                <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Menganalisis...
-                </>
-              ) : (
-                <>
-                  <LinkIcon className="w-4 h-4 mr-2" />
-                  Analisis Portfolio
-                </>
-              )}
-            </Button>
           </div>
+          <p className="text-sm text-muted-foreground mb-4">
+            Generate analisis kinerja komprehensif dengan quadrant classification dan development recommendations.
+          </p>
+          <Button
+            onClick={generatePerformanceAnalysis}
+            disabled={loading || !selectedNIP}
+            className="w-full"
+            variant="outline"
+          >
+            {loading ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Menganalisis...
+              </>
+            ) : (
+              <>
+                <TrendingUp className="w-4 h-4 mr-2" />
+                Generate Analisis Kinerja
+              </>
+            )}
+          </Button>
+          <p className="text-xs text-muted-foreground mt-3 text-center">
+            Hasil di: <span className="font-medium text-cyan-500">Penilaian Kinerja</span>
+          </p>
         </Card>
       </div>
 
@@ -299,12 +323,21 @@ export default function InputData({ user }) {
           </div>
           <div>
             <h3 className="font-semibold text-foreground mb-2">Tentang Analisis AI</h3>
-            <p className="text-sm text-muted-foreground">
-              Sistem ini menggunakan AI (GPT-4o) untuk menganalisis dokumen dan portfolio secara mendalam.
-              AI akan mengekstrak skill teknis, soft skill, pengalaman, prestasi, dan memberikan penilaian
-              kompetensi yang komprehensif. Data yang dianalisis akan digunakan untuk pemetaan talenta dan
-              rekomendasi jabatan.
+            <p className="text-sm text-muted-foreground mb-3">
+              Sistem ini menggunakan AI (GPT-4o) untuk menganalisis data ASN secara mendalam. Setiap analisis akan:
             </p>
+            <ul className="text-sm text-muted-foreground space-y-1 ml-4">
+              <li>• Mengekstrak dan menganalisis kompetensi, skill, dan prestasi</li>
+              <li>• Memberikan penilaian objektif berdasarkan data komprehensif</li>
+              <li>• Menghasilkan rekomendasi pengembangan yang actionable</li>
+              <li>• Menyimpan hasil untuk dapat dilihat di menu terkait</li>
+            </ul>
+            <div className="mt-4 p-3 bg-background/50 rounded-lg border border-border">
+              <p className="text-xs font-medium text-foreground mb-1">Workflow:</p>
+              <p className="text-xs text-muted-foreground">
+                1. Pilih ASN → 2. Generate Analisis → 3. Lihat hasil di menu Manajemen Talenta atau Penilaian Kinerja
+              </p>
+            </div>
           </div>
         </div>
       </Card>
