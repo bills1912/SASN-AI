@@ -1,0 +1,346 @@
+'use client'
+
+import { useState, useEffect } from 'react';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useToast } from '@/hooks/use-toast';
+import { Upload, FileText, Link as LinkIcon, Loader2, Target, Code2, TrendingUp } from 'lucide-react';
+
+export default function InputData({ user }) {
+  const [documentContent, setDocumentContent] = useState('');
+  const [portfolioUrl, setPortfolioUrl] = useState('');
+  const [selectedNIP, setSelectedNIP] = useState('');
+  const [profiles, setProfiles] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    loadProfiles();
+  }, []);
+
+  const loadProfiles = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch('/api/talent/profiles', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setProfiles(data.profiles);
+        if (data.profiles.length > 0) {
+          setSelectedNIP(data.profiles[0].nip);
+        }
+      }
+    } catch (error) {
+      console.error('Error loading profiles:', error);
+    }
+  };
+
+  const generateTalentMapping = async () => {
+    if (!selectedNIP) {
+      toast({
+        title: 'Error',
+        description: 'Pilih ASN terlebih dahulu',
+        variant: 'destructive'
+      });
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch('/api/talent/talent-mapping', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ nip: selectedNIP })
+      });
+
+      if (response.ok) {
+        toast({
+          title: 'Pemetaan Talenta Berhasil',
+          description: 'Hasil dapat dilihat di menu Manajemen Talenta → Pemetaan Talenta',
+        });
+      } else {
+        throw new Error('Gagal generate talent mapping');
+      }
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: error.message,
+        variant: 'destructive'
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const generateSkillAnalysis = async () => {
+    if (!selectedNIP) {
+      toast({
+        title: 'Error',
+        description: 'Pilih ASN terlebih dahulu',
+        variant: 'destructive'
+      });
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch('/api/talent/skill-analysis', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ nip: selectedNIP })
+      });
+
+      if (response.ok) {
+        toast({
+          title: 'Analisis Skill Berhasil',
+          description: 'Hasil dapat dilihat di menu Manajemen Talenta → Analisis Skill',
+        });
+      } else {
+        throw new Error('Gagal generate skill analysis');
+      }
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: error.message,
+        variant: 'destructive'
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const generatePerformanceAnalysis = async () => {
+    if (!selectedNIP) {
+      toast({
+        title: 'Error',
+        description: 'Pilih ASN terlebih dahulu',
+        variant: 'destructive'
+      });
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch('/api/performance/analyze', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ nip: selectedNIP })
+      });
+
+      if (response.ok) {
+        toast({
+          title: 'Analisis Kinerja Berhasil',
+          description: 'Hasil dapat dilihat di menu Penilaian Kinerja',
+        });
+      } else {
+        throw new Error('Gagal generate performance analysis');
+      }
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: error.message,
+        variant: 'destructive'
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="max-w-7xl mx-auto space-y-6">
+      <div>
+        <h1 className="text-3xl font-bold text-foreground mb-2">Input Data & Analisis ASN</h1>
+        <p className="text-muted-foreground">
+          Pilih ASN dan generate analisis talenta atau kinerja. Hasil analisis dapat dilihat di menu masing-masing.
+        </p>
+      </div>
+
+      {/* Select ASN */}
+      <Card className="p-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <Label>Pilih ASN untuk Analisis</Label>
+            <p className="text-sm text-muted-foreground mt-1">
+              Pilih pegawai yang akan dianalisis
+            </p>
+          </div>
+          <Select value={selectedNIP} onValueChange={setSelectedNIP}>
+            <SelectTrigger className="w-[350px]">
+              <SelectValue placeholder="Pilih ASN" />
+            </SelectTrigger>
+            <SelectContent>
+              {profiles.map(profile => (
+                <SelectItem key={profile.nip} value={profile.nip}>
+                  {profile.name} - {profile.position}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      </Card>
+
+      {/* Analysis Actions */}
+      <div className="grid md:grid-cols-3 gap-6">
+        {/* Talent Mapping */}
+        <Card className="p-6">
+          <div className="flex items-center space-x-3 mb-4">
+            <div className="w-12 h-12 rounded-lg bg-blue-500/10 flex items-center justify-center">
+              <Target className="w-6 h-6 text-blue-500" />
+            </div>
+            <div>
+              <h3 className="font-semibold text-foreground">Pemetaan Talenta</h3>
+              <p className="text-xs text-muted-foreground">9-Box Grid Analysis</p>
+            </div>
+          </div>
+          <p className="text-sm text-muted-foreground mb-4">
+            Generate analisis pemetaan talenta dengan 9-box grid matrix, mencakup performance vs potential analysis.
+          </p>
+          <Button
+            onClick={generateTalentMapping}
+            disabled={loading || !selectedNIP}
+            className="w-full"
+          >
+            {loading ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Menganalisis...
+              </>
+            ) : (
+              <>
+                <Target className="w-4 h-4 mr-2" />
+                Generate Pemetaan Talenta
+              </>
+            )}
+          </Button>
+          <p className="text-xs text-muted-foreground mt-3 text-center">
+            Hasil di: <span className="font-medium text-blue-500">Manajemen Talenta → Pemetaan Talenta</span>
+          </p>
+        </Card>
+
+        {/* Skill Analysis */}
+        <Card className="p-6">
+          <div className="flex items-center space-x-3 mb-4">
+            <div className="w-12 h-12 rounded-lg bg-purple-500/10 flex items-center justify-center">
+              <Code2 className="w-6 h-6 text-purple-500" />
+            </div>
+            <div>
+              <h3 className="font-semibold text-foreground">Analisis Skill</h3>
+              <p className="text-xs text-muted-foreground">Deep Skill Assessment</p>
+            </div>
+          </div>
+          <p className="text-sm text-muted-foreground mb-4">
+            Generate analisis mendalam terhadap technical & soft skills, identifikasi skill gaps dan emerging skills.
+          </p>
+          <Button
+            onClick={generateSkillAnalysis}
+            disabled={loading || !selectedNIP}
+            className="w-full"
+            variant="outline"
+          >
+            {loading ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Menganalisis...
+              </>
+            ) : (
+              <>
+                <Code2 className="w-4 h-4 mr-2" />
+                Generate Analisis Skill
+              </>
+            )}
+          </Button>
+          <p className="text-xs text-muted-foreground mt-3 text-center">
+            Hasil di: <span className="font-medium text-purple-500">Manajemen Talenta → Analisis Skill</span>
+          </p>
+        </Card>
+
+        {/* Performance Analysis */}
+        <Card className="p-6">
+          <div className="flex items-center space-x-3 mb-4">
+            <div className="w-12 h-12 rounded-lg bg-cyan-500/10 flex items-center justify-center">
+              <TrendingUp className="w-6 h-6 text-cyan-500" />
+            </div>
+            <div>
+              <h3 className="font-semibold text-foreground">Analisis Kinerja</h3>
+              <p className="text-xs text-muted-foreground">Performance Assessment</p>
+            </div>
+          </div>
+          <p className="text-sm text-muted-foreground mb-4">
+            Generate analisis kinerja komprehensif dengan quadrant classification dan development recommendations.
+          </p>
+          <Button
+            onClick={generatePerformanceAnalysis}
+            disabled={loading || !selectedNIP}
+            className="w-full"
+            variant="outline"
+          >
+            {loading ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Menganalisis...
+              </>
+            ) : (
+              <>
+                <TrendingUp className="w-4 h-4 mr-2" />
+                Generate Analisis Kinerja
+              </>
+            )}
+          </Button>
+          <p className="text-xs text-muted-foreground mt-3 text-center">
+            Hasil di: <span className="font-medium text-cyan-500">Penilaian Kinerja</span>
+          </p>
+        </Card>
+      </div>
+
+      {/* Info Card */}
+      <Card className="p-6 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border-blue-500/20">
+        <div className="flex items-start space-x-3">
+          <div className="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center flex-shrink-0 mt-1">
+            <svg className="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <div>
+            <h3 className="font-semibold text-foreground mb-2">Tentang Analisis AI</h3>
+            <p className="text-sm text-muted-foreground mb-3">
+              Sistem ini menggunakan AI (GPT-4o) untuk menganalisis data ASN secara mendalam. Setiap analisis akan:
+            </p>
+            <ul className="text-sm text-muted-foreground space-y-1 ml-4">
+              <li>• Mengekstrak dan menganalisis kompetensi, skill, dan prestasi</li>
+              <li>• Memberikan penilaian objektif berdasarkan data komprehensif</li>
+              <li>• Menghasilkan rekomendasi pengembangan yang actionable</li>
+              <li>• Menyimpan hasil untuk dapat dilihat di menu terkait</li>
+            </ul>
+            <div className="mt-4 p-3 bg-background/50 rounded-lg border border-border">
+              <p className="text-xs font-medium text-foreground mb-1">Workflow:</p>
+              <p className="text-xs text-muted-foreground">
+                1. Pilih ASN → 2. Generate Analisis → 3. Lihat hasil di menu Manajemen Talenta atau Penilaian Kinerja
+              </p>
+            </div>
+          </div>
+        </div>
+      </Card>
+    </div>
+  );
+}
