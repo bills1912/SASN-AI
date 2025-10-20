@@ -251,12 +251,12 @@ export default function InputDataNew({ user }) {
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Pilih Pegawai" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="max-w-[calc(100vw-2rem)]">
                 {profiles.map(profile => (
                   <SelectItem key={profile.nip} value={profile.nip}>
-                    <div className="flex items-center justify-between w-full pr-2">
-                      <span className="font-medium truncate mr-3">{profile.name}</span>
-                      <span className="text-xs text-muted-foreground whitespace-nowrap">{profile.position} - {profile.agency}</span>
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between w-full">
+                      <span className="font-medium truncate">{profile.name}</span>
+                      <span className="text-xs text-muted-foreground">{profile.position}</span>
                     </div>
                   </SelectItem>
                 ))}
