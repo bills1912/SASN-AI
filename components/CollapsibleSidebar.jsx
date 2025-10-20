@@ -182,7 +182,13 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
                     {item.submenu.map((subitem) => (
                       <button
                         key={subitem.id}
-                        onClick={() => setCurrentView(subitem.id)}
+                        onClick={() => {
+                          setCurrentView(subitem.id);
+                          // Auto close mobile sidebar
+                          if (isMobile) {
+                            setIsMobileOpen(false);
+                          }
+                        }}
                         className={cn(
                           "w-full flex items-center space-x-3 pl-14 pr-6 py-2.5 transition-colors",
                           currentView === subitem.id
