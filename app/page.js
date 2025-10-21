@@ -613,8 +613,8 @@ export default function App() {
 
   // Main App
   return (
-    <div className={`min-h-screen ${theme === 'dark' ? 'dark' : ''}`}>
-      <div className="flex min-h-screen bg-background">
+    <div className={`h-screen ${theme === 'dark' ? 'dark' : ''}`}>
+      <div className="flex h-screen bg-background">
         <CollapsibleSidebar
           currentView={currentView}
           setCurrentView={setCurrentView}
@@ -624,8 +624,8 @@ export default function App() {
           toggleTheme={toggleTheme}
         />
 
-        {/* Main Content with proper boundaries */}
-        <div className="flex-1 overflow-auto lg:ml-0 w-full">
+        {/* Main Content with proper boundaries and scrollable */}
+        <div className="flex-1 h-screen overflow-y-auto w-full">
           {/* Content container with proper spacing from sidebar and mobile menu button */}
           <div className="p-4 md:p-6 pt-16 lg:pt-6">
             {currentView === 'input-data' && (
