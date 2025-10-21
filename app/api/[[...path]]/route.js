@@ -384,6 +384,96 @@ Return JSON:
     }
   }
   
+  // Extract portfolio data
+  if (segments[0] === 'extract-portfolio' && method === 'POST') {
+    try {
+      const { nip, portfolioLink } = await request.json();
+      
+      // Use OpenAI to extract and analyze portfolio data
+      const prompt = `Extract professional information from this portfolio/profile link: ${portfolioLink}
+
+Please analyze and extract:
+1. Skills and expertise (technical and soft skills)
+2. Work experience and projects
+3. Education and certifications
+4. Achievements and accomplishments
+5. Professional summary
+
+Return structured JSON:
+{
+  "skills": {
+    "technical": ["skill1", "skill2"],
+    "soft": ["skill1", "skill2"]
+  },
+  "experience": [{"title": "position", "company": "name", "duration": "period", "description": "details"}],
+  "education": [{"degree": "name", "institution": "name", "year": "year"}],
+  "certifications": ["cert1", "cert2"],
+  "achievements": ["achievement1", "achievement2"],
+  "summary": "professional summary",
+  "competencyScore": 0-100
+}`;
+
+      const response = await openai.chat.completions.create({
+        model: process.env.OPENAI_MODEL || 'gpt-4o',
+        messages: [
+          {
+            role: 'system',
+            content: 'You are an expert at extracting and analyzing professional data from portfolio links, LinkedIn profiles, and GitHub profiles. Extract meaningful career information even if you cannot directly access the URL.'
+          },
+          {
+            role: 'user',
+            content: prompt
+          }
+        ],
+        temperature: 0.3,
+        response_format: { type: "json_object" }
+      });
+      
+      const extractedData = JSON.parse(response.choices[0].message.content);
+      
+      // Save extracted data to MongoDB
+      const client = await clientPromise;
+      const db = client.db('asta_cita_ai');
+      
+      await db.collection('portfolio_data').updateOne(
+        { nip },
+        { 
+          $set: {
+            portfolioLink,
+            extractedData,
+            extractedAt: new Date()
+          }
+        },
+        { upsert: true }
+      );
+      
+      // Update profile with portfolio data
+      await db.collection('profiles').updateOne(
+        { nip },
+        { 
+          $set: { 
+            portfolioLink,
+            hasPortfolioData: true,
+            lastPortfolioUpdate: new Date()
+          }
+        },
+        { upsert: true }
+      );
+      
+      return NextResponse.json({ 
+        success: true,
+        extractedData,
+        message: 'Portfolio data extracted and saved successfully' 
+      });
+    } catch (error) {
+      console.error('Error extracting portfolio:', error);
+      return NextResponse.json(
+        { error: 'Failed to extract portfolio data', details: error.message },
+        { status: 500 }
+      );
+    }
+  }
+  
   return null;
 }
 
