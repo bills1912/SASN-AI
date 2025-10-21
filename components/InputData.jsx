@@ -16,6 +16,8 @@ export default function InputData({ user, selectedProfile: globalSelectedProfile
   const [portfolioLink, setPortfolioLink] = useState('');
   const [extractingPortfolio, setExtractingPortfolio] = useState(false);
   const [portfolioData, setPortfolioData] = useState(null);
+  const [inputMode, setInputMode] = useState('link'); // 'link' or 'file'
+  const [uploadedFile, setUploadedFile] = useState(null);
   const { toast } = useToast();
   
   // Check if user is admin or individual
