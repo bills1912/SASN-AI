@@ -389,8 +389,53 @@ Return JSON:
     try {
       const { nip, portfolioLink } = await request.json();
       
-      // Use OpenAI to extract and analyze portfolio data
-      const prompt = `Extract professional information from this portfolio/profile link: ${portfolioLink}
+      let extractedData;
+      
+      // Check if mock mode or use real OpenAI
+      if (USE_MOCK_MODE || !openai) {
+        // Mock extracted data for demo
+        extractedData = {
+          skills: {
+            technical: ["Python", "JavaScript", "React", "Node.js", "MongoDB", "AWS", "Docker"],
+            soft: ["Leadership", "Communication", "Problem Solving", "Team Collaboration", "Time Management"]
+          },
+          experience: [
+            {
+              title: "Senior Developer",
+              company: "Tech Company",
+              duration: "2020 - Present",
+              description: "Leading development team and architecting scalable solutions"
+            },
+            {
+              title: "Software Engineer",
+              company: "Startup Inc",
+              duration: "2018 - 2020",
+              description: "Full-stack development and system design"
+            }
+          ],
+          education: [
+            {
+              degree: "Bachelor of Computer Science",
+              institution: "Top University",
+              year: "2018"
+            }
+          ],
+          certifications: [
+            "AWS Certified Solutions Architect",
+            "Professional Scrum Master",
+            "Google Cloud Professional"
+          ],
+          achievements: [
+            "Led successful digital transformation project",
+            "Improved system performance by 40%",
+            "Mentored 10+ junior developers"
+          ],
+          summary: "Experienced software engineer with strong technical skills and proven leadership abilities. Specialized in full-stack development and cloud architecture.",
+          competencyScore: 85
+        };
+      } else {
+        // Use real OpenAI for extraction
+        const prompt = `Extract professional information from this portfolio/profile link: ${portfolioLink}
 
 Please analyze and extract:
 1. Skills and expertise (technical and soft skills)
@@ -413,23 +458,24 @@ Return structured JSON:
   "competencyScore": 0-100
 }`;
 
-      const response = await openai.chat.completions.create({
-        model: process.env.OPENAI_MODEL || 'gpt-4o',
-        messages: [
-          {
-            role: 'system',
-            content: 'You are an expert at extracting and analyzing professional data from portfolio links, LinkedIn profiles, and GitHub profiles. Extract meaningful career information even if you cannot directly access the URL.'
-          },
-          {
-            role: 'user',
-            content: prompt
-          }
-        ],
-        temperature: 0.3,
-        response_format: { type: "json_object" }
-      });
-      
-      const extractedData = JSON.parse(response.choices[0].message.content);
+        const response = await openai.chat.completions.create({
+          model: process.env.OPENAI_MODEL || 'gpt-4o',
+          messages: [
+            {
+              role: 'system',
+              content: 'You are an expert at extracting and analyzing professional data from portfolio links, LinkedIn profiles, and GitHub profiles. Extract meaningful career information even if you cannot directly access the URL.'
+            },
+            {
+              role: 'user',
+              content: prompt
+            }
+          ],
+          temperature: 0.3,
+          response_format: { type: "json_object" }
+        });
+        
+        extractedData = JSON.parse(response.choices[0].message.content);
+      }
       
       // Save extracted data to MongoDB
       const client = await clientPromise;
