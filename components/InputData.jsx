@@ -511,28 +511,22 @@ export default function InputDataNew({ user, selectedProfile: globalSelectedProf
                 Unggah sertifikat pelatihan, kursus, atau penghargaan yang relevan
               </p>
               
-              {/* List of uploaded certifications with progress bars */}
+              {/* List of uploaded certifications */}
               {certifications.length > 0 && (
                 <div className="mt-3 space-y-2">
                   <p className="text-xs font-medium text-foreground">File yang diunggah:</p>
                   {certifications.map((cert, index) => (
-                    <div key={index} className="p-2 bg-muted rounded">
-                      <div className="flex items-center gap-2 text-xs mb-1">
-                        <FileText className="w-4 h-4 flex-shrink-0" />
-                        <span className="flex-1 truncate font-medium">{cert.name}</span>
-                        <span className="text-muted-foreground">{(cert.size / 1024).toFixed(1)} KB</span>
-                      </div>
+                    <div key={index} className="flex items-center gap-2 p-2 bg-muted rounded text-xs">
+                      <FileText className="w-4 h-4" />
+                      <span className="flex-1 truncate">{cert.name}</span>
+                      <span className="text-muted-foreground">{(cert.size / 1024).toFixed(1)} KB</span>
                       {/* Progress bar per file */}
-                      {uploadProgress[cert.name] !== undefined && (
-                        <div className="w-full bg-slate-700 rounded-full h-2 mt-1.5">
+                      {uploadProgress[cert.name] !== undefined && uploadProgress[cert.name] < 100 && (
+                        <div className="w-full bg-slate-700 rounded-full h-1.5 mt-1">
                           <div 
-                            className="bg-gradient-to-r from-blue-500 to-cyan-500 h-2 rounded-full transition-all duration-300 flex items-center justify-end pr-1"
+                            className="bg-blue-500 h-1.5 rounded-full transition-all duration-300"
                             style={{ width: `${uploadProgress[cert.name]}%` }}
-                          >
-                            {uploadProgress[cert.name] > 20 && (
-                              <span className="text-[10px] font-bold text-white">{uploadProgress[cert.name]}%</span>
-                            )}
-                          </div>
+                          />
                         </div>
                       )}
                     </div>
