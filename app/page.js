@@ -11,6 +11,7 @@ import CollapsibleSidebar from '@/components/CollapsibleSidebar';
 import TalentManagement from '@/components/TalentManagement';
 import PerformanceAssessment from '@/components/PerformanceAssessment';
 import InputData from '@/components/InputData';
+import SystemInfo from '@/components/SystemInfo';
 import { CheckCircle, Target, TrendingUp, BarChart3, Eye, EyeOff, RefreshCw } from 'lucide-react';
 
 export default function App() {
