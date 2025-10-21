@@ -490,17 +490,17 @@ export default function InputDataNew({ user, selectedProfile: globalSelectedProf
                   multiple
                   accept=".pdf,.jpg,.jpeg,.png"
                   onChange={handleFileUpload}
-                  disabled={uploadingCert || !selectedProfile}
+                  disabled={Object.keys(uploadProgress).length > 0 || !selectedProfile}
                   className="hidden"
                 />
                 <label htmlFor="certifications" className="cursor-pointer">
-                  {uploadingCert ? (
+                  {Object.keys(uploadProgress).length > 0 ? (
                     <Loader2 className="w-8 h-8 text-muted-foreground mx-auto mb-2 animate-spin" />
                   ) : (
                     <FileText className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
                   )}
                   <p className="text-sm font-medium text-foreground mb-1">
-                    {uploadingCert ? 'Mengunggah...' : 'Klik untuk unggah sertifikat'}
+                    {Object.keys(uploadProgress).length > 0 ? 'Mengunggah...' : 'Klik untuk unggah sertifikat'}
                   </p>
                   <p className="text-xs text-muted-foreground">
                     PDF, JPG, PNG (Maks 5MB per file)
