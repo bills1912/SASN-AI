@@ -132,7 +132,7 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
 
       {/* Navigation */}
       <div className="flex-1 overflow-y-auto py-4">
-        {menuItems.map((item) => (
+        {allMenuItems.map((item) => (
           <div key={item.id}>
             {item.section === 'main' && (
               <button
