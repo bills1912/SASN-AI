@@ -464,21 +464,23 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
         isCollapsed ? "w-20" : "w-72"
       )}>
         <SidebarContent />
-        
-        {/* Collapse Toggle Button - Below header to avoid overlap */}
-        <Button
-          variant="ghost"
-          onClick={() => setIsCollapsed(!isCollapsed)}
-          className={cn(
-            "absolute z-20 flex items-center justify-center transition-all duration-300",
-            "bg-slate-800 hover:bg-slate-700",
-            "text-slate-400 hover:text-white",
-            "rounded-lg border border-slate-700",
-            "w-8 h-8",
-            isCollapsed ? "top-[88px] left-1/2 -translate-x-1/2" : "top-[88px] right-4"
-          )}
-          title={isCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
-        >
+      </div>
+
+      {/* Collapse Toggle Button - Outside sidebar, on the right edge */}
+      <Button
+        variant="ghost"
+        onClick={() => setIsCollapsed(!isCollapsed)}
+        className={cn(
+          "hidden lg:flex absolute z-20 items-center justify-center transition-all duration-300",
+          "bg-slate-800 hover:bg-slate-700",
+          "text-slate-400 hover:text-white",
+          "rounded-lg border border-slate-700",
+          "w-8 h-8",
+          "top-4",
+          isCollapsed ? "left-[84px]" : "left-[292px]"
+        )}
+        title={isCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
+      >
           {isCollapsed ? (
             <ChevronRight className="w-4 h-4" />
           ) : (
