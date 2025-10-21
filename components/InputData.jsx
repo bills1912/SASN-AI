@@ -238,37 +238,163 @@ export default function InputData({ user, selectedProfile: globalSelectedProfile
   };
 
   return (
-    <div className="max-w-7xl mx-auto space-y-6">
+    <div className="max-w-7xl mx-auto space-y-6 px-4 md:px-6">
       <div>
-        <h1 className="text-3xl font-bold text-foreground mb-2">Input Data & Analisis ASN</h1>
+        <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-2">Input Data & Analisis ASN</h1>
         <p className="text-muted-foreground">
-          Pilih ASN dan generate analisis talenta atau kinerja. Hasil analisis dapat dilihat di menu masing-masing.
+          Pilih pegawai dan generate analisis talenta atau kinerja. Hasil analisis dapat dilihat di menu masing-masing.
         </p>
       </div>
 
       {/* Select ASN */}
-      <Card className="p-6">
-        <div className="flex items-center justify-between">
+      <Card className="p-4 md:p-6">
+        <div className="space-y-4">
           <div>
-            <Label>Pilih ASN untuk Analisis</Label>
+            <Label className="text-base font-semibold">Pilih Pegawai untuk Analisis</Label>
             <p className="text-sm text-muted-foreground mt-1">
               Pilih pegawai yang akan dianalisis
             </p>
           </div>
-          <Select value={selectedNIP} onValueChange={setSelectedNIP}>
-            <SelectTrigger className="w-[350px]">
-              <SelectValue placeholder="Pilih ASN" />
-            </SelectTrigger>
-            <SelectContent>
-              {profiles.map(profile => (
-                <SelectItem key={profile.nip} value={profile.nip}>
-                  {profile.name} - {profile.position}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          
+          {isAdmin ? (
+            <Select 
+              value={selectedProfile?.nip} 
+              onValueChange={(nip) => {
+                const profile = profiles.find(p => p.nip === nip);
+                setSelectedProfile(profile);
+                setGlobalSelectedProfile?.(profile);
+              }}
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Pilih Pegawai" />
+              </SelectTrigger>
+              <SelectContent className="max-w-[calc(100vw-2rem)]">
+                {profiles.map(profile => (
+                  <SelectItem key={profile.nip} value={profile.nip}>
+                    <div className="flex items-center w-full">
+                      <span className="font-medium truncate">{profile.name}</span>
+                      <span className="hidden md:inline text-xs text-muted-foreground ml-auto pl-3">{profile.position}</span>
+                    </div>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          ) : (
+            selectedProfile && (
+              <div className="p-4 bg-gradient-to-br from-purple-500/10 to-pink-500/10 rounded-lg border border-purple-500/20">
+                <div className="flex items-center space-x-3">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white text-xl font-bold">
+                    {selectedProfile.name.charAt(0)}
+                  </div>
+                  <div>
+                    <p className="font-semibold text-foreground text-lg">{selectedProfile.name}</p>
+                    <p className="text-sm text-muted-foreground">{selectedProfile.position}</p>
+                  </div>
+                </div>
+              </div>
+            )
+          )}
+
+          {selectedProfile && (
+            <Card className="p-4 bg-muted/50 border-muted">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+                <div>
+                  <p className="text-muted-foreground">NIP</p>
+                  <p className="font-medium">{selectedProfile.nip}</p>
+                </div>
+                <div>
+                  <p className="text-muted-foreground">Jabatan</p>
+                  <p className="font-medium">{selectedProfile.position}</p>
+                </div>
+                <div>
+                  <p className="text-muted-foreground">Instansi</p>
+                  <p className="font-medium">{selectedProfile.agency}</p>
+                </div>
+                <div>
+                  <p className="text-muted-foreground">Grade</p>
+                  <p className="font-medium">{selectedProfile.grade}</p>
+                </div>
+              </div>
+            </Card>
+          )}
         </div>
       </Card>
+
+      {/* Portfolio Section */}
+      {selectedProfile && (
+        <Card className="p-4 md:p-6">
+          <h3 className="text-lg font-semibold text-foreground mb-2">
+            Link Portfolio (Opsional)
+          </h3>
+          <p className="text-sm text-muted-foreground mb-4">
+            Tambahkan link portfolio untuk ekstraksi data otomatis yang akan digunakan dalam analisis AI
+          </p>
+          
+          <div className="space-y-3">
+            <div className="flex gap-2">
+              <div className="relative flex-1">
+                <LinkIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input
+                  type="url"
+                  value={portfolioLink}
+                  onChange={(e) => setPortfolioLink(e.target.value)}
+                  placeholder="https://linkedin.com/in/username atau https://github.com/username"
+                  className="pl-10"
+                />
+              </div>
+              <Button 
+                onClick={handleExtractPortfolio}
+                disabled={!portfolioLink || extractingPortfolio}
+                className="whitespace-nowrap"
+              >
+                {extractingPortfolio ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Ekstrak...
+                  </>
+                ) : (
+                  <>
+                    <ExternalLink className="w-4 h-4 mr-2" />
+                    Ekstrak Data
+                  </>
+                )}
+              </Button>
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Mendukung: LinkedIn, GitHub, portfolio pribadi, atau profil profesional lainnya
+            </p>
+            
+            {/* Portfolio Data Preview */}
+            {portfolioData && (
+              <Card className="p-4 bg-gradient-to-br from-green-500/10 to-emerald-500/10 border-green-500/20">
+                <div className="flex items-start gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-green-500/20 flex items-center justify-center flex-shrink-0">
+                    <ExternalLink className="w-5 h-5 text-green-500" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h4 className="font-semibold text-foreground mb-1">Data Portfolio Berhasil Diekstrak</h4>
+                    <p className="text-sm text-muted-foreground mb-2">
+                      Data telah disimpan dan akan digunakan dalam analisis talenta & kinerja
+                    </p>
+                    {portfolioData.summary && (
+                      <p className="text-xs text-foreground italic">"{portfolioData.summary}"</p>
+                    )}
+                    {portfolioData.skills && (
+                      <div className="mt-2 flex flex-wrap gap-1">
+                        {portfolioData.skills.technical?.slice(0, 5).map((skill, idx) => (
+                          <span key={idx} className="px-2 py-0.5 bg-blue-500/20 text-blue-400 text-xs rounded">
+                            {skill}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </Card>
+            )}
+          </div>
+        </Card>
+      )}
 
       {/* Analysis Actions */}
       <div className="grid md:grid-cols-3 gap-6">
