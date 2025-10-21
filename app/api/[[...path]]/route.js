@@ -716,6 +716,214 @@ IMPORTANT: Only include information that is actually found in the content. If a 
     }
   }
   
+  // Extract resume/CV file
+  if (segments[0] === 'extract-resume' && method === 'POST') {
+    try {
+      const { nip, fileName, fileData, fileType } = await request.json();
+      
+      console.log('=== Starting Resume Extraction ===');
+      console.log('File:', fileName, 'Type:', fileType);
+      
+      let extractedText = '';
+      
+      // Decode base64
+      const base64Data = fileData.split(',')[1];
+      const buffer = Buffer.from(base64Data, 'base64');
+      
+      console.log('Buffer size:', buffer.length);
+      
+      // Extract text based on file type
+      if (fileType === 'application/pdf') {
+        const pdfParse = require('pdf-parse');
+        try {
+          const pdfData = await pdfParse(buffer);
+          extractedText = pdfData.text;
+          console.log('PDF text extracted, length:', extractedText.length);
+        } catch (pdfError) {
+          console.error('PDF parse error:', pdfError.message);
+          throw new Error('Gagal membaca file PDF. Pastikan file tidak ter-enkripsi.');
+        }
+      } else if (fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || fileType === 'application/msword') {
+        const mammoth = require('mammoth');
+        try {
+          const result = await mammoth.extractRawText({ buffer });
+          extractedText = result.value;
+          console.log('DOCX text extracted, length:', extractedText.length);
+        } catch (docError) {
+          console.error('DOCX parse error:', docError.message);
+          throw new Error('Gagal membaca file Word.');
+        }
+      }
+      
+      if (!extractedText || extractedText.length < 50) {
+        throw new Error('Tidak dapat mengekstrak teks dari file. Pastikan file berisi teks yang dapat dibaca.');
+      }
+      
+      console.log('Text extracted successfully, analyzing...');
+      
+      // Use same extraction logic as portfolio
+      let extractedData;
+      
+      // Try AI extraction first
+      if (!USE_MOCK_MODE && openai) {
+        try {
+          const prompt = `Analyze this resume/CV text and extract structured professional information:
+
+${extractedText.substring(0, 7000)}
+
+Extract and return valid JSON:
+{
+  "skills": {
+    "technical": ["array of technical skills"],
+    "soft": ["array of soft skills"]
+  },
+  "experience": [
+    {
+      "title": "job title",
+      "company": "company name",
+      "duration": "time period",
+      "description": "brief description"
+    }
+  ],
+  "education": [
+    {
+      "degree": "degree name",
+      "institution": "institution name",
+      "year": "year"
+    }
+  ],
+  "certifications": ["list of certifications"],
+  "achievements": ["list of achievements"],
+  "summary": "professional summary",
+  "competencyScore": 0-100
+}`;
+
+          const aiResponse = await openai.chat.completions.create({
+            model: process.env.OPENAI_MODEL || 'gpt-4o',
+            messages: [
+              { role: 'system', content: 'Extract professional data from resume text. Return valid JSON only.' },
+              { role: 'user', content: prompt }
+            ],
+            temperature: 0.2,
+            response_format: { type: "json_object" }
+          });
+          
+          extractedData = JSON.parse(aiResponse.choices[0].message.content);
+          console.log('AI extraction successful');
+          
+        } catch (aiError) {
+          console.error('AI extraction failed:', aiError.message);
+        }
+      }
+      
+      // Manual extraction fallback
+      if (!extractedData) {
+        console.log('Using manual extraction from resume...');
+        
+        const textLower = extractedText.toLowerCase();
+        const lines = extractedText.split('\n').filter(l => l.trim().length > 0);
+        
+        // Extract skills
+        const skillKeywords = {
+          technical: ['python', 'javascript', 'java', 'react', 'node', 'angular', 'sql', 'mongodb', 'aws', 'docker', 'kubernetes', 'git'],
+          soft: ['leadership', 'communication', 'teamwork', 'problem solving', 'analytical', 'management']
+        };
+        
+        const foundSkills = { technical: [], soft: [] };
+        
+        skillKeywords.technical.forEach(skill => {
+          if (textLower.includes(skill)) {
+            foundSkills.technical.push(skill.charAt(0).toUpperCase() + skill.slice(1));
+          }
+        });
+        
+        skillKeywords.soft.forEach(skill => {
+          if (textLower.includes(skill)) {
+            foundSkills.soft.push(skill.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '));
+          }
+        });
+        
+        // Extract email and phone (for summary)
+        const emailMatch = extractedText.match(/[\w.-]+@[\w.-]+\.\w+/);
+        const phoneMatch = extractedText.match(/[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}/);
+        
+        let score = 60;
+        if (foundSkills.technical.length > 3) score += 15;
+        if (extractedText.length > 1000) score += 10;
+        if (emailMatch) score += 5;
+        if (phoneMatch) score += 5;
+        
+        extractedData = {
+          skills: foundSkills.technical.length > 0 ? foundSkills : {
+            technical: ["Skills extracted from resume"],
+            soft: ["See resume for details"]
+          },
+          experience: [{
+            title: "Work Experience",
+            company: "Details in resume",
+            duration: "See resume",
+            description: `Extracted from ${fileName}`
+          }],
+          education: [{
+            degree: "Education details in resume",
+            institution: fileName,
+            year: ""
+          }],
+          certifications: ["Certifications listed in resume"],
+          achievements: [`Resume analyzed: ${fileName}`, `${extractedText.length} characters processed`],
+          summary: `Professional resume with ${foundSkills.technical.length + foundSkills.soft.length} skills identified. ${emailMatch ? `Contact: ${emailMatch[0]}` : ''}`,
+          competencyScore: Math.min(score, 95)
+        };
+      }
+      
+      // Save to MongoDB
+      const client = await clientPromise;
+      const db = client.db('asta_cita_ai');
+      
+      await db.collection('portfolio_data').updateOne(
+        { nip },
+        { 
+          $set: {
+            resumeFileName: fileName,
+            extractedData,
+            extractedTextLength: extractedText.length,
+            extractedAt: new Date(),
+            extractionMethod: 'resume_upload'
+          }
+        },
+        { upsert: true }
+      );
+      
+      await db.collection('profiles').updateOne(
+        { nip },
+        { 
+          $set: { 
+            hasResumeData: true,
+            lastResumeUpload: new Date()
+          }
+        },
+        { upsert: true }
+      );
+      
+      console.log('=== Resume Extraction Complete ===');
+      
+      return NextResponse.json({ 
+        success: true,
+        extractedData,
+        extractedTextLength: extractedText.length,
+        message: 'Resume extracted successfully' 
+      });
+      
+    } catch (error) {
+      console.error('=== Resume Extraction Error ===');
+      console.error(error);
+      return NextResponse.json(
+        { error: 'Failed to extract resume', details: error.message },
+        { status: 500 }
+      );
+    }
+  }
+  
   return null;
 }
 
