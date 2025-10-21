@@ -465,17 +465,17 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
       )}>
         <SidebarContent />
         
-        {/* Collapse Toggle Button - Inside Sidebar */}
+        {/* Collapse Toggle Button - Below header to avoid overlap */}
         <Button
           variant="ghost"
           onClick={() => setIsCollapsed(!isCollapsed)}
           className={cn(
-            "absolute top-4 z-20 flex items-center justify-center transition-all duration-300",
+            "absolute z-20 flex items-center justify-center transition-all duration-300",
             "bg-slate-800 hover:bg-slate-700",
             "text-slate-400 hover:text-white",
             "rounded-lg border border-slate-700",
             "w-8 h-8",
-            isCollapsed ? "right-4" : "right-4"
+            isCollapsed ? "top-[88px] left-1/2 -translate-x-1/2" : "top-[88px] right-4"
           )}
           title={isCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
         >
