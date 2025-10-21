@@ -280,6 +280,31 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
                 )}
               </div>
             )}
+
+            {item.section === 'admin' && (
+              <button
+                onClick={() => {
+                  setCurrentView(item.id);
+                  // Auto close mobile sidebar
+                  if (isMobile) {
+                    setIsMobileOpen(false);
+                  }
+                }}
+                title={isCollapsed ? item.label : ''}
+                className={cn(
+                  "w-full flex items-center transition-colors border-t border-slate-800",
+                  isCollapsed && !isMobile ? "justify-center px-4 py-3" : "space-x-3 px-6 py-3",
+                  currentView === item.id
+                    ? "bg-purple-600 text-white"
+                    : "text-slate-300 hover:bg-slate-800 hover:text-white"
+                )}
+              >
+                <item.icon className={cn("flex-shrink-0", isCollapsed && !isMobile ? "w-6 h-6" : "w-5 h-5")} />
+                {(!isCollapsed || isMobile) && (
+                  <span className="font-medium">{item.label}</span>
+                )}
+              </button>
+            )}
           </div>
         ))}
       </div>
