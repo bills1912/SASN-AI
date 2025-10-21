@@ -213,6 +213,126 @@ export default function InputDataNew({ user, selectedProfile: globalSelectedProf
     }
   };
 
+  const handleSavePortfolio = async () => {
+    if (!selectedProfile || !portfolioLink) {
+      toast({
+        title: 'Error',
+        description: 'Pastikan pegawai dipilih dan link portfolio diisi',
+        variant: 'destructive'
+      });
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch('/api/talent/update-portfolio', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          nip: selectedProfile.nip,
+          portfolioLink: portfolioLink
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        toast({
+          title: 'Portfolio Link Disimpan',
+          description: 'Link portfolio berhasil ditambahkan ke profil',
+        });
+      } else {
+        throw new Error(data.error || 'Gagal menyimpan link');
+      }
+    } catch (error) {
+      console.error('Error saving portfolio:', error);
+      toast({
+        title: 'Error',
+        description: error.message,
+        variant: 'destructive'
+      });
+    }
+  };
+
+  const handleFileUpload = async (event) => {
+    const files = event.target.files;
+    if (!files || files.length === 0 || !selectedProfile) return;
+
+    setUploadingCert(true);
+
+    try {
+      const uploadedFiles = [];
+      
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        
+        // Check file size (max 5MB)
+        if (file.size > 5 * 1024 * 1024) {
+          toast({
+            title: 'File Terlalu Besar',
+            description: `${file.name} melebihi 5MB`,
+            variant: 'destructive'
+          });
+          continue;
+        }
+
+        // Convert to base64
+        const base64 = await new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onloadend = () => resolve(reader.result);
+          reader.readAsDataURL(file);
+        });
+
+        uploadedFiles.push({
+          name: file.name,
+          type: file.type,
+          size: file.size,
+          data: base64
+        });
+      }
+
+      // Send to backend
+      const token = localStorage.getItem('token');
+      const response = await fetch('/api/talent/upload-certifications', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          nip: selectedProfile.nip,
+          certifications: uploadedFiles
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setCertifications([...certifications, ...uploadedFiles]);
+        toast({
+          title: 'Sertifikat Berhasil Diunggah',
+          description: `${uploadedFiles.length} file berhasil ditambahkan`,
+        });
+        // Clear file input
+        event.target.value = '';
+      } else {
+        throw new Error(data.error || 'Gagal upload sertifikat');
+      }
+    } catch (error) {
+      console.error('Error uploading certifications:', error);
+      toast({
+        title: 'Error',
+        description: error.message,
+        variant: 'destructive'
+      });
+    } finally {
+      setUploadingCert(false);
+    }
+  };
+
   return (
     <div className="max-w-7xl mx-auto space-y-6 px-4 md:px-6">
       <div>
