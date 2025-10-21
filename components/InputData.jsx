@@ -458,11 +458,18 @@ export default function InputDataNew({ user, selectedProfile: globalSelectedProf
                   <Input
                     id="portfolioLink"
                     type="url"
-                    placeholder="https://portfolio.example.com"
+                    value={portfolioLink}
+                    onChange={(e) => setPortfolioLink(e.target.value)}
+                    placeholder="https://linkedin.com/in/username atau https://github.com/username"
                     className="pl-10"
                   />
                 </div>
-                <Button variant="outline" size="icon">
+                <Button 
+                  variant="outline" 
+                  size="icon"
+                  onClick={handleSavePortfolio}
+                  disabled={!portfolioLink || !selectedProfile}
+                >
                   <Upload className="w-4 h-4" />
                 </Button>
               </div>
@@ -478,6 +485,47 @@ export default function InputDataNew({ user, selectedProfile: globalSelectedProf
               </Label>
               <div className="border-2 border-dashed border-slate-700 rounded-lg p-6 text-center hover:border-slate-600 transition-colors cursor-pointer">
                 <Input
+                  id="certifications"
+                  type="file"
+                  multiple
+                  accept=".pdf,.jpg,.jpeg,.png"
+                  onChange={handleFileUpload}
+                  disabled={uploadingCert || !selectedProfile}
+                  className="hidden"
+                />
+                <label htmlFor="certifications" className="cursor-pointer">
+                  {uploadingCert ? (
+                    <Loader2 className="w-8 h-8 text-muted-foreground mx-auto mb-2 animate-spin" />
+                  ) : (
+                    <FileText className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
+                  )}
+                  <p className="text-sm font-medium text-foreground mb-1">
+                    {uploadingCert ? 'Mengunggah...' : 'Klik untuk unggah sertifikat'}
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    PDF, JPG, PNG (Maks 5MB per file)
+                  </p>
+                </label>
+              </div>
+              <p className="text-xs text-muted-foreground mt-2">
+                Unggah sertifikat pelatihan, kursus, atau penghargaan yang relevan
+              </p>
+              
+              {/* List of uploaded certifications */}
+              {certifications.length > 0 && (
+                <div className="mt-3 space-y-2">
+                  <p className="text-xs font-medium text-foreground">File yang diunggah:</p>
+                  {certifications.map((cert, index) => (
+                    <div key={index} className="flex items-center gap-2 p-2 bg-muted rounded text-xs">
+                      <FileText className="w-4 h-4" />
+                      <span className="flex-1 truncate">{cert.name}</span>
+                      <span className="text-muted-foreground">{(cert.size / 1024).toFixed(1)} KB</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
                   id="certifications"
                   type="file"
                   multiple
