@@ -116,6 +116,83 @@ export default function InputData({ user, selectedProfile: globalSelectedProfile
     }
   };
 
+  const handleFileUpload = async (event) => {
+    const file = event.target.files?.[0];
+    if (!file || !selectedProfile) return;
+
+    // Check file type
+    const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+    if (!allowedTypes.includes(file.type)) {
+      toast({
+        title: 'Format File Tidak Didukung',
+        description: 'Hanya file PDF, DOC, dan DOCX yang didukung',
+        variant: 'destructive'
+      });
+      return;
+    }
+
+    // Check file size (max 10MB)
+    if (file.size > 10 * 1024 * 1024) {
+      toast({
+        title: 'File Terlalu Besar',
+        description: 'Ukuran maksimal file adalah 10MB',
+        variant: 'destructive'
+      });
+      return;
+    }
+
+    setUploadedFile(file);
+    setExtractingPortfolio(true);
+
+    try {
+      // Convert to base64
+      const base64 = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+
+      const token = localStorage.getItem('token');
+      const response = await fetch('/api/talent/extract-resume', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          nip: selectedProfile.nip,
+          fileName: file.name,
+          fileData: base64,
+          fileType: file.type
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setPortfolioData(data.extractedData);
+        toast({
+          title: 'Resume Berhasil Diekstrak! ✓',
+          description: 'Data dari resume/CV telah berhasil diambil dan akan digunakan dalam analisis',
+          duration: 5000,
+        });
+      } else {
+        throw new Error(data.error || 'Gagal ekstrak resume');
+      }
+    } catch (error) {
+      console.error('Error uploading resume:', error);
+      toast({
+        title: 'Error',
+        description: error.message,
+        variant: 'destructive'
+      });
+      setUploadedFile(null);
+    } finally {
+      setExtractingPortfolio(false);
+    }
+  };
+
   const generateTalentMapping = async () => {
     if (!selectedProfile) {
       toast({
