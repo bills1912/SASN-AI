@@ -649,6 +649,7 @@ export default function App() {
                 selectedProfile={selectedProfile}
               />
             )}
+            {currentView === 'system-info' && <SystemInfo />}
           </div>
         </div>
       </div>
