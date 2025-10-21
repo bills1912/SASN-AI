@@ -24,7 +24,9 @@ import {
   AlertTriangle,
   Award,
   Target as TargetIcon,
-  FileBarChart
+  FileBarChart,
+  Database,
+  Cpu
 } from 'lucide-react';
 
 export default function CollapsibleSidebar({ currentView, setCurrentView, user, onLogout, theme, toggleTheme }) {
