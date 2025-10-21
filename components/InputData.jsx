@@ -402,46 +402,128 @@ export default function InputData({ user, selectedProfile: globalSelectedProfile
       {/* Portfolio Section */}
       {selectedProfile && (
         <Card className="p-4 md:p-6">
-          <h3 className="text-lg font-semibold text-foreground mb-2">
-            Link Portfolio (Opsional)
-          </h3>
-          <p className="text-sm text-muted-foreground mb-4">
-            Tambahkan link portfolio untuk ekstraksi data otomatis yang akan digunakan dalam analisis AI
-          </p>
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h3 className="text-lg font-semibold text-foreground">
+                Portfolio & Resume (Opsional)
+              </h3>
+              <p className="text-sm text-muted-foreground mt-1">
+                Tambahkan link atau upload resume untuk ekstraksi data otomatis
+              </p>
+            </div>
+            
+            {/* Mode Switch */}
+            <div className="flex items-center gap-2 bg-muted p-1 rounded-lg">
+              <button
+                onClick={() => setInputMode('link')}
+                className={`px-3 py-1.5 text-sm font-medium rounded transition-colors ${
+                  inputMode === 'link'
+                    ? 'bg-primary text-primary-foreground'
+                    : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                <LinkIcon className="w-4 h-4 inline mr-1" />
+                Link
+              </button>
+              <button
+                onClick={() => setInputMode('file')}
+                className={`px-3 py-1.5 text-sm font-medium rounded transition-colors ${
+                  inputMode === 'file'
+                    ? 'bg-primary text-primary-foreground'
+                    : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                <FileText className="w-4 h-4 inline mr-1" />
+                Upload
+              </button>
+            </div>
+          </div>
           
           <div className="space-y-3">
-            <div className="flex gap-2">
-              <div className="relative flex-1">
-                <LinkIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <Input
-                  type="url"
-                  value={portfolioLink}
-                  onChange={(e) => setPortfolioLink(e.target.value)}
-                  placeholder="https://linkedin.com/in/username atau https://github.com/username"
-                  className="pl-10"
-                />
-              </div>
-              <Button 
-                onClick={handleExtractPortfolio}
-                disabled={!portfolioLink || extractingPortfolio}
-                className="whitespace-nowrap"
-              >
-                {extractingPortfolio ? (
-                  <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Ekstrak...
-                  </>
-                ) : (
-                  <>
-                    <ExternalLink className="w-4 h-4 mr-2" />
-                    Ekstrak Data
-                  </>
-                )}
-              </Button>
-            </div>
-            <p className="text-xs text-muted-foreground">
-              Mendukung: LinkedIn, GitHub, portfolio pribadi, atau profil profesional lainnya
-            </p>
+            {inputMode === 'link' ? (
+              // Link Input Mode
+              <>
+                <div className="flex gap-2">
+                  <div className="relative flex-1">
+                    <LinkIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                    <Input
+                      type="url"
+                      value={portfolioLink}
+                      onChange={(e) => setPortfolioLink(e.target.value)}
+                      placeholder="https://linkedin.com/in/username atau https://github.com/username"
+                      className="pl-10"
+                    />
+                  </div>
+                  <Button 
+                    onClick={handleExtractPortfolio}
+                    disabled={!portfolioLink || extractingPortfolio}
+                    className="whitespace-nowrap"
+                  >
+                    {extractingPortfolio ? (
+                      <>
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        Ekstrak...
+                      </>
+                    ) : (
+                      <>
+                        <ExternalLink className="w-4 h-4 mr-2" />
+                        Ekstrak Data
+                      </>
+                    )}
+                  </Button>
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Mendukung: LinkedIn, GitHub, portfolio pribadi, atau profil profesional lainnya
+                </p>
+              </>
+            ) : (
+              // File Upload Mode
+              <>
+                <div className="border-2 border-dashed border-muted rounded-lg p-6 text-center hover:border-muted-foreground/50 transition-colors">
+                  <input
+                    type="file"
+                    id="resume-upload"
+                    accept=".pdf,.doc,.docx"
+                    onChange={handleFileUpload}
+                    disabled={extractingPortfolio}
+                    className="hidden"
+                  />
+                  <label htmlFor="resume-upload" className="cursor-pointer">
+                    {extractingPortfolio ? (
+                      <>
+                        <Loader2 className="w-12 h-12 text-muted-foreground mx-auto mb-3 animate-spin" />
+                        <p className="text-sm font-medium text-foreground mb-1">
+                          Mengekstrak data...
+                        </p>
+                      </>
+                    ) : uploadedFile ? (
+                      <>
+                        <FileText className="w-12 h-12 text-green-500 mx-auto mb-3" />
+                        <p className="text-sm font-medium text-foreground mb-1">
+                          {uploadedFile.name}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          {(uploadedFile.size / 1024).toFixed(1)} KB - Klik untuk ganti file
+                        </p>
+                      </>
+                    ) : (
+                      <>
+                        <FileText className="w-12 h-12 text-muted-foreground mx-auto mb-3" />
+                        <p className="text-sm font-medium text-foreground mb-1">
+                          Klik untuk upload Resume/CV
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          PDF, DOC, DOCX (Maks 10MB)
+                        </p>
+                      </>
+                    )}
+                  </label>
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Upload resume/CV Anda dalam format PDF atau Word untuk ekstraksi otomatis
+                </p>
+              </>
+            )}
             
             {/* Portfolio Data Preview */}
             {portfolioData && (
