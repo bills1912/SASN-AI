@@ -14,6 +14,9 @@ export default function InputDataNew({ user, selectedProfile: globalSelectedProf
   const [profiles, setProfiles] = useState([]);
   const [selectedProfile, setSelectedProfile] = useState(globalSelectedProfile);
   const [loading, setLoading] = useState(false);
+  const [portfolioLink, setPortfolioLink] = useState('');
+  const [certifications, setCertifications] = useState([]);
+  const [uploadingCert, setUploadingCert] = useState(false);
   const { toast } = useToast();
   
   // Check if user is admin or individual
