@@ -390,10 +390,108 @@ Return JSON:
       const { nip, portfolioLink } = await request.json();
       
       let extractedData;
+      let scrapedContent = '';
       
-      // Check if mock mode or use real OpenAI
-      if (USE_MOCK_MODE || !openai) {
-        // Mock extracted data for demo
+      // Step 1: Fetch and scrape content from the URL
+      try {
+        const axios = require('axios');
+        const cheerio = require('cheerio');
+        
+        console.log('Fetching portfolio from:', portfolioLink);
+        
+        const response = await axios.get(portfolioLink, {
+          headers: {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+          },
+          timeout: 10000
+        });
+        
+        const $ = cheerio.load(response.data);
+        
+        // Extract text content from various common elements
+        const textContent = [];
+        
+        // Remove script and style tags
+        $('script, style, noscript').remove();
+        
+        // Extract from common portfolio/profile sections
+        $('h1, h2, h3, h4, p, li, span, div[class*="summary"], div[class*="bio"], div[class*="about"]').each((i, elem) => {
+          const text = $(elem).text().trim();
+          if (text.length > 10 && text.length < 500) {
+            textContent.push(text);
+          }
+        });
+        
+        scrapedContent = textContent.join('\n').substring(0, 8000); // Limit to 8000 chars
+        console.log('Scraped content length:', scrapedContent.length);
+        
+      } catch (scrapeError) {
+        console.warn('Failed to scrape URL:', scrapeError.message);
+        // Continue with URL only if scraping fails
+        scrapedContent = `Unable to directly scrape the URL. Analyzing based on the provided link: ${portfolioLink}`;
+      }
+      
+      // Step 2: Use OpenAI to analyze the content
+      if (!USE_MOCK_MODE && openai) {
+        const prompt = `Analyze this professional portfolio/profile content and extract structured information:
+
+${scrapedContent}
+
+Source URL: ${portfolioLink}
+
+Extract and return JSON with:
+{
+  "skills": {
+    "technical": ["list of technical skills found"],
+    "soft": ["list of soft skills found"]
+  },
+  "experience": [
+    {
+      "title": "job title",
+      "company": "company name",
+      "duration": "time period",
+      "description": "brief description"
+    }
+  ],
+  "education": [
+    {
+      "degree": "degree name",
+      "institution": "school/university",
+      "year": "graduation year"
+    }
+  ],
+  "certifications": ["list of certifications"],
+  "achievements": ["list of notable achievements"],
+  "summary": "brief professional summary based on content",
+  "competencyScore": 0-100 (estimated based on experience and skills)
+}
+
+If information is not found, provide empty arrays or reasonable estimates based on available data.`;
+
+        console.log('Sending to OpenAI for analysis...');
+        
+        const aiResponse = await openai.chat.completions.create({
+          model: process.env.OPENAI_MODEL || 'gpt-4o',
+          messages: [
+            {
+              role: 'system',
+              content: 'You are an expert at analyzing professional portfolios and extracting structured career information. Extract real data from the provided content and estimate missing information reasonably.'
+            },
+            {
+              role: 'user',
+              content: prompt
+            }
+          ],
+          temperature: 0.3,
+          response_format: { type: "json_object" }
+        });
+        
+        extractedData = JSON.parse(aiResponse.choices[0].message.content);
+        console.log('OpenAI extraction successful');
+        
+      } else {
+        // Fallback to mock data if API not available
+        console.log('Using mock mode for portfolio extraction');
         extractedData = {
           skills: {
             technical: ["Python", "JavaScript", "React", "Node.js", "MongoDB", "AWS", "Docker"],
@@ -405,12 +503,6 @@ Return JSON:
               company: "Tech Company",
               duration: "2020 - Present",
               description: "Leading development team and architecting scalable solutions"
-            },
-            {
-              title: "Software Engineer",
-              company: "Startup Inc",
-              duration: "2018 - 2020",
-              description: "Full-stack development and system design"
             }
           ],
           education: [
@@ -422,59 +514,15 @@ Return JSON:
           ],
           certifications: [
             "AWS Certified Solutions Architect",
-            "Professional Scrum Master",
-            "Google Cloud Professional"
+            "Professional Scrum Master"
           ],
           achievements: [
             "Led successful digital transformation project",
-            "Improved system performance by 40%",
-            "Mentored 10+ junior developers"
+            "Improved system performance by 40%"
           ],
-          summary: "Experienced software engineer with strong technical skills and proven leadership abilities. Specialized in full-stack development and cloud architecture.",
-          competencyScore: 85
+          summary: "Experienced professional with strong technical skills. (Note: This is mock data - real extraction requires valid API key)",
+          competencyScore: 75
         };
-      } else {
-        // Use real OpenAI for extraction
-        const prompt = `Extract professional information from this portfolio/profile link: ${portfolioLink}
-
-Please analyze and extract:
-1. Skills and expertise (technical and soft skills)
-2. Work experience and projects
-3. Education and certifications
-4. Achievements and accomplishments
-5. Professional summary
-
-Return structured JSON:
-{
-  "skills": {
-    "technical": ["skill1", "skill2"],
-    "soft": ["skill1", "skill2"]
-  },
-  "experience": [{"title": "position", "company": "name", "duration": "period", "description": "details"}],
-  "education": [{"degree": "name", "institution": "name", "year": "year"}],
-  "certifications": ["cert1", "cert2"],
-  "achievements": ["achievement1", "achievement2"],
-  "summary": "professional summary",
-  "competencyScore": 0-100
-}`;
-
-        const response = await openai.chat.completions.create({
-          model: process.env.OPENAI_MODEL || 'gpt-4o',
-          messages: [
-            {
-              role: 'system',
-              content: 'You are an expert at extracting and analyzing professional data from portfolio links, LinkedIn profiles, and GitHub profiles. Extract meaningful career information even if you cannot directly access the URL.'
-            },
-            {
-              role: 'user',
-              content: prompt
-            }
-          ],
-          temperature: 0.3,
-          response_format: { type: "json_object" }
-        });
-        
-        extractedData = JSON.parse(response.choices[0].message.content);
       }
       
       // Save extracted data to MongoDB
@@ -487,7 +535,9 @@ Return structured JSON:
           $set: {
             portfolioLink,
             extractedData,
-            extractedAt: new Date()
+            scrapedContentLength: scrapedContent.length,
+            extractedAt: new Date(),
+            extractionMethod: USE_MOCK_MODE ? 'mock' : 'openai'
           }
         },
         { upsert: true }
@@ -506,9 +556,13 @@ Return structured JSON:
         { upsert: true }
       );
       
+      console.log('Portfolio data saved to MongoDB');
+      
       return NextResponse.json({ 
         success: true,
         extractedData,
+        scrapedContentLength: scrapedContent.length,
+        extractionMethod: USE_MOCK_MODE ? 'mock' : 'openai',
         message: 'Portfolio data extracted and saved successfully' 
       });
     } catch (error) {
