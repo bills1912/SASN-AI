@@ -487,7 +487,7 @@ export default function InputData({ user, selectedProfile: globalSelectedProfile
           </p>
           <Button
             onClick={generatePerformanceAnalysis}
-            disabled={loading || !selectedNIP}
+            disabled={loading || !selectedProfile}
             className="w-full"
             variant="outline"
           >
