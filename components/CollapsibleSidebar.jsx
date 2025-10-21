@@ -71,6 +71,19 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
     }
   ];
 
+  // Add System Info menu only for admin
+  const allMenuItems = user?.role === 'admin' 
+    ? [
+        ...menuItems,
+        {
+          id: 'system-info',
+          label: 'System Info',
+          icon: Cpu,
+          section: 'admin'
+        }
+      ]
+    : menuItems;
+
   const SidebarContent = ({ isMobile = false }) => (
     <div className={cn(
       "flex flex-col h-full",
