@@ -450,7 +450,7 @@ export default function InputData({ user, selectedProfile: globalSelectedProfile
           </p>
           <Button
             onClick={generateSkillAnalysis}
-            disabled={loading || !selectedNIP}
+            disabled={loading || !selectedProfile}
             className="w-full"
             variant="outline"
           >
