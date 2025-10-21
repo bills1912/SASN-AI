@@ -3,21 +3,24 @@
 import { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
-import { Upload, FileText, Link as LinkIcon, Loader2, Target, Code2, TrendingUp } from 'lucide-react';
+import { LinkIcon, Loader2, Target, Code2, TrendingUp, ExternalLink } from 'lucide-react';
 
-export default function InputData({ user }) {
-  const [documentContent, setDocumentContent] = useState('');
-  const [portfolioUrl, setPortfolioUrl] = useState('');
-  const [selectedNIP, setSelectedNIP] = useState('');
+export default function InputData({ user, selectedProfile: globalSelectedProfile, setSelectedProfile: setGlobalSelectedProfile }) {
   const [profiles, setProfiles] = useState([]);
+  const [selectedProfile, setSelectedProfile] = useState(globalSelectedProfile);
   const [loading, setLoading] = useState(false);
+  const [portfolioLink, setPortfolioLink] = useState('');
+  const [extractingPortfolio, setExtractingPortfolio] = useState(false);
+  const [portfolioData, setPortfolioData] = useState(null);
   const { toast } = useToast();
+  
+  // Check if user is admin or individual
+  const isAdmin = user?.role === 'admin';
+  const userNIP = user?.nip;
 
   useEffect(() => {
     loadProfiles();
