@@ -481,13 +481,12 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
         )}
         title={isCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
       >
-          {isCollapsed ? (
-            <ChevronRight className="w-4 h-4" />
-          ) : (
-            <ChevronLeft className="w-4 h-4" />
-          )}
-        </Button>
-      </div>
+        {isCollapsed ? (
+          <ChevronRight className="w-4 h-4" />
+        ) : (
+          <ChevronLeft className="w-4 h-4" />
+        )}
+      </Button>
     </>
   );
 }
