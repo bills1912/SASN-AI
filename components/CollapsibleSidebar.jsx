@@ -396,7 +396,7 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
           variant="ghost"
           size="icon"
           onClick={() => setIsMobileOpen(true)}
-          className="fixed top-4 left-4 z-[60] lg:hidden bg-slate-900/90 backdrop-blur text-white hover:bg-slate-800 shadow-lg"
+          className="fixed top-4 right-4 z-[60] lg:hidden bg-slate-900/90 backdrop-blur text-white hover:bg-slate-800 shadow-lg border border-slate-700"
         >
           <Menu className="w-5 h-5" />
         </Button>
