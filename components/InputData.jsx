@@ -197,10 +197,10 @@ export default function InputData({ user, selectedProfile: globalSelectedProfile
   };
 
   const generatePerformanceAnalysis = async () => {
-    if (!selectedNIP) {
+    if (!selectedProfile) {
       toast({
         title: 'Error',
-        description: 'Pilih ASN terlebih dahulu',
+        description: 'Pilih pegawai terlebih dahulu',
         variant: 'destructive'
       });
       return;
@@ -215,7 +215,7 @@ export default function InputData({ user, selectedProfile: globalSelectedProfile
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ nip: selectedNIP })
+        body: JSON.stringify({ nip: selectedProfile.nip })
       });
 
       if (response.ok) {
