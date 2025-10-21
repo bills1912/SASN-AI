@@ -520,31 +520,19 @@ export default function InputDataNew({ user, selectedProfile: globalSelectedProf
                       <FileText className="w-4 h-4" />
                       <span className="flex-1 truncate">{cert.name}</span>
                       <span className="text-muted-foreground">{(cert.size / 1024).toFixed(1)} KB</span>
+                      {/* Progress bar per file */}
+                      {uploadProgress[cert.name] !== undefined && uploadProgress[cert.name] < 100 && (
+                        <div className="w-full bg-slate-700 rounded-full h-1.5 mt-1">
+                          <div 
+                            className="bg-blue-500 h-1.5 rounded-full transition-all duration-300"
+                            style={{ width: `${uploadProgress[cert.name]}%` }}
+                          />
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>
               )}
-            </div>
-          </div>
-                  id="certifications"
-                  type="file"
-                  multiple
-                  accept=".pdf,.jpg,.jpeg,.png"
-                  className="hidden"
-                />
-                <label htmlFor="certifications" className="cursor-pointer">
-                  <FileText className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
-                  <p className="text-sm font-medium text-foreground mb-1">
-                    Klik untuk unggah sertifikat
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    PDF, JPG, PNG (Maks 5MB per file)
-                  </p>
-                </label>
-              </div>
-              <p className="text-xs text-muted-foreground mt-2">
-                Unggah sertifikat pelatihan, kursus, atau penghargaan yang relevan
-              </p>
             </div>
           </div>
         </Card>
