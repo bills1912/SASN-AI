@@ -313,6 +313,77 @@ Return JSON:
     }
   }
   
+  // Update portfolio link
+  if (segments[0] === 'update-portfolio' && method === 'POST') {
+    try {
+      const { nip, portfolioLink } = await request.json();
+      
+      const client = await clientPromise;
+      const db = client.db('asta_cita_ai');
+      
+      await db.collection('profiles').updateOne(
+        { nip },
+        { 
+          $set: { 
+            portfolioLink,
+            updatedAt: new Date()
+          }
+        },
+        { upsert: true }
+      );
+      
+      return NextResponse.json({ 
+        success: true,
+        message: 'Portfolio link updated successfully' 
+      });
+    } catch (error) {
+      console.error('Error updating portfolio:', error);
+      return NextResponse.json(
+        { error: 'Failed to update portfolio link', details: error.message },
+        { status: 500 }
+      );
+    }
+  }
+  
+  // Upload certifications
+  if (segments[0] === 'upload-certifications' && method === 'POST') {
+    try {
+      const { nip, certifications } = await request.json();
+      
+      const client = await clientPromise;
+      const db = client.db('asta_cita_ai');
+      
+      // Store certifications
+      await db.collection('certifications').insertOne({
+        nip,
+        certifications,
+        uploadedAt: new Date()
+      });
+      
+      // Update profile with certification count
+      await db.collection('profiles').updateOne(
+        { nip },
+        { 
+          $inc: { certificationCount: certifications.length },
+          $set: { lastCertificationUpload: new Date() }
+        },
+        { upsert: true }
+      );
+      
+      return NextResponse.json({ 
+        success: true,
+        message: 'Certifications uploaded successfully',
+        count: certifications.length
+      });
+    } catch (error) {
+      console.error('Error uploading certifications:', error);
+      return NextResponse.json(
+        { error: 'Failed to upload certifications', details: error.message },
+        { status: 500 }
+      );
+    }
+  }
+  
   return null;
 }
 
