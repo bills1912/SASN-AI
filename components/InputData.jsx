@@ -478,6 +478,71 @@ export default function InputDataNew({ user, selectedProfile: globalSelectedProf
               </p>
             </div>
 
+            {/* Certification Upload */}
+            <div>
+              <Label htmlFor="certifications" className="text-sm font-medium mb-1.5">
+                Unggah Sertifikasi
+              </Label>
+              <div className="border-2 border-dashed border-slate-700 rounded-lg p-6 text-center hover:border-slate-600 transition-colors cursor-pointer">
+                <Input
+                  id="certifications"
+                  type="file"
+                  multiple
+                  accept=".pdf,.jpg,.jpeg,.png"
+                  onChange={handleFileUpload}
+                  disabled={Object.keys(uploadProgress).length > 0 || !selectedProfile}
+                  className="hidden"
+                />
+                <label htmlFor="certifications" className="cursor-pointer">
+                  {Object.keys(uploadProgress).length > 0 ? (
+                    <Loader2 className="w-8 h-8 text-muted-foreground mx-auto mb-2 animate-spin" />
+                  ) : (
+                    <FileText className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
+                  )}
+                  <p className="text-sm font-medium text-foreground mb-1">
+                    {Object.keys(uploadProgress).length > 0 ? 'Mengunggah...' : 'Klik untuk unggah sertifikat'}
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    PDF, JPG, PNG (Maks 5MB per file)
+                  </p>
+                </label>
+              </div>
+              <p className="text-xs text-muted-foreground mt-2">
+                Unggah sertifikat pelatihan, kursus, atau penghargaan yang relevan
+              </p>
+              
+              {/* List of uploaded certifications with progress bars */}
+              {certifications.length > 0 && (
+                <div className="mt-3 space-y-2">
+                  <p className="text-xs font-medium text-foreground">File yang diunggah:</p>
+                  {certifications.map((cert, index) => (
+                    <div key={index} className="p-2 bg-muted rounded">
+                      <div className="flex items-center gap-2 text-xs mb-1">
+                        <FileText className="w-4 h-4 flex-shrink-0" />
+                        <span className="flex-1 truncate font-medium">{cert.name}</span>
+                        <span className="text-muted-foreground">{(cert.size / 1024).toFixed(1)} KB</span>
+                      </div>
+                      {/* Progress bar per file */}
+                      {uploadProgress[cert.name] !== undefined && (
+                        <div className="w-full bg-slate-700 rounded-full h-2 mt-1.5">
+                          <div 
+                            className="bg-gradient-to-r from-blue-500 to-cyan-500 h-2 rounded-full transition-all duration-300 flex items-center justify-end pr-1"
+                            style={{ width: `${uploadProgress[cert.name]}%` }}
+                          >
+                            {uploadProgress[cert.name] > 20 && (
+                              <span className="text-[10px] font-bold text-white">{uploadProgress[cert.name]}%</span>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </Card>
+      )}
 
       {/* Analysis Actions */}
       <div className="grid md:grid-cols-3 gap-4 md:gap-6">
