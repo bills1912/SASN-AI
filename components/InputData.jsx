@@ -26,6 +26,13 @@ export default function InputData({ user, selectedProfile: globalSelectedProfile
     loadProfiles();
   }, []);
 
+  // Sync with global selected profile
+  useEffect(() => {
+    if (globalSelectedProfile) {
+      setSelectedProfile(globalSelectedProfile);
+    }
+  }, [globalSelectedProfile]);
+
   const loadProfiles = async () => {
     try {
       const token = localStorage.getItem('token');
@@ -37,9 +44,20 @@ export default function InputData({ user, selectedProfile: globalSelectedProfile
 
       if (response.ok) {
         const data = await response.json();
-        setProfiles(data.profiles);
-        if (data.profiles.length > 0) {
-          setSelectedNIP(data.profiles[0].nip);
+        // Filter based on role
+        if (!isAdmin && userNIP) {
+          const userProfile = data.profiles.find(p => p.nip === userNIP);
+          setProfiles(userProfile ? [userProfile] : []);
+          if (userProfile) {
+            setSelectedProfile(userProfile);
+            setGlobalSelectedProfile?.(userProfile);
+          }
+        } else {
+          setProfiles(data.profiles);
+          if (data.profiles.length > 0 && !selectedProfile) {
+            setSelectedProfile(data.profiles[0]);
+            setGlobalSelectedProfile?.(data.profiles[0]);
+          }
         }
       }
     } catch (error) {
@@ -47,11 +65,60 @@ export default function InputData({ user, selectedProfile: globalSelectedProfile
     }
   };
 
-  const generateTalentMapping = async () => {
-    if (!selectedNIP) {
+  const handleExtractPortfolio = async () => {
+    if (!portfolioLink || !selectedProfile) {
       toast({
         title: 'Error',
-        description: 'Pilih ASN terlebih dahulu',
+        description: 'Pastikan pegawai dipilih dan link portfolio diisi',
+        variant: 'destructive'
+      });
+      return;
+    }
+
+    setExtractingPortfolio(true);
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch('/api/talent/extract-portfolio', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          nip: selectedProfile.nip,
+          portfolioLink: portfolioLink
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setPortfolioData(data.extractedData);
+        toast({
+          title: 'Portfolio Berhasil Diekstrak! ✓',
+          description: 'Data dari portfolio telah berhasil diambil dan akan digunakan dalam analisis',
+          duration: 5000,
+        });
+      } else {
+        throw new Error(data.error || 'Gagal ekstrak portfolio');
+      }
+    } catch (error) {
+      console.error('Error extracting portfolio:', error);
+      toast({
+        title: 'Error',
+        description: error.message,
+        variant: 'destructive'
+      });
+    } finally {
+      setExtractingPortfolio(false);
+    }
+  };
+
+  const generateTalentMapping = async () => {
+    if (!selectedProfile) {
+      toast({
+        title: 'Error',
+        description: 'Pilih pegawai terlebih dahulu',
         variant: 'destructive'
       });
       return;
@@ -66,7 +133,7 @@ export default function InputData({ user, selectedProfile: globalSelectedProfile
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ nip: selectedNIP })
+        body: JSON.stringify({ nip: selectedProfile.nip })
       });
 
       if (response.ok) {
