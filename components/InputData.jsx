@@ -313,6 +313,72 @@ export default function InputDataNew({ user, selectedProfile: globalSelectedProf
         </div>
       </Card>
 
+      {/* Portfolio & Certification Section */}
+      {selectedProfile && (
+        <Card className="p-4 md:p-6">
+          <h3 className="text-lg font-semibold text-foreground mb-4">
+            Portfolio & Sertifikasi (Opsional)
+          </h3>
+          <p className="text-sm text-muted-foreground mb-4">
+            Data ini akan digunakan sebagai landasan tambahan dalam penilaian kinerja dan manajemen talenta
+          </p>
+          
+          <div className="space-y-4">
+            {/* Portfolio Link */}
+            <div>
+              <Label htmlFor="portfolioLink" className="text-sm font-medium mb-1.5">
+                Link Portfolio
+              </Label>
+              <div className="flex gap-2">
+                <div className="relative flex-1">
+                  <LinkIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <Input
+                    id="portfolioLink"
+                    type="url"
+                    placeholder="https://portfolio.example.com"
+                    className="pl-10"
+                  />
+                </div>
+                <Button variant="outline" size="icon">
+                  <Upload className="w-4 h-4" />
+                </Button>
+              </div>
+              <p className="text-xs text-muted-foreground mt-1">
+                Tambahkan link ke portfolio online Anda (LinkedIn, GitHub, website pribadi, dll)
+              </p>
+            </div>
+
+            {/* Certification Upload */}
+            <div>
+              <Label htmlFor="certifications" className="text-sm font-medium mb-1.5">
+                Unggah Sertifikasi
+              </Label>
+              <div className="border-2 border-dashed border-slate-700 rounded-lg p-6 text-center hover:border-slate-600 transition-colors cursor-pointer">
+                <Input
+                  id="certifications"
+                  type="file"
+                  multiple
+                  accept=".pdf,.jpg,.jpeg,.png"
+                  className="hidden"
+                />
+                <label htmlFor="certifications" className="cursor-pointer">
+                  <FileText className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
+                  <p className="text-sm font-medium text-foreground mb-1">
+                    Klik untuk unggah sertifikat
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    PDF, JPG, PNG (Maks 5MB per file)
+                  </p>
+                </label>
+              </div>
+              <p className="text-xs text-muted-foreground mt-2">
+                Unggah sertifikat pelatihan, kursus, atau penghargaan yang relevan
+              </p>
+            </div>
+          </div>
+        </Card>
+      )}
+
       {/* Analysis Actions */}
       <div className="grid md:grid-cols-3 gap-4 md:gap-6">
         {/* Talent Mapping */}
