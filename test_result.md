@@ -101,3 +101,120 @@
 #====================================================================================================
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
+
+user_problem_statement: |
+  Application Modification and Development Requirements:
+  1. Remove Performance Analysis feature completely
+  2. Focus exclusively on Talent Management
+  3. Implement AI-based Merit System according to Permenpan RB No. 3/2020
+  4. Add Merit System Index Analysis feature (Admin-only) with:
+     - Web scraping of government institution websites for employee data
+     - AI-based analysis using Emergent LLM Key
+     - Deep learning model using TensorFlow.js
+     - Calculate index (0-100) with: compliance score, talent pipeline strength, training adequacy
+     - Compare institutions against each other
+
+backend:
+  - task: "Remove Performance Analysis API endpoints"
+    implemented: false
+    working: "NA"
+    file: "/app/app/api/[[...path]]/route.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Planning to remove all performance-related endpoints"
+
+  - task: "Enhance Talent Management with Permenpan RB regulations"
+    implemented: false
+    working: "NA"
+    file: "/app/app/api/[[...path]]/route.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Need to implement strict 9-Box Grid system and merit principles"
+
+  - task: "Add Merit System Index API endpoints (Admin-only)"
+    implemented: false
+    working: "NA"
+    file: "/app/app/api/[[...path]]/route.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "New feature for institutional merit system analysis"
+
+  - task: "Implement web scraping for government institutions"
+    implemented: false
+    working: "NA"
+    file: "/app/lib/webScraper.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Need to scrape employee data from government websites"
+
+  - task: "Implement TensorFlow.js ML model for merit index"
+    implemented: false
+    working: "NA"
+    file: "/app/lib/meritModel.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Deep learning model for institutional merit analysis"
+
+frontend:
+  - task: "Remove Performance Assessment component and navigation"
+    implemented: false
+    working: "NA"
+    file: "/app/components/PerformanceAssessment.jsx, /app/components/CollapsibleSidebar.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Remove all performance-related UI components"
+
+  - task: "Add Merit System Index component (Admin-only)"
+    implemented: false
+    working: "NA"
+    file: "/app/components/MeritSystemIndex.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "New admin-only component for institutional analysis"
+
+metadata:
+  created_by: "main_agent"
+  version: "1.0"
+  test_sequence: 0
+  run_ui: false
+
+test_plan:
+  current_focus:
+    - "Remove Performance Analysis feature"
+    - "Enhance Talent Management"
+    - "Add Merit System Index feature"
+  stuck_tasks: []
+  test_all: false
+  test_priority: "high_first"
+
+agent_communication:
+  - agent: "main"
+    message: "Starting implementation of requirements. Will proceed in 3 phases: 1) Remove performance features, 2) Enhance talent management with regulations, 3) Add merit system index with ML"
