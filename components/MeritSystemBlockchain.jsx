@@ -290,7 +290,7 @@ export default function MeritSystemBlockchain({ user, selectedProfile }) {
               Credential History (Blockchain-Verified)
             </h3>
             
-            {credentialHistory.filter(h => h.type === 'CREDENTIAL').length === 0 ? (
+            {(!credentialHistory || credentialHistory.filter(h => h.type === 'CREDENTIAL').length === 0) ? (
               <p className="text-muted-foreground text-center py-8">Belum ada kredensial yang tercatat</p>
             ) : (
               <div className="space-y-3">
