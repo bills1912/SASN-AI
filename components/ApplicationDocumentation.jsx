@@ -29,28 +29,32 @@ export default function ApplicationDocumentation({ user }) {
             <h2 className="text-2xl font-bold text-foreground mb-3">Novelty & Innovation</h2>
             <div className="space-y-3 text-foreground">
               <p className="font-semibold text-lg text-purple-700 dark:text-purple-400">
-                🏆 First-in-Indonesia: AI-Powered Merit System Index untuk Institusi Pemerintah
+                🏆 First-in-Indonesia: Blockchain-Powered Talent Management System dengan Merit-Based AI
               </p>
               <ul className="space-y-2 ml-6">
                 <li className="flex items-start">
                   <span className="text-purple-600 dark:text-purple-400 mr-2">•</span>
-                  <span><strong>Pertama di Indonesia</strong> yang mengintegrasikan Deep Learning untuk perhitungan Merit System Index berdasarkan Permenpan RB No. 3/2020</span>
+                  <span><strong>Pertama di Indonesia</strong> yang mengintegrasikan Blockchain untuk keamanan data ASN dengan sistem manajemen talenta berdasarkan Permenpan RB No. 3 Tahun 2020</span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-purple-600 dark:text-purple-400 mr-2">•</span>
-                  <span><strong>Automated Web Scraping</strong> untuk mengumpulkan data institusi pemerintah secara real-time</span>
+                  <span><strong>Immutable Credential Verification</strong> menggunakan blockchain untuk memastikan kredensial, sertifikasi, dan riwayat kinerja ASN tidak dapat dimanipulasi</span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-purple-600 dark:text-purple-400 mr-2">•</span>
-                  <span><strong>Multi-Layer Neural Network</strong> untuk memprediksi Compliance Score, Talent Pipeline Strength, dan Training Adequacy</span>
+                  <span><strong>Merit-Based Transparency</strong> sesuai Permenpan RB No. 40/2018 tentang Pedoman Sistem Merit dengan audit trail lengkap berbasis blockchain</span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-purple-600 dark:text-purple-400 mr-2">•</span>
-                  <span><strong>AI-driven Analysis</strong> menggunakan Large Language Models (LLM) untuk analisis kualitatif talent management</span>
+                  <span><strong>AI-Powered Talent Analytics</strong> menggunakan Large Language Models (LLM) untuk pemetaan talenta 9-box, skill gap analysis, dan succession planning</span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-purple-600 dark:text-purple-400 mr-2">•</span>
-                  <span><strong>Comparative Analytics</strong> antar institusi untuk benchmarking implementasi sistem merit nasional</span>
+                  <span><strong>Deep Learning Merit Index</strong> untuk perhitungan Merit System Index institusi pemerintah dengan neural network prediction</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-purple-600 dark:text-purple-400 mr-2">•</span>
+                  <span><strong>Cross-Institution Secure Data Sharing</strong> dengan decentralized storage untuk mobilitas talenta antar instansi pemerintah</span>
                 </li>
               </ul>
             </div>
