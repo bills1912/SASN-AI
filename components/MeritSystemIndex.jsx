@@ -144,6 +144,128 @@ export default function MeritSystemIndex({ user, currentView }) {
       grid: { left: '10%', right: '5%', top: '15%', bottom: '25%' }
     };
   };
+  const getTopInstitutionsChartOptions = () => {
+    // Detect mobile screen
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+    
+    // Shorten institution names for mobile
+    const formatName = (name) => {
+      if (!isMobile) return name;
+      // Shorten long names for mobile
+      const words = name.split(' ');
+      if (words.length > 3) {
+        return words.slice(0, 3).join(' ') + '...';
+      }
+      if (name.length > 25) {
+        return name.substring(0, 25) + '...';
+      }
+      return name;
+    };
+
+    return {
+      title: {
+        text: 'Perbandingan Merit System Index',
+        left: 'center',
+        top: 10,
+        textStyle: { 
+          color: '#f1f5f9', 
+          fontSize: isMobile ? 12 : 16 
+        }
+      },
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: { type: 'shadow' },
+        confine: true, // Keep tooltip within chart container on mobile
+        formatter: function(params) {
+          // Show full name in tooltip
+          const institution = institutions[params[0].dataIndex];
+          let result = `<strong>${institution?.name || 'Unknown'}</strong><br/>`;
+          params.forEach(param => {
+            result += `${param.marker} ${param.seriesName}: ${param.value}<br/>`;
+          });
+          return result;
+        }
+      },
+      legend: {
+        data: ['Merit Index', 'Compliance', 'Talent Pipeline', 'Training'],
+        bottom: 10,
+        textStyle: { color: '#94a3b8', fontSize: isMobile ? 10 : 12 },
+        orient: isMobile ? 'horizontal' : 'horizontal',
+        itemGap: isMobile ? 5 : 10,
+        itemWidth: isMobile ? 15 : 25
+      },
+      grid: {
+        left: isMobile ? '5%' : '3%',
+        right: isMobile ? '5%' : '4%',
+        bottom: isMobile ? '20%' : '15%',
+        top: isMobile ? '15%' : '10%',
+        containLabel: true
+      },
+      xAxis: {
+        type: 'category',
+        data: institutions.slice(0, 10).map(i => formatName(i.name)),
+        axisLabel: {
+          rotate: isMobile ? 65 : 45,
+          color: '#94a3b8',
+          fontSize: isMobile ? 8 : 10,
+          interval: 0, // Show all labels
+          formatter: function(value) {
+            // Further truncate if still too long on mobile
+            if (isMobile && value.length > 20) {
+              return value.substring(0, 18) + '...';
+            }
+            return value;
+          }
+        },
+        axisLine: { lineStyle: { color: '#475569' } }
+      },
+      yAxis: {
+        type: 'value',
+        max: 100,
+        axisLabel: { 
+          color: '#94a3b8',
+          fontSize: isMobile ? 10 : 12
+        },
+        splitLine: { lineStyle: { color: '#334155' } }
+      },
+      series: [
+        {
+          name: 'Merit Index',
+          type: 'bar',
+          data: institutions.slice(0, 10).map(i => i.merit_index || 0),
+          itemStyle: {
+            color: {
+              type: 'linear',
+              x: 0, y: 0, x2: 0, y2: 1,
+              colorStops: [
+                { offset: 0, color: '#8b5cf6' },
+                { offset: 1, color: '#6366f1' }
+              ]
+            }
+          }
+        },
+        {
+          name: 'Compliance',
+          type: 'line',
+          data: institutions.slice(0, 10).map(i => i.compliance_score || 0),
+          itemStyle: { color: '#22c55e' }
+        },
+        {
+          name: 'Talent Pipeline',
+          type: 'line',
+          data: institutions.slice(0, 10).map(i => i.talent_pipeline_strength || 0),
+          itemStyle: { color: '#3b82f6' }
+        },
+        {
+          name: 'Training',
+          type: 'line',
+          data: institutions.slice(0, 10).map(i => i.training_adequacy || 0),
+          itemStyle: { color: '#f59e0b' }
+        }
+      ],
+      backgroundColor: 'transparent'
+    };
+  };
 
   // DASHBOARD VIEW
   if (currentView === 'merit-dashboard' || currentView === 'merit-system-index') {
