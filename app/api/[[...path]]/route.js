@@ -18,6 +18,7 @@ import {
 } from '@/lib/mockAIResponses';
 import mockInstitutions, { generateInstitutionAnalysis } from '@/lib/mockMeritData';
 import { getBlockchainInstance } from '@/lib/blockchain';
+import { seedBlockchainData } from '@/lib/seedBlockchainData';
 
 // Helper to extract path segments
 function getPathSegments(request) {
