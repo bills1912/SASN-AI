@@ -40,20 +40,36 @@ export default function MeritSystemBlockchain({ user, selectedProfile }) {
 
     setLoading(true);
     try {
+      // Get token from localStorage
+      const token = localStorage.getItem('token');
+      const headers = {
+        'Content-Type': 'application/json',
+        ...(token && { 'Authorization': `Bearer ${token}` })
+      };
+
       // Get blockchain statistics
-      const statsRes = await fetch('/api/blockchain/statistics');
+      const statsRes = await fetch('/api/blockchain/statistics', { headers });
       const statsData = await statsRes.json();
-      setBlockchainStats(statsData.statistics);
+      
+      if (statsRes.ok) {
+        setBlockchainStats(statsData.statistics);
+      }
 
       // Get merit audit trail for selected profile
-      const auditRes = await fetch(`/api/blockchain/merit-audit/${selectedProfile.nip}`);
+      const auditRes = await fetch(`/api/blockchain/merit-audit/${selectedProfile.nip}`, { headers });
       const auditData = await auditRes.json();
-      setMeritAudit(auditData.audit);
+      
+      if (auditRes.ok) {
+        setMeritAudit(auditData.audit);
+      }
 
       // Get credential history
-      const historyRes = await fetch(`/api/blockchain/history/${selectedProfile.nip}`);
+      const historyRes = await fetch(`/api/blockchain/history/${selectedProfile.nip}`, { headers });
       const historyData = await historyRes.json();
-      setCredentialHistory(historyData.history);
+      
+      if (historyRes.ok && historyData.history) {
+        setCredentialHistory(historyData.history);
+      }
 
     } catch (error) {
       console.error('Error loading blockchain data:', error);
