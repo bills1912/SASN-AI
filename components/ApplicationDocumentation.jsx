@@ -345,21 +345,204 @@ export default function ApplicationDocumentation({ user }) {
       </Card>
 
       {/* Blockchain Security Section */}
-      <Card className="p-8 bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-950/20 dark:to-blue-950/20 border-blue-200 dark:border-blue-800">
+      <Card className="p-4 md:p-8 bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-950/20 dark:to-blue-950/20 border-blue-200 dark:border-blue-800">
         <div className="flex items-center space-x-3 mb-6">
           <div className="p-2 bg-blue-500 rounded-lg">
             <Shield className="w-6 h-6 text-white" />
           </div>
-          <h2 className="text-2xl font-bold text-foreground">Blockchain Security Layer</h2>
+          <h2 className="text-xl md:text-2xl font-bold text-foreground">Blockchain Security Layer</h2>
         </div>
         
         <div className="space-y-6">
           <div>
-            <h3 className="text-lg font-semibold text-foreground mb-3">Mengapa Blockchain?</h3>
-            <p className="text-muted-foreground mb-4">
+            <h3 className="text-base md:text-lg font-semibold text-foreground mb-3">Mengapa Blockchain?</h3>
+            <p className="text-sm md:text-base text-muted-foreground mb-4">
               Implementasi blockchain dalam sistem manajemen talenta ASN memberikan jaminan integritas data 
               dan transparansi yang diperlukan untuk sistem merit yang akuntabel sesuai Permenpan RB No. 40/2018.
             </p>
+          </div>
+
+          {/* Technical Deep Dive */}
+          <div className="p-4 md:p-6 bg-blue-50 dark:bg-blue-950/30 rounded-lg border border-blue-200 dark:border-blue-800">
+            <h3 className="text-base md:text-lg font-bold text-blue-700 dark:text-blue-400 mb-4">Technical Architecture</h3>
+            
+            <div className="space-y-4">
+              <div>
+                <h4 className="font-semibold text-foreground mb-2 flex items-center gap-2">
+                  <Database className="w-4 h-4 text-blue-500" />
+                  1. Blockchain Model: Private Permissioned Blockchain
+                </h4>
+                <p className="text-sm text-muted-foreground ml-6 mb-2">
+                  ASTA-CITA AI menggunakan <strong>Private Permissioned Blockchain</strong>, model yang ideal untuk aplikasi 
+                  pemerintahan dan enterprise karena:
+                </p>
+                <ul className="text-sm text-muted-foreground ml-10 space-y-1">
+                  <li>• <strong>Access Control:</strong> Hanya instansi pemerintah terverifikasi yang dapat menambah/membaca data</li>
+                  <li>• <strong>Privacy:</strong> Data ASN terlindungi dari akses publik</li>
+                  <li>• <strong>Performance:</strong> Lebih cepat dari public blockchain (tidak perlu consensus dari ribuan node)</li>
+                  <li>• <strong>Compliance:</strong> Memenuhi regulasi data pribadi dan keamanan informasi pemerintah</li>
+                </ul>
+              </div>
+
+              <div>
+                <h4 className="font-semibold text-foreground mb-2 flex items-center gap-2">
+                  <Lock className="w-4 h-4 text-green-500" />
+                  2. Cryptographic Algorithm: SHA-256
+                </h4>
+                <p className="text-sm text-muted-foreground ml-6 mb-2">
+                  Setiap block menggunakan <strong>SHA-256 (Secure Hash Algorithm 256-bit)</strong>:
+                </p>
+                <ul className="text-sm text-muted-foreground ml-10 space-y-1">
+                  <li>• <strong>Hash Function:</strong> Menghasilkan unique fingerprint 64 karakter untuk setiap block</li>
+                  <li>• <strong>One-Way:</strong> Tidak bisa di-reverse (tidak bisa mendapatkan data asli dari hash)</li>
+                  <li>• <strong>Collision Resistant:</strong> Hampir mustahil 2 data berbeda menghasilkan hash yang sama</li>
+                  <li>• <strong>NSA Standard:</strong> Digunakan oleh Bitcoin, SSL certificates, dan sistem keamanan global</li>
+                </ul>
+                <div className="mt-2 p-3 bg-slate-100 dark:bg-slate-900 rounded font-mono text-xs break-all">
+                  <span className="text-muted-foreground">Example Hash:</span><br/>
+                  <span className="text-green-600 dark:text-green-400">
+                    a3d2f1e8b9c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0
+                  </span>
+                </div>
+              </div>
+
+              <div>
+                <h4 className="font-semibold text-foreground mb-2 flex items-center gap-2">
+                  <CheckCircle className="w-4 h-4 text-purple-500" />
+                  3. Consensus Mechanism: Proof of Work (PoW)
+                </h4>
+                <p className="text-sm text-muted-foreground ml-6 mb-2">
+                  Menggunakan <strong>Proof of Work</strong> dengan mining difficulty yang adjustable:
+                </p>
+                <ul className="text-sm text-muted-foreground ml-10 space-y-1">
+                  <li>• <strong>Mining Process:</strong> Block baru harus di-"mine" dengan menemukan nonce yang menghasilkan hash dengan difficulty tertentu</li>
+                  <li>• <strong>Difficulty Level:</strong> Saat ini set ke difficulty=2 (hash harus dimulai dengan "00")</li>
+                  <li>• <strong>Tamper Prevention:</strong> Jika ada data diubah, hash berubah dan chain validation akan gagal</li>
+                  <li>• <strong>Adjustable:</strong> Difficulty bisa ditingkatkan untuk keamanan lebih tinggi</li>
+                </ul>
+                <div className="mt-2 p-3 bg-purple-50 dark:bg-purple-950/30 rounded text-xs">
+                  <code className="text-purple-700 dark:text-purple-300">
+                    while (hash.substring(0, difficulty) !== "00...") {'{'}
+                    <br/>
+                    &nbsp;&nbsp;nonce++;
+                    <br/>
+                    &nbsp;&nbsp;hash = calculateHash();
+                    <br/>
+                    {'}'}
+                  </code>
+                </div>
+              </div>
+
+              <div>
+                <h4 className="font-semibold text-foreground mb-2 flex items-center gap-2">
+                  <History className="w-4 h-4 text-orange-500" />
+                  4. Block Structure & Chain Linking
+                </h4>
+                <p className="text-sm text-muted-foreground ml-6 mb-2">
+                  Setiap block berisi informasi lengkap dan terhubung ke block sebelumnya:
+                </p>
+                <div className="mt-2 p-3 bg-orange-50 dark:bg-orange-950/30 rounded text-xs space-y-2">
+                  <div>
+                    <strong className="text-orange-700 dark:text-orange-300">Block Components:</strong>
+                    <ul className="mt-1 ml-4 text-muted-foreground">
+                      <li>• <strong>Index:</strong> Nomor urut block dalam chain</li>
+                      <li>• <strong>Timestamp:</strong> Waktu pembuatan block (epoch milliseconds)</li>
+                      <li>• <strong>Data:</strong> Credential, performance, career movement, atau assessment</li>
+                      <li>• <strong>Previous Hash:</strong> Hash dari block sebelumnya (linking mechanism)</li>
+                      <li>• <strong>Hash:</strong> Hash unik block ini (computed dari semua data di atas)</li>
+                      <li>• <strong>Nonce:</strong> Number used once - untuk proof of work</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <strong className="text-orange-700 dark:text-orange-300">Chain Validation:</strong>
+                    <p className="text-muted-foreground mt-1">
+                      Validasi dilakukan dengan memverifikasi bahwa previousHash di block N+1 sama dengan hash di block N. 
+                      Jika ada satu block diubah, semua block sesudahnya akan invalid.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h4 className="font-semibold text-foreground mb-2">5. Data Types Stored in Blockchain</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 ml-6">
+                  <div className="p-3 bg-white dark:bg-slate-900 rounded border border-border">
+                    <strong className="text-green-600">CREDENTIAL</strong>
+                    <p className="text-xs text-muted-foreground mt-1">Pendidikan, sertifikasi, training dengan verification status</p>
+                  </div>
+                  <div className="p-3 bg-white dark:bg-slate-900 rounded border border-border">
+                    <strong className="text-purple-600">PERFORMANCE</strong>
+                    <p className="text-xs text-muted-foreground mt-1">Penilaian kinerja SKP, perilaku, kompetensi dengan merit score</p>
+                  </div>
+                  <div className="p-3 bg-white dark:bg-slate-900 rounded border border-border">
+                    <strong className="text-orange-600">CAREER_MOVEMENT</strong>
+                    <p className="text-xs text-muted-foreground mt-1">Promosi, mutasi, rotasi dengan merit-based flag</p>
+                  </div>
+                  <div className="p-3 bg-white dark:bg-slate-900 rounded border border-border">
+                    <strong className="text-blue-600">TALENT_ASSESSMENT</strong>
+                    <p className="text-xs text-muted-foreground mt-1">9-box assessment, skill gaps, development plans</p>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h4 className="font-semibold text-foreground mb-2 flex items-center gap-2">
+                  <Database className="w-4 h-4 text-cyan-500" />
+                  6. Dual Storage: Blockchain + MongoDB
+                </h4>
+                <p className="text-sm text-muted-foreground ml-6 mb-2">
+                  Hybrid architecture untuk optimal performance dan persistence:
+                </p>
+                <ul className="text-sm text-muted-foreground ml-10 space-y-1">
+                  <li>• <strong>In-Memory Blockchain:</strong> Untuk fast access dan real-time validation</li>
+                  <li>• <strong>MongoDB Persistence:</strong> Setiap block disimpan ke database untuk long-term storage</li>
+                  <li>• <strong>Recovery:</strong> Blockchain dapat di-reconstruct dari MongoDB jika server restart</li>
+                  <li>• <strong>Query Performance:</strong> MongoDB untuk complex queries, blockchain untuk validation</li>
+                </ul>
+              </div>
+
+              <div>
+                <h4 className="font-semibold text-foreground mb-2">7. Implementation Technology Stack</h4>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-xs mt-2">
+                    <thead className="bg-slate-200 dark:bg-slate-800">
+                      <tr>
+                        <th className="p-2 text-left">Component</th>
+                        <th className="p-2 text-left">Technology</th>
+                        <th className="p-2 text-left">Purpose</th>
+                      </tr>
+                    </thead>
+                    <tbody className="text-muted-foreground">
+                      <tr className="border-b border-border">
+                        <td className="p-2">Blockchain Core</td>
+                        <td className="p-2">Node.js + Crypto Module</td>
+                        <td className="p-2">SHA-256 hashing & block creation</td>
+                      </tr>
+                      <tr className="border-b border-border">
+                        <td className="p-2">API Layer</td>
+                        <td className="p-2">Next.js 14 API Routes</td>
+                        <td className="p-2">RESTful endpoints untuk blockchain ops</td>
+                      </tr>
+                      <tr className="border-b border-border">
+                        <td className="p-2">Database</td>
+                        <td className="p-2">MongoDB</td>
+                        <td className="p-2">Persistent storage & backup</td>
+                      </tr>
+                      <tr className="border-b border-border">
+                        <td className="p-2">Frontend</td>
+                        <td className="p-2">React 18 + TypeScript</td>
+                        <td className="p-2">Interactive blockchain explorer</td>
+                      </tr>
+                      <tr>
+                        <td className="p-2">Authentication</td>
+                        <td className="p-2">JWT + Bearer Tokens</td>
+                        <td className="p-2">Secure API access control</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div className="grid md:grid-cols-2 gap-4">
