@@ -454,7 +454,7 @@ export default function MeritSystemBlockchain({ user, selectedProfile }) {
               Talent Assessment History
             </h3>
             
-            {credentialHistory.filter(h => h.type === 'TALENT_ASSESSMENT').length === 0 ? (
+            {(!credentialHistory || credentialHistory.filter(h => h.type === 'TALENT_ASSESSMENT').length === 0) ? (
               <p className="text-muted-foreground text-center py-8">Belum ada assessment tercatat</p>
             ) : (
               <div className="space-y-3">
