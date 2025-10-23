@@ -545,13 +545,13 @@ export default function ApplicationDocumentation({ user }) {
             </div>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border border-border">
               <div className="flex items-center gap-2 mb-3">
-                <Lock className="w-5 h-5 text-blue-500" />
-                <h4 className="font-semibold text-foreground">Immutable Records</h4>
+                <Lock className="w-4 md:w-5 h-4 md:h-5 text-blue-500" />
+                <h4 className="font-semibold text-sm md:text-base text-foreground">Immutable Records</h4>
               </div>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-xs md:text-sm text-muted-foreground">
                 Semua kredensial, sertifikasi, dan penilaian kinerja ASN disimpan dalam blockchain 
                 yang tidak dapat diubah atau dihapus. Setiap perubahan tercatat dengan timestamp dan hash kriptografi.
               </p>
@@ -559,10 +559,10 @@ export default function ApplicationDocumentation({ user }) {
 
             <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border border-border">
               <div className="flex items-center gap-2 mb-3">
-                <CheckCircle className="w-5 h-5 text-green-500" />
-                <h4 className="font-semibold text-foreground">Credential Verification</h4>
+                <CheckCircle className="w-4 md:w-5 h-4 md:h-5 text-green-500" />
+                <h4 className="font-semibold text-sm md:text-base text-foreground">Credential Verification</h4>
               </div>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-xs md:text-sm text-muted-foreground">
                 Verifikasi otomatis kredensial pendidikan dan sertifikasi menggunakan SHA-256 hashing. 
                 Mengurangi risiko pemalsuan dokumen dan mempercepat proses verifikasi hingga 90%.
               </p>
@@ -570,10 +570,10 @@ export default function ApplicationDocumentation({ user }) {
 
             <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border border-border">
               <div className="flex items-center gap-2 mb-3">
-                <History className="w-5 h-5 text-purple-500" />
-                <h4 className="font-semibold text-foreground">Full Audit Trail</h4>
+                <History className="w-4 md:w-5 h-4 md:h-5 text-purple-500" />
+                <h4 className="font-semibold text-sm md:text-base text-foreground">Full Audit Trail</h4>
               </div>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-xs md:text-sm text-muted-foreground">
                 Setiap promosi, mutasi, dan penugasan ASN tercatat lengkap dengan bukti merit-based decision. 
                 Mendukung transparansi dan akuntabilitas sesuai prinsip merit system.
               </p>
@@ -581,36 +581,45 @@ export default function ApplicationDocumentation({ user }) {
 
             <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border border-border">
               <div className="flex items-center gap-2 mb-3">
-                <Database className="w-5 h-5 text-orange-500" />
-                <h4 className="font-semibold text-foreground">Decentralized Storage</h4>
+                <Database className="w-4 md:w-5 h-4 md:h-5 text-orange-500" />
+                <h4 className="font-semibold text-sm md:text-base text-foreground">Decentralized Storage</h4>
               </div>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-xs md:text-sm text-muted-foreground">
                 Data terdistribusi dan terenkripsi, mengurangi risiko data breach hingga 50%. 
                 Memfasilitasi sharing data aman antar instansi pemerintah untuk mobilitas talenta.
               </p>
             </div>
           </div>
 
-          <div className="p-4 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-800">
-            <h4 className="font-semibold text-blue-700 dark:text-blue-400 mb-2">Blockchain Architecture</h4>
-            <ul className="space-y-2 text-sm text-foreground">
-              <li className="flex items-center gap-2">
-                <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-                <span><strong>Private Permissioned Blockchain:</strong> Hanya instansi pemerintah terverifikasi yang dapat mengakses</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-                <span><strong>Proof of Work:</strong> Mining dengan difficulty adjustment untuk keamanan</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-                <span><strong>SHA-256 Encryption:</strong> Standar kriptografi untuk hash generation</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-                <span><strong>MongoDB Persistence:</strong> Dual storage dengan blockchain dan database untuk performa optimal</span>
-              </li>
-            </ul>
+          {/* Security Advantages */}
+          <div className="p-4 bg-green-50 dark:bg-green-950/20 rounded-lg border border-green-200 dark:border-green-800">
+            <h4 className="font-semibold text-sm md:text-base text-green-700 dark:text-green-400 mb-3">Security Advantages vs Traditional Database</h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs md:text-sm">
+              <div>
+                <strong className="text-foreground">🔒 Tamper Detection:</strong>
+                <p className="text-muted-foreground mt-1">
+                  Blockchain instantly detects any data modification attempt through hash validation. Traditional databases can be silently altered by admin with sufficient privileges.
+                </p>
+              </div>
+              <div>
+                <strong className="text-foreground">🛡️ No Single Point of Failure:</strong>
+                <p className="text-muted-foreground mt-1">
+                  Even if MongoDB compromised, blockchain validation ensures data integrity. Attackers must recalculate all subsequent blocks - computationally infeasible.
+                </p>
+              </div>
+              <div>
+                <strong className="text-foreground">📜 Immutable Audit Log:</strong>
+                <p className="text-muted-foreground mt-1">
+                  Every action permanently recorded. Traditional audit logs can be deleted or modified. Blockchain audit is cryptographically sealed.
+                </p>
+              </div>
+              <div>
+                <strong className="text-foreground">⚖️ Merit System Transparency:</strong>
+                <p className="text-muted-foreground mt-1">
+                  Promotions must have blockchain-verified merit scores. Prevents backdoor favoritism - all decisions auditable by independent oversight bodies.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </Card>
