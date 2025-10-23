@@ -171,8 +171,8 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
                     "w-full flex items-center transition-colors",
                     isCollapsed && !isMobile ? "justify-center px-4 py-3" : "justify-between px-6 py-3",
                     currentView.startsWith('talent') || currentView === item.id
-                      ? "bg-slate-800 text-white"
-                      : "text-sidebar-foreground hover:bg-slate-800 hover:text-white"
+                      ? "bg-sidebar-accent text-white"
+                      : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-white"
                   )}
                 >
                   <div className={cn(
@@ -190,7 +190,7 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
                 </button>
 
                 {talentExpanded && (!isCollapsed || isMobile) && item.submenu && (
-                  <div className="bg-slate-800/50">
+                  <div className="bg-sidebar-accent/50">
                     {item.submenu.map((subitem) => (
                       <button
                         key={subitem.id}
@@ -205,7 +205,7 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
                           "w-full flex items-center space-x-3 pl-14 pr-6 py-2.5 transition-colors",
                           currentView === subitem.id
                             ? "text-blue-400 bg-slate-900"
-                            : "text-muted-foreground hover:text-white hover:bg-slate-900"
+                            : "text-muted-foreground hover:text-white hover:bg-sidebar-accent/80"
                         )}
                       >
                         <subitem.icon className="w-4 h-4 flex-shrink-0" />
@@ -233,7 +233,7 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
                     isCollapsed && !isMobile ? "justify-center px-4 py-3" : "justify-between px-6 py-3",
                     currentView.startsWith('merit') || currentView === item.id
                       ? "bg-purple-600 text-white"
-                      : "text-sidebar-foreground hover:bg-slate-800 hover:text-white"
+                      : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-white"
                   )}
                 >
                   <div className={cn(
@@ -251,7 +251,7 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
                 </button>
 
                 {meritExpanded && (!isCollapsed || isMobile) && item.submenu && (
-                  <div className="bg-slate-800/50">
+                  <div className="bg-sidebar-accent/50">
                     {item.submenu.map((subitem) => (
                       <button
                         key={subitem.id}
@@ -266,7 +266,7 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
                           "w-full flex items-center space-x-3 pl-14 pr-6 py-2.5 transition-colors",
                           currentView === subitem.id
                             ? "text-purple-400 bg-slate-900"
-                            : "text-muted-foreground hover:text-white hover:bg-slate-900"
+                            : "text-muted-foreground hover:text-white hover:bg-sidebar-accent/80"
                         )}
                       >
                         <subitem.icon className="w-4 h-4 flex-shrink-0" />
@@ -293,7 +293,7 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
                   isCollapsed && !isMobile ? "justify-center px-4 py-3" : "space-x-3 px-6 py-3",
                   currentView === item.id
                     ? "bg-purple-600 text-white"
-                    : "text-sidebar-foreground hover:bg-slate-800 hover:text-white"
+                    : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-white"
                 )}
               >
                 <item.icon className={cn("flex-shrink-0", isCollapsed && !isMobile ? "w-6 h-6" : "w-5 h-5")} />
@@ -396,7 +396,7 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
           <Button
             onClick={onLogout}
             variant="outline"
-            className="w-full border-slate-700 text-sidebar-foreground hover:bg-slate-800 hover:text-white"
+            className="w-full border-slate-700 text-sidebar-foreground hover:bg-sidebar-accent hover:text-white"
           >
             <LogOut className="w-4 h-4 mr-2" />
             Logout
@@ -433,7 +433,7 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
           variant="ghost"
           size="icon"
           onClick={() => setIsMobileOpen(true)}
-          className="fixed top-4 right-4 z-[60] lg:hidden bg-slate-900/90 backdrop-blur text-white hover:bg-slate-800 shadow-lg border border-slate-700"
+          className="fixed top-4 right-4 z-[60] lg:hidden bg-slate-900/90 backdrop-blur text-white hover:bg-sidebar-accent shadow-lg border border-slate-700"
         >
           <Menu className="w-5 h-5" />
         </Button>
@@ -469,7 +469,7 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
         onClick={() => setIsCollapsed(!isCollapsed)}
         className={cn(
           "hidden lg:flex absolute z-20 items-center justify-center transition-all duration-300",
-          "bg-slate-800 hover:bg-slate-700",
+          "bg-sidebar-accent hover:bg-slate-700",
           "text-muted-foreground hover:text-white",
           "rounded-lg border border-slate-700",
           "w-8 h-8",
