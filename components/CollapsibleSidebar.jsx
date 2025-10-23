@@ -33,7 +33,7 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [talentExpanded, setTalentExpanded] = useState(true);
-  const [performanceExpanded, setPerformanceExpanded] = useState(false);
+  const [meritExpanded, setMeritExpanded] = useState(false);
 
   const menuItems = [
     {
