@@ -217,22 +217,22 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
               </div>
             )}
 
-            {item.section === 'performance' && (
+            {item.section === 'admin' && item.submenu && (
               <div>
                 <button
                   onClick={() => {
                     if (isCollapsed && !isMobile) {
                       setIsCollapsed(false);
                     }
-                    setPerformanceExpanded(!performanceExpanded);
+                    setMeritExpanded(!meritExpanded);
                     setCurrentView(item.id);
                   }}
                   title={isCollapsed ? item.label : ''}
                   className={cn(
-                    "w-full flex items-center transition-colors",
+                    "w-full flex items-center transition-colors border-t border-slate-800",
                     isCollapsed && !isMobile ? "justify-center px-4 py-3" : "justify-between px-6 py-3",
-                    currentView.startsWith('performance') || currentView === item.id
-                      ? "bg-slate-800 text-white"
+                    currentView.startsWith('merit') || currentView === item.id
+                      ? "bg-purple-600 text-white"
                       : "text-slate-300 hover:bg-slate-800 hover:text-white"
                   )}
                 >
@@ -246,11 +246,11 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
                     )}
                   </div>
                   {(!isCollapsed || isMobile) && (
-                    performanceExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />
+                    meritExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />
                   )}
                 </button>
 
-                {performanceExpanded && (!isCollapsed || isMobile) && item.submenu && (
+                {meritExpanded && (!isCollapsed || isMobile) && item.submenu && (
                   <div className="bg-slate-800/50">
                     {item.submenu.map((subitem) => (
                       <button
@@ -265,7 +265,7 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
                         className={cn(
                           "w-full flex items-center space-x-3 pl-14 pr-6 py-2.5 transition-colors",
                           currentView === subitem.id
-                            ? "text-cyan-400 bg-slate-900"
+                            ? "text-purple-400 bg-slate-900"
                             : "text-slate-400 hover:text-white hover:bg-slate-900"
                         )}
                       >
