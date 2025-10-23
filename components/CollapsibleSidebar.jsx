@@ -145,8 +145,8 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
                   "w-full flex items-center transition-colors",
                   isCollapsed && !isMobile ? "justify-center px-4 py-3" : "space-x-3 px-6 py-3",
                   currentView === item.id
-                    ? "bg-blue-600 text-white"
-                    : "text-slate-300 hover:bg-slate-800 hover:text-white"
+                    ? "bg-cyan-600 dark:bg-cyan-600 text-white"
+                    : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                 )}
               >
                 <item.icon className={cn("flex-shrink-0", isCollapsed && !isMobile ? "w-6 h-6" : "w-5 h-5")} />
