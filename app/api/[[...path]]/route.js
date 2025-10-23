@@ -1412,6 +1412,38 @@ async function handleBlockchain(segments, request, method) {
     }
   }
 
+  // POST /api/blockchain/seed - Seed blockchain with sample data (Admin only)
+  if (segments[0] === 'seed' && method === 'POST') {
+    try {
+      if (user.role !== 'admin') {
+        return NextResponse.json({ error: 'Forbidden - Admin access required' }, { status: 403 });
+      }
+
+      const stats = seedBlockchainData();
+      
+      // Save blockchain state to MongoDB
+      const client = await clientPromise;
+      const db = client.db('asta_cita_ai');
+      await db.collection('blockchain_seeds').insertOne({
+        stats,
+        seededBy: user.id,
+        seededAt: new Date()
+      });
+
+      return NextResponse.json({ 
+        success: true, 
+        message: 'Blockchain seeded successfully',
+        stats 
+      });
+    } catch (error) {
+      console.error('Error seeding blockchain:', error);
+      return NextResponse.json(
+        { error: 'Failed to seed blockchain' },
+        { status: 500 }
+      );
+    }
+  }
+
   return null;
 }
 
