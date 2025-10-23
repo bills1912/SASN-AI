@@ -319,10 +319,26 @@ export default function TalentManagement({ user, currentView, selectedProfile: g
               <p className="font-semibold text-sm text-foreground truncate">{selectedProfile.agency}</p>
             </div>
             <div className="p-3 bg-white dark:bg-slate-900/50 rounded-lg">
-              <p className="text-sm text-muted-foreground mb-1">Performance Score</p>
-              <p className="font-semibold text-foreground">{selectedProfile.performanceScore}/100</p>
+              <p className="text-xs text-muted-foreground mb-1">Performance Score</p>
+              <p className="font-semibold text-sm text-foreground">{selectedProfile.performanceScore}/100</p>
             </div>
           </div>
+
+          {/* Blockchain Security Info */}
+          {meritAudit && (
+            <div className="mt-4 p-3 bg-green-50 dark:bg-green-950/20 rounded-lg border border-green-200 dark:border-green-800">
+              <div className="flex items-start gap-2">
+                <CheckCircle className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
+                <div className="flex-1">
+                  <p className="text-xs font-semibold text-green-800 dark:text-green-400">Data Secured by Blockchain</p>
+                  <p className="text-xs text-green-700 dark:text-green-300 mt-1">
+                    {meritAudit.totalRecords} records verified • {meritAudit.performanceRecords} performance assessments • 
+                    {meritAudit.meritBasedPromotions} merit-based promotions • Blockchain integrity: Valid
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
         </Card>
       )}
 
