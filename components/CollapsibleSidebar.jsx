@@ -119,7 +119,7 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
               variant="ghost"
               size="icon"
               onClick={() => setIsMobileOpen(false)}
-              className="text-slate-400 hover:text-white lg:hidden"
+              className="text-muted-foreground hover:text-white lg:hidden"
             >
               <X className="w-5 h-5" />
             </Button>
@@ -172,7 +172,7 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
                     isCollapsed && !isMobile ? "justify-center px-4 py-3" : "justify-between px-6 py-3",
                     currentView.startsWith('talent') || currentView === item.id
                       ? "bg-slate-800 text-white"
-                      : "text-slate-300 hover:bg-slate-800 hover:text-white"
+                      : "text-sidebar-foreground hover:bg-slate-800 hover:text-white"
                   )}
                 >
                   <div className={cn(
@@ -205,7 +205,7 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
                           "w-full flex items-center space-x-3 pl-14 pr-6 py-2.5 transition-colors",
                           currentView === subitem.id
                             ? "text-blue-400 bg-slate-900"
-                            : "text-slate-400 hover:text-white hover:bg-slate-900"
+                            : "text-muted-foreground hover:text-white hover:bg-slate-900"
                         )}
                       >
                         <subitem.icon className="w-4 h-4 flex-shrink-0" />
@@ -233,7 +233,7 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
                     isCollapsed && !isMobile ? "justify-center px-4 py-3" : "justify-between px-6 py-3",
                     currentView.startsWith('merit') || currentView === item.id
                       ? "bg-purple-600 text-white"
-                      : "text-slate-300 hover:bg-slate-800 hover:text-white"
+                      : "text-sidebar-foreground hover:bg-slate-800 hover:text-white"
                   )}
                 >
                   <div className={cn(
@@ -266,7 +266,7 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
                           "w-full flex items-center space-x-3 pl-14 pr-6 py-2.5 transition-colors",
                           currentView === subitem.id
                             ? "text-purple-400 bg-slate-900"
-                            : "text-slate-400 hover:text-white hover:bg-slate-900"
+                            : "text-muted-foreground hover:text-white hover:bg-slate-900"
                         )}
                       >
                         <subitem.icon className="w-4 h-4 flex-shrink-0" />
@@ -293,7 +293,7 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
                   isCollapsed && !isMobile ? "justify-center px-4 py-3" : "space-x-3 px-6 py-3",
                   currentView === item.id
                     ? "bg-purple-600 text-white"
-                    : "text-slate-300 hover:bg-slate-800 hover:text-white"
+                    : "text-sidebar-foreground hover:bg-slate-800 hover:text-white"
                 )}
               >
                 <item.icon className={cn("flex-shrink-0", isCollapsed && !isMobile ? "w-6 h-6" : "w-5 h-5")} />
@@ -319,7 +319,7 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
               </div>
               <div>
                 <p className="text-xs font-medium text-white">{user?.name}</p>
-                <p className="text-xs text-slate-400">{user?.role === 'admin' ? 'Administrator' : 'ASN'}</p>
+                <p className="text-xs text-muted-foreground">{user?.role === 'admin' ? 'Administrator' : 'ASN'}</p>
               </div>
             </div>
             <div className="flex items-center gap-1">
@@ -328,7 +328,7 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
                 size="icon"
                 onClick={() => toggleTheme('light')}
                 className={cn(
-                  "text-slate-400 hover:text-white",
+                  "text-muted-foreground hover:text-white",
                   theme === 'light' && "text-yellow-400"
                 )}
                 title="Light Mode"
@@ -340,7 +340,7 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
                 size="icon"
                 onClick={() => toggleTheme('dark')}
                 className={cn(
-                  "text-slate-400 hover:text-white",
+                  "text-muted-foreground hover:text-white",
                   theme === 'dark' && "text-blue-400"
                 )}
                 title="Dark Mode"
@@ -352,7 +352,7 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
                 size="icon"
                 onClick={() => toggleTheme('system')}
                 className={cn(
-                  "text-slate-400 hover:text-white",
+                  "text-muted-foreground hover:text-white",
                   theme === 'system' && "text-purple-400"
                 )}
                 title="System Mode"
@@ -379,7 +379,7 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
                 const nextTheme = themes[(currentIndex + 1) % themes.length];
                 toggleTheme(nextTheme);
               }}
-              className="text-slate-400 hover:text-white"
+              className="text-muted-foreground hover:text-white"
               title="Toggle Theme"
             >
               {theme === 'light' ? <Sun className="w-4 h-4" /> : 
@@ -396,7 +396,7 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
           <Button
             onClick={onLogout}
             variant="outline"
-            className="w-full border-slate-700 text-slate-300 hover:bg-slate-800 hover:text-white"
+            className="w-full border-slate-700 text-sidebar-foreground hover:bg-slate-800 hover:text-white"
           >
             <LogOut className="w-4 h-4 mr-2" />
             Logout
@@ -409,7 +409,7 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
             variant="ghost"
             size="icon"
             title="Logout"
-            className="w-full text-slate-400 hover:text-white"
+            className="w-full text-muted-foreground hover:text-white"
           >
             <LogOut className="w-4 h-4" />
           </Button>
@@ -419,7 +419,7 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
       {/* Copyright */}
       {(!isCollapsed || isMobile) && (
         <div className="px-4 py-2 text-center border-t border-slate-800">
-          <p className="text-xs text-slate-500">© 2024 - Proposal Hackathon BKN</p>
+          <p className="text-xs text-muted-foreground">© 2024 - Proposal Hackathon BKN</p>
         </div>
       )}
     </div>
@@ -470,7 +470,7 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
         className={cn(
           "hidden lg:flex absolute z-20 items-center justify-center transition-all duration-300",
           "bg-slate-800 hover:bg-slate-700",
-          "text-slate-400 hover:text-white",
+          "text-muted-foreground hover:text-white",
           "rounded-lg border border-slate-700",
           "w-8 h-8",
           "top-4",
