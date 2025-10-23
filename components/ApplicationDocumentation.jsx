@@ -1,7 +1,7 @@
 'use client'
 
 import { Card } from '@/components/ui/card';
-import { Book, GitBranch, Sparkles, Database, Brain, Target, TrendingUp, Shield, Zap } from 'lucide-react';
+import { Book, GitBranch, Sparkles, Database, Brain, Target, TrendingUp, Shield, Zap, Lock, CheckCircle, History, FileCheck } from 'lucide-react';
 
 export default function ApplicationDocumentation({ user }) {
   return (
