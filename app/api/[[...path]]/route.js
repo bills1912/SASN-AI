@@ -1063,6 +1063,156 @@ async function handleMockBKN(segments, request, method) {
   return null;
 }
 
+// Merit System Index endpoints (Admin only)
+async function handleMeritSystem(segments, request, method) {
+  const user = verifyAuth(request);
+  if (!user) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+  
+  // Only admin can access merit system features
+  if (user.role !== 'admin') {
+    return NextResponse.json({ error: 'Forbidden - Admin access required' }, { status: 403 });
+  }
+  
+  // GET /api/merit/institutions-list - Get all institutions
+  if (segments[0] === 'institutions-list' && method === 'GET') {
+    try {
+      // In production, this would fetch from database
+      // For now, return mock data
+      return NextResponse.json({ 
+        institutions: mockInstitutions,
+        total: mockInstitutions.length,
+        last_updated: new Date().toISOString()
+      });
+    } catch (error) {
+      console.error('Error fetching institutions:', error);
+      return NextResponse.json(
+        { error: 'Failed to fetch institutions' },
+        { status: 500 }
+      );
+    }
+  }
+  
+  // POST /api/merit/scrape-institutions - Trigger scraping (mock)
+  if (segments[0] === 'scrape-institutions' && method === 'POST') {
+    try {
+      // Simulate scraping process
+      console.log('Starting mock scraping process...');
+      
+      // In production, this would trigger actual web scraping
+      // For now, return mock data with simulated delay
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      return NextResponse.json({
+        success: true,
+        message: 'Scraping completed successfully',
+        scraped_count: mockInstitutions.length,
+        institutions: mockInstitutions,
+        timestamp: new Date().toISOString()
+      });
+    } catch (error) {
+      console.error('Error during scraping:', error);
+      return NextResponse.json(
+        { error: 'Scraping failed', details: error.message },
+        { status: 500 }
+      );
+    }
+  }
+  
+  // POST /api/merit/analyze-institution - Analyze specific institution
+  if (segments[0] === 'analyze-institution' && method === 'POST') {
+    try {
+      const { institution_id } = await request.json();
+      
+      const institution = mockInstitutions.find(i => i.id === institution_id);
+      if (!institution) {
+        return NextResponse.json(
+          { error: 'Institution not found' },
+          { status: 404 }
+        );
+      }
+      
+      const analysis = generateInstitutionAnalysis(institution);
+      
+      return NextResponse.json({
+        success: true,
+        institution: institution,
+        analysis: analysis
+      });
+    } catch (error) {
+      console.error('Error analyzing institution:', error);
+      return NextResponse.json(
+        { error: 'Analysis failed', details: error.message },
+        { status: 500 }
+      );
+    }
+  }
+  
+  // GET /api/merit/compare-institutions - Compare institutions
+  if (segments[0] === 'compare-institutions' && method === 'GET') {
+    try {
+      // Sort by merit index
+      const sortedInstitutions = [...mockInstitutions].sort(
+        (a, b) => b.merit_index - a.merit_index
+      );
+      
+      // Add rankings
+      const rankedInstitutions = sortedInstitutions.map((inst, index) => ({
+        ...inst,
+        rank: index + 1
+      }));
+      
+      return NextResponse.json({
+        institutions: rankedInstitutions,
+        total: rankedInstitutions.length,
+        average_merit_index: (
+          rankedInstitutions.reduce((sum, i) => sum + i.merit_index, 0) / 
+          rankedInstitutions.length
+        ).toFixed(2),
+        highest_score: rankedInstitutions[0]?.merit_index || 0,
+        lowest_score: rankedInstitutions[rankedInstitutions.length - 1]?.merit_index || 0
+      });
+    } catch (error) {
+      console.error('Error comparing institutions:', error);
+      return NextResponse.json(
+        { error: 'Comparison failed' },
+        { status: 500 }
+      );
+    }
+  }
+  
+  // GET /api/merit/institution/:id - Get specific institution details
+  if (segments[0] === 'institution' && segments[1] && method === 'GET') {
+    try {
+      const institutionId = segments[1];
+      const institution = mockInstitutions.find(i => i.id === institutionId);
+      
+      if (!institution) {
+        return NextResponse.json(
+          { error: 'Institution not found' },
+          { status: 404 }
+        );
+      }
+      
+      const analysis = generateInstitutionAnalysis(institution);
+      
+      return NextResponse.json({
+        institution: institution,
+        analysis: analysis
+      });
+    } catch (error) {
+      console.error('Error fetching institution:', error);
+      return NextResponse.json(
+        { error: 'Failed to fetch institution details' },
+        { status: 500 }
+      );
+    }
+  }
+  
+  return null;
+}
+
 // Main router
 export async function GET(request) {
   const segments = getPathSegments(request);
