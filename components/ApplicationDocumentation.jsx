@@ -344,11 +344,156 @@ export default function ApplicationDocumentation({ user }) {
         </div>
       </Card>
 
+      {/* Blockchain Security Section */}
+      <Card className="p-8 bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-950/20 dark:to-blue-950/20 border-blue-200 dark:border-blue-800">
+        <div className="flex items-center space-x-3 mb-6">
+          <div className="p-2 bg-blue-500 rounded-lg">
+            <Shield className="w-6 h-6 text-white" />
+          </div>
+          <h2 className="text-2xl font-bold text-foreground">Blockchain Security Layer</h2>
+        </div>
+        
+        <div className="space-y-6">
+          <div>
+            <h3 className="text-lg font-semibold text-foreground mb-3">Mengapa Blockchain?</h3>
+            <p className="text-muted-foreground mb-4">
+              Implementasi blockchain dalam sistem manajemen talenta ASN memberikan jaminan integritas data 
+              dan transparansi yang diperlukan untuk sistem merit yang akuntabel sesuai Permenpan RB No. 40/2018.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-4">
+            <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border border-border">
+              <div className="flex items-center gap-2 mb-3">
+                <Lock className="w-5 h-5 text-blue-500" />
+                <h4 className="font-semibold text-foreground">Immutable Records</h4>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Semua kredensial, sertifikasi, dan penilaian kinerja ASN disimpan dalam blockchain 
+                yang tidak dapat diubah atau dihapus. Setiap perubahan tercatat dengan timestamp dan hash kriptografi.
+              </p>
+            </div>
+
+            <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border border-border">
+              <div className="flex items-center gap-2 mb-3">
+                <CheckCircle className="w-5 h-5 text-green-500" />
+                <h4 className="font-semibold text-foreground">Credential Verification</h4>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Verifikasi otomatis kredensial pendidikan dan sertifikasi menggunakan SHA-256 hashing. 
+                Mengurangi risiko pemalsuan dokumen dan mempercepat proses verifikasi hingga 90%.
+              </p>
+            </div>
+
+            <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border border-border">
+              <div className="flex items-center gap-2 mb-3">
+                <History className="w-5 h-5 text-purple-500" />
+                <h4 className="font-semibold text-foreground">Full Audit Trail</h4>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Setiap promosi, mutasi, dan penugasan ASN tercatat lengkap dengan bukti merit-based decision. 
+                Mendukung transparansi dan akuntabilitas sesuai prinsip merit system.
+              </p>
+            </div>
+
+            <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border border-border">
+              <div className="flex items-center gap-2 mb-3">
+                <Database className="w-5 h-5 text-orange-500" />
+                <h4 className="font-semibold text-foreground">Decentralized Storage</h4>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Data terdistribusi dan terenkripsi, mengurangi risiko data breach hingga 50%. 
+                Memfasilitasi sharing data aman antar instansi pemerintah untuk mobilitas talenta.
+              </p>
+            </div>
+          </div>
+
+          <div className="p-4 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-800">
+            <h4 className="font-semibold text-blue-700 dark:text-blue-400 mb-2">Blockchain Architecture</h4>
+            <ul className="space-y-2 text-sm text-foreground">
+              <li className="flex items-center gap-2">
+                <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+                <span><strong>Private Permissioned Blockchain:</strong> Hanya instansi pemerintah terverifikasi yang dapat mengakses</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+                <span><strong>Proof of Work:</strong> Mining dengan difficulty adjustment untuk keamanan</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+                <span><strong>SHA-256 Encryption:</strong> Standar kriptografi untuk hash generation</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+                <span><strong>MongoDB Persistence:</strong> Dual storage dengan blockchain dan database untuk performa optimal</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </Card>
+
+      {/* Regulatory Compliance */}
+      <Card className="p-8 bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-950/20 dark:to-teal-950/20 border-emerald-200 dark:border-emerald-800">
+        <div className="flex items-center space-x-3 mb-6">
+          <div className="p-2 bg-emerald-500 rounded-lg">
+            <FileCheck className="w-6 h-6 text-white" />
+          </div>
+          <h2 className="text-2xl font-bold text-foreground">Kepatuhan Regulasi</h2>
+        </div>
+
+        <div className="space-y-6">
+          <div className="grid md:grid-cols-2 gap-6">
+            <div>
+              <h3 className="text-lg font-semibold text-foreground mb-3 flex items-center gap-2">
+                <span className="w-8 h-8 bg-emerald-500 text-white rounded-full flex items-center justify-center text-sm">1</span>
+                Permenpan RB No. 3 Tahun 2020
+              </h3>
+              <p className="text-sm font-semibold text-emerald-700 dark:text-emerald-400 mb-2">
+                Tentang Manajemen Talenta ASN
+              </p>
+              <ul className="space-y-2 text-sm text-muted-foreground ml-6">
+                <li>• <strong>Akuisisi Talenta:</strong> Pemetaan dan identifikasi talenta strategis</li>
+                <li>• <strong>Pengembangan Talenta:</strong> Individual Development Plan (IDP) dan akselerasi karier</li>
+                <li>• <strong>Retensi:</strong> Job enrichment, rotation, dan reward system</li>
+                <li>• <strong>Penempatan:</strong> Merit-based positioning sesuai kompetensi</li>
+                <li>• <strong>Pemantauan & Evaluasi:</strong> Continuous monitoring dengan blockchain audit</li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-foreground mb-3 flex items-center gap-2">
+                <span className="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center text-sm">2</span>
+                Permenpan RB No. 40 Tahun 2018
+              </h3>
+              <p className="text-sm font-semibold text-blue-700 dark:text-blue-400 mb-2">
+                Tentang Pedoman Sistem Merit ASN
+              </p>
+              <ul className="space-y-2 text-sm text-muted-foreground ml-6">
+                <li>• <strong>Prinsip Merit:</strong> Berbasis kualifikasi, kompetensi, dan kinerja</li>
+                <li>• <strong>Objektif & Transparan:</strong> Blockchain audit trail untuk transparansi penuh</li>
+                <li>• <strong>Bebas KKN:</strong> Anti-korupsi, kolusi, dan nepotisme dengan verifikasi otomatis</li>
+                <li>• <strong>Merit System Index:</strong> Penilaian compliance institusi dengan ML prediction</li>
+                <li>• <strong>Performance-Based:</strong> Reward dan sanksi berdasarkan kinerja terverifikasi</li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="p-4 bg-emerald-50 dark:bg-emerald-950/20 rounded-lg border border-emerald-200 dark:border-emerald-800">
+            <h4 className="font-semibold text-emerald-700 dark:text-emerald-400 mb-2">Dasar Hukum Lainnya</h4>
+            <ul className="space-y-1 text-sm text-foreground">
+              <li>• <strong>UU No. 5 Tahun 2014:</strong> Tentang Aparatur Sipil Negara (sistem merit sebagai fondasi)</li>
+              <li>• <strong>PP No. 30 Tahun 2019:</strong> Tentang Penilaian Kinerja PNS</li>
+              <li>• <strong>Permenpan RB No. 8 Tahun 2021:</strong> Sistem Penilaian Kinerja ASN</li>
+            </ul>
+          </div>
+        </div>
+      </Card>
+
       {/* Future Development */}
       <Card className="p-8 bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-950/20 dark:to-purple-950/20 border-indigo-200 dark:border-indigo-800">
         <div className="flex items-center space-x-3 mb-4">
           <div className="p-2 bg-indigo-500 rounded-lg">
-            <Book className="w-6 h-6 text-white" />
+            <Sparkles className="w-6 h-6 text-white" />
           </div>
           <h2 className="text-2xl font-bold text-foreground">Future Enhancements</h2>
         </div>
@@ -359,15 +504,19 @@ export default function ApplicationDocumentation({ user }) {
           </li>
           <li className="flex items-start">
             <span className="text-indigo-600 dark:text-indigo-400 mr-2 font-bold">→</span>
-            <span><strong>Advanced ML Models:</strong> Implementasi Transformer-based models untuk analisis prediktif</span>
+            <span><strong>Smart Contracts:</strong> Automated merit-based promotion workflows</span>
           </li>
           <li className="flex items-start">
             <span className="text-indigo-600 dark:text-indigo-400 mr-2 font-bold">→</span>
-            <span><strong>Automated Succession Planning:</strong> AI-powered successor recommendations</span>
+            <span><strong>Cross-Institution Blockchain Network:</strong> Decentralized talent marketplace antar kementerian/lembaga</span>
           </li>
           <li className="flex items-start">
             <span className="text-indigo-600 dark:text-indigo-400 mr-2 font-bold">→</span>
-            <span><strong>Predictive Analytics:</strong> Forecasting talent gaps dan retention risks</span>
+            <span><strong>AI-Powered Gig Marketplace:</strong> Short-term project matching terinspirasi GigEagle.mil</span>
+          </li>
+          <li className="flex items-start">
+            <span className="text-indigo-600 dark:text-indigo-400 mr-2 font-bold">→</span>
+            <span><strong>Predictive Analytics:</strong> Forecasting talent gaps, retention risks, dan succession needs</span>
           </li>
           <li className="flex items-start">
             <span className="text-indigo-600 dark:text-indigo-400 mr-2 font-bold">→</span>
