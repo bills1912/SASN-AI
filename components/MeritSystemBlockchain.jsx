@@ -404,7 +404,7 @@ export default function MeritSystemBlockchain({ user, selectedProfile }) {
               Career Movement History
             </h3>
             
-            {credentialHistory.filter(h => h.type === 'CAREER_MOVEMENT').length === 0 ? (
+            {(!credentialHistory || credentialHistory.filter(h => h.type === 'CAREER_MOVEMENT').length === 0) ? (
               <p className="text-muted-foreground text-center py-8">Belum ada mutasi/promosi tercatat</p>
             ) : (
               <div className="space-y-3">
