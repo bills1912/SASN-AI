@@ -271,23 +271,54 @@ export default function TalentManagement({ user, currentView, selectedProfile: g
         </div>
       </div>
 
-      {/* Profile Summary */}
+      {/* Profile Summary with Blockchain Security */}
       {selectedProfile && (
-        <Card className="p-6">
-          <div className="grid md:grid-cols-4 gap-6">
-            <div>
-              <p className="text-sm text-muted-foreground mb-1">Nama</p>
-              <p className="font-semibold text-foreground">{selectedProfile.name}</p>
+        <Card className="p-4 md:p-6 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
+            <div className="flex-1">
+              <h2 className="text-lg md:text-xl font-bold text-foreground">{selectedProfile.name}</h2>
+              <p className="text-sm text-muted-foreground">{selectedProfile.position} - {selectedProfile.agency}</p>
+              <p className="text-xs text-muted-foreground">NIP: {selectedProfile.nip}</p>
             </div>
-            <div>
-              <p className="text-sm text-muted-foreground mb-1">Jabatan</p>
-              <p className="font-semibold text-foreground">{selectedProfile.position}</p>
+            
+            {/* Blockchain Security Indicators */}
+            <div className="flex flex-wrap gap-2">
+              {blockchainStats?.blockchainValid && (
+                <Badge variant="success" className="flex items-center gap-1 text-xs">
+                  <Shield className="w-3 h-3" />
+                  Blockchain Verified
+                </Badge>
+              )}
+              {meritAudit && (
+                <Badge variant="outline" className="flex items-center gap-1 text-xs">
+                  <Lock className="w-3 h-3" />
+                  {meritAudit.totalRecords} Records
+                </Badge>
+              )}
+              {meritAudit?.meritBasedPromotions > 0 && (
+                <Badge className="bg-purple-500 text-white flex items-center gap-1 text-xs">
+                  <Award className="w-3 h-3" />
+                  Merit Score: {meritAudit.averageMeritScore}
+                </Badge>
+              )}
             </div>
-            <div>
-              <p className="text-sm text-muted-foreground mb-1">Instansi</p>
-              <p className="font-semibold text-foreground">{selectedProfile.agency}</p>
+          </div>
+
+          {/* Quick Stats Grid */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mt-4">
+            <div className="p-3 bg-white dark:bg-slate-900/50 rounded-lg">
+              <p className="text-xs text-muted-foreground mb-1">Nama</p>
+              <p className="font-semibold text-sm text-foreground truncate">{selectedProfile.name}</p>
             </div>
-            <div>
+            <div className="p-3 bg-white dark:bg-slate-900/50 rounded-lg">
+              <p className="text-xs text-muted-foreground mb-1">Jabatan</p>
+              <p className="font-semibold text-sm text-foreground truncate">{selectedProfile.position}</p>
+            </div>
+            <div className="p-3 bg-white dark:bg-slate-900/50 rounded-lg">
+              <p className="text-xs text-muted-foreground mb-1">Instansi</p>
+              <p className="font-semibold text-sm text-foreground truncate">{selectedProfile.agency}</p>
+            </div>
+            <div className="p-3 bg-white dark:bg-slate-900/50 rounded-lg">
               <p className="text-sm text-muted-foreground mb-1">Performance Score</p>
               <p className="font-semibold text-foreground">{selectedProfile.performanceScore}/100</p>
             </div>
