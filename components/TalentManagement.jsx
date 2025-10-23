@@ -79,6 +79,51 @@ export default function TalentManagement({ user, currentView, selectedProfile: g
     }
   };
 
+  // Load blockchain data for security verification
+  const loadBlockchainData = async (nip) => {
+    if (!nip) return;
+
+    try {
+      const token = localStorage.getItem('token');
+      const headers = {
+        'Content-Type': 'application/json',
+        ...(token && { 'Authorization': `Bearer ${token}` })
+      };
+
+      // Get blockchain statistics
+      const statsRes = await fetch('/api/blockchain/statistics', { headers });
+      if (statsRes.ok) {
+        const statsData = await statsRes.json();
+        setBlockchainStats(statsData.statistics);
+      }
+
+      // Get merit audit trail
+      const auditRes = await fetch(`/api/blockchain/merit-audit/${nip}`, { headers });
+      if (auditRes.ok) {
+        const auditData = await auditRes.json();
+        setMeritAudit(auditData.audit);
+      }
+
+      // Get credential history
+      const historyRes = await fetch(`/api/blockchain/history/${nip}`, { headers });
+      if (historyRes.ok) {
+        const historyData = await historyRes.json();
+        setCredentialHistory(historyData.history || []);
+      }
+    } catch (error) {
+      console.error('Error loading blockchain data:', error);
+    }
+  };
+
+  // Sync with global selected profile and load blockchain data
+  useEffect(() => {
+    if (globalSelectedProfile) {
+      setSelectedProfile(globalSelectedProfile);
+      loadAnalysisData(globalSelectedProfile.nip);
+      loadBlockchainData(globalSelectedProfile.nip);
+    }
+  }, [globalSelectedProfile, currentView]);
+
   const get9BoxChartOption = () => {
     if (!talentMapping) return {};
 
