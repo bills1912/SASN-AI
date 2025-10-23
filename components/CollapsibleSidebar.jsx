@@ -64,12 +64,6 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
     ? [
         ...menuItems,
         {
-          id: 'merit-blockchain',
-          label: 'Merit System Blockchain',
-          icon: Shield,
-          section: 'admin'
-        },
-        {
           id: 'merit-system-index',
           label: 'Merit System Index',
           icon: Database,
