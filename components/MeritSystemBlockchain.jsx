@@ -42,6 +42,8 @@ export default function MeritSystemBlockchain({ user, selectedProfile }) {
     try {
       // Get token from localStorage
       const token = localStorage.getItem('token');
+      console.log('Token from localStorage:', token ? 'exists' : 'missing');
+      
       const headers = {
         'Content-Type': 'application/json',
         ...(token && { 'Authorization': `Bearer ${token}` })
@@ -49,6 +51,7 @@ export default function MeritSystemBlockchain({ user, selectedProfile }) {
 
       // Get blockchain statistics
       const statsRes = await fetch('/api/blockchain/statistics', { headers });
+      console.log('Stats response status:', statsRes.status);
       const statsData = await statsRes.json();
       
       if (statsRes.ok) {
