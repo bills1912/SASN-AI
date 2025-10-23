@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import { TrendingUp, Award, Target, Code2, Loader2, AlertCircle, Shield, Lock, CheckCircle } from 'lucide-react';
 import ReactECharts from 'echarts-for-react';
+import NineBoxMatrix from '@/components/NineBoxMatrix';
 
 export default function TalentManagement({ user, currentView, selectedProfile: globalSelectedProfile }) {
   const [selectedProfile, setSelectedProfile] = useState(globalSelectedProfile);
