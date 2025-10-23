@@ -505,20 +505,21 @@ export default function MeritSystemIndex({ user, currentView }) {
               />
             </Card>
 
-            {/* Ranking Table */}
-            <Card className="p-6">
-              <h3 className="text-lg font-semibold text-foreground mb-4">
+            {/* Ranking Table - Mobile Responsive */}
+            <Card className="p-4 md:p-6">
+              <h3 className="text-base md:text-lg font-semibold text-foreground mb-4">
                 Top 10 Institusi Berdasarkan Merit Index
               </h3>
               <div className="space-y-3">
                 {topInstitutions.map((institution, idx) => (
                   <div
                     key={idx}
-                    className="flex items-center justify-between p-4 bg-slate-800/50 rounded-lg hover:bg-slate-800 transition-colors"
+                    className="p-3 md:p-4 bg-slate-800/50 rounded-lg hover:bg-slate-800 transition-colors"
                   >
-                    <div className="flex items-center space-x-4">
+                    {/* Header with Rank and Name */}
+                    <div className="flex items-start space-x-3 md:space-x-4 mb-3 md:mb-0">
                       <div className={`
-                        w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg
+                        w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center font-bold text-base md:text-lg flex-shrink-0
                         ${idx === 0 ? 'bg-yellow-500 text-yellow-900' :
                           idx === 1 ? 'bg-slate-400 text-slate-900' :
                           idx === 2 ? 'bg-orange-600 text-orange-100' :
@@ -526,27 +527,29 @@ export default function MeritSystemIndex({ user, currentView }) {
                       `}>
                         {idx + 1}
                       </div>
-                      <div>
-                        <p className="font-semibold text-foreground">{institution.name}</p>
-                        <p className="text-sm text-muted-foreground">{institution.type}</p>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-semibold text-sm md:text-base text-foreground truncate">{institution.name}</p>
+                        <p className="text-xs md:text-sm text-muted-foreground">{institution.type}</p>
                       </div>
                     </div>
-                    <div className="flex items-center space-x-6">
-                      <div className="text-right">
-                        <p className="text-sm text-muted-foreground">Merit Index</p>
-                        <p className="text-2xl font-bold text-purple-400">{institution.merit_index || 0}</p>
+                    
+                    {/* Metrics - Stack on mobile, inline on desktop */}
+                    <div className="grid grid-cols-2 md:flex md:items-center md:justify-end gap-3 md:gap-6 mt-3 md:mt-0">
+                      <div className="text-left md:text-right">
+                        <p className="text-xs text-muted-foreground">Merit Index</p>
+                        <p className="text-lg md:text-2xl font-bold text-purple-400">{institution.merit_index || 0}</p>
                       </div>
-                      <div className="text-right">
-                        <p className="text-sm text-muted-foreground">Compliance</p>
-                        <p className="text-lg font-semibold text-green-400">{institution.compliance_score || 0}</p>
+                      <div className="text-left md:text-right">
+                        <p className="text-xs text-muted-foreground">Compliance</p>
+                        <p className="text-base md:text-lg font-semibold text-green-400">{institution.compliance_score || 0}</p>
                       </div>
-                      <div className="text-right">
-                        <p className="text-sm text-muted-foreground">Pipeline</p>
-                        <p className="text-lg font-semibold text-blue-400">{institution.talent_pipeline_strength || 0}</p>
+                      <div className="text-left md:text-right">
+                        <p className="text-xs text-muted-foreground">Pipeline</p>
+                        <p className="text-base md:text-lg font-semibold text-blue-400">{institution.talent_pipeline_strength || 0}</p>
                       </div>
-                      <div className="text-right">
-                        <p className="text-sm text-muted-foreground">Training</p>
-                        <p className="text-lg font-semibold text-orange-400">{institution.training_adequacy || 0}</p>
+                      <div className="text-left md:text-right">
+                        <p className="text-xs text-muted-foreground">Training</p>
+                        <p className="text-base md:text-lg font-semibold text-orange-400">{institution.training_adequacy || 0}</p>
                       </div>
                     </div>
                   </div>
