@@ -60,9 +60,24 @@ export default function SystemInfo() {
           System Information
         </h1>
         <p className="text-muted-foreground">
-          Monitor model AI dan database yang digunakan dalam sistem
+          Monitor model AI, database, dan dokumentasi lengkap aplikasi
         </p>
       </div>
+
+      {/* Tabs for System Info and Documentation */}
+      <Tabs defaultValue="system" className="w-full">
+        <TabsList className="grid w-full grid-cols-2 mb-6">
+          <TabsTrigger value="system" className="flex items-center gap-2">
+            <Server className="w-4 h-4" />
+            System Status
+          </TabsTrigger>
+          <TabsTrigger value="documentation" className="flex items-center gap-2">
+            <BookOpen className="w-4 h-4" />
+            Dokumentasi Lengkap
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="system" className="space-y-6">
 
       {/* AI Models Section */}
       <Card className="p-6">
