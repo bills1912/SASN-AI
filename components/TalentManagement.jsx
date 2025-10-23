@@ -21,14 +21,6 @@ export default function TalentManagement({ user, currentView, selectedProfile: g
   
   const { toast } = useToast();
 
-  // Sync with global selected profile
-  useEffect(() => {
-    if (globalSelectedProfile) {
-      setSelectedProfile(globalSelectedProfile);
-      loadAnalysisData(globalSelectedProfile.nip);
-    }
-  }, [globalSelectedProfile, currentView]);
-
   const loadAnalysisData = async (nip) => {
     if (!nip) return;
     
