@@ -359,27 +359,70 @@ export default function TalentManagement({ user, currentView, selectedProfile: g
             />
           </Card>
 
-          {/* Talent Box Classification */}
+          {/* Talent Box Classification with Real-time Calculation */}
           <Card className="p-4 md:p-6">
-            <h3 className="text-base md:text-lg font-semibold text-foreground mb-4">Klasifikasi Talenta</h3>
+            <h3 className="text-base md:text-lg font-semibold text-foreground mb-4">Klasifikasi Talenta (Real-time)</h3>
             <div className="space-y-4">
               <div className="p-4 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 rounded-lg border border-blue-500/30">
-                <p className="text-sm text-muted-foreground mb-1">Talent Box</p>
+                <div className="flex items-center justify-between mb-2">
+                  <p className="text-sm text-muted-foreground">Talent Box</p>
+                  <Badge variant="outline" className="text-xs">
+                    Box {talentMapping.boxNumber || 5}
+                  </Badge>
+                </div>
                 <p className="text-xl md:text-2xl font-bold text-blue-400">{talentMapping.talentBox}</p>
+                <p className="text-xs text-muted-foreground mt-2">
+                  Priority: <span className="font-semibold">{talentMapping.priority}</span>
+                </p>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="p-4 bg-muted/50 rounded-lg">
-                  <p className="text-sm text-muted-foreground mb-1">Performance (Sumbu Y)</p>
+                  <div className="flex items-center justify-between mb-2">
+                    <p className="text-sm text-muted-foreground">Kinerja (Sumbu Y)</p>
+                    <Badge className="bg-purple-500 text-white text-xs">
+                      {talentMapping.performance.sumbuY?.toFixed(2) || '0.00'}/3.0
+                    </Badge>
+                  </div>
                   <p className="text-lg font-semibold text-foreground">{talentMapping.performance.level}</p>
                   <p className="text-xs text-muted-foreground mt-1">{talentMapping.performance.justification}</p>
                 </div>
                 <div className="p-4 bg-muted/50 rounded-lg">
-                  <p className="text-sm text-muted-foreground mb-1">Potential (Sumbu X)</p>
+                  <div className="flex items-center justify-between mb-2">
+                    <p className="text-sm text-muted-foreground">Potensi (Sumbu X)</p>
+                    <Badge className="bg-green-500 text-white text-xs">
+                      {talentMapping.potential.sumbuX?.toFixed(2) || '0.00'}/3.0
+                    </Badge>
+                  </div>
                   <p className="text-lg font-semibold text-foreground">{talentMapping.potential.level}</p>
                   <p className="text-xs text-muted-foreground mt-1">{talentMapping.potential.justification}</p>
                 </div>
               </div>
+
+              {/* Breakdown Sumbu X (jika ada) */}
+              {talentMapping.potential.breakdown && (
+                <div className="p-3 bg-green-50 dark:bg-green-950/20 rounded-lg border border-green-200 dark:border-green-800">
+                  <p className="text-xs font-semibold text-green-800 dark:text-green-400 mb-2">
+                    Breakdown Sumbu X (Potensi):
+                  </p>
+                  <div className="space-y-1 text-xs">
+                    {Object.entries(talentMapping.potential.breakdown).map(([key, data]) => (
+                      <div key={key} className="flex justify-between items-center">
+                        <span className="text-muted-foreground capitalize">
+                          {key === 'jobFit' ? 'Job Fit' :
+                           key === 'gapPotensi' ? 'Gap Potensi' :
+                           key === 'diklatTeknis' ? 'Diklat Teknis' :
+                           key === 'pendidikan' ? 'Pendidikan' :
+                           key === 'pengalaman' ? 'Pengalaman' : key}:
+                        </span>
+                        <span className="font-mono text-foreground">
+                          {data.converted} × {(data.weight * 100).toFixed(0)}% = {data.score.toFixed(2)}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               <div>
                 <p className="text-sm font-medium text-foreground mb-2">Risk Level</p>
