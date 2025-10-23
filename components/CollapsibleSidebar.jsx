@@ -278,7 +278,7 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
               </div>
             )}
 
-            {item.section === 'admin' && (
+            {item.section === 'admin' && !item.submenu && (
               <button
                 onClick={() => {
                   setCurrentView(item.id);
