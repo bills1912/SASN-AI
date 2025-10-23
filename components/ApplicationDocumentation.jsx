@@ -1,7 +1,31 @@
 'use client'
 
 import { Card } from '@/components/ui/card';
-import { Book, GitBranch, Sparkles, Database, Brain, Target, TrendingUp, Shield, Zap, Lock, CheckCircle, History, FileCheck } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { 
+  Book, 
+  GitBranch, 
+  Sparkles, 
+  Database, 
+  Brain, 
+  Target, 
+  TrendingUp, 
+  Shield, 
+  Zap, 
+  Lock, 
+  CheckCircle, 
+  History, 
+  FileCheck,
+  Download,
+  Award,
+  Lightbulb,
+  Users,
+  Code2,
+  DollarSign,
+  Calendar,
+  Rocket
+} from 'lucide-react';
 
 export default function ApplicationDocumentation({ user }) {
   return (
