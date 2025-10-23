@@ -644,6 +644,12 @@ export default function App() {
                 selectedProfile={selectedProfile}
               />
             )}
+            {currentView === 'merit-blockchain' && user?.role === 'admin' && (
+              <MeritSystemBlockchain 
+                user={user} 
+                selectedProfile={selectedProfile}
+              />
+            )}
             {(currentView === 'merit-system-index' || currentView.startsWith('merit-')) && user?.role === 'admin' && (
               <MeritSystemIndex 
                 user={user} 
