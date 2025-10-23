@@ -84,7 +84,11 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
           id: 'system-info',
           label: 'System Info',
           icon: Cpu,
-          section: 'admin'
+          section: 'admin',
+          submenu: [
+            { id: 'system-overview', label: 'System Overview', icon: Activity },
+            { id: 'technical-docs', label: 'Technical Documentation', icon: FileBarChart }
+          ]
         }
       ]
     : menuItems;
