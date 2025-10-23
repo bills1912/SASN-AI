@@ -27,7 +27,7 @@ import {
   FileBarChart,
   Database,
   Cpu,
-  Book
+  BookOpen
 } from 'lucide-react';
 
 export default function CollapsibleSidebar({ currentView, setCurrentView, user, onLogout, theme, toggleTheme }) {
