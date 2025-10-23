@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Database, Cpu, Server, Activity, CheckCircle, BookOpen, FileText, Target, Zap, Shield, TrendingUp } from 'lucide-react';
+import { Database, Cpu, Server, Activity, CheckCircle, BookOpen, FileText, Target, Zap, Shield, TrendingUp, AlertCircle } from 'lucide-react';
 
 export default function SystemInfo() {
   const models = [
