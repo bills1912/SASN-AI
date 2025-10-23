@@ -26,7 +26,6 @@ import {
   Calendar,
   Rocket
 } from 'lucide-react';
-
 import DetailedDocumentation from './DetailedDocumentation';
 
 export default function ApplicationDocumentation({ user }) {
