@@ -345,34 +345,37 @@ export default function TalentManagement({ user, currentView, selectedProfile: g
 
       {/* TALENT MAPPING VIEW */}
       {currentView === 'talent-mapping' && talentMapping && (
-        <div className="grid md:grid-cols-2 gap-6">
-          {/* 9-Box Grid */}
-          <Card className="p-6">
-            <h3 className="text-lg font-semibold text-foreground mb-4">9-Box Talent Matrix</h3>
-            <ReactECharts
-              option={get9BoxChartOption()}
-              style={{ height: '400px' }}
-              theme="dark"
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* 9-Box Matrix - Sesuai Menpan RB */}
+          <Card className="p-4 md:p-6">
+            <NineBoxMatrix 
+              position={{
+                box: talentMapping.boxNumber || 5,
+                label: talentMapping.talentBox,
+                quadrant: `Potensi: ${talentMapping.potential?.level || 'Medium'}, Kinerja: ${talentMapping.performance?.level || 'Medium'}`,
+                priority: talentMapping.priority || 'Medium'
+              }}
+              showLabels={true}
             />
           </Card>
 
           {/* Talent Box Classification */}
-          <Card className="p-6">
-            <h3 className="text-lg font-semibold text-foreground mb-4">Klasifikasi Talenta</h3>
+          <Card className="p-4 md:p-6">
+            <h3 className="text-base md:text-lg font-semibold text-foreground mb-4">Klasifikasi Talenta</h3>
             <div className="space-y-4">
               <div className="p-4 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 rounded-lg border border-blue-500/30">
                 <p className="text-sm text-muted-foreground mb-1">Talent Box</p>
-                <p className="text-2xl font-bold text-blue-400">{talentMapping.talentBox}</p>
+                <p className="text-xl md:text-2xl font-bold text-blue-400">{talentMapping.talentBox}</p>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="p-4 bg-muted/50 rounded-lg">
-                  <p className="text-sm text-muted-foreground mb-1">Performance</p>
+                  <p className="text-sm text-muted-foreground mb-1">Performance (Sumbu Y)</p>
                   <p className="text-lg font-semibold text-foreground">{talentMapping.performance.level}</p>
                   <p className="text-xs text-muted-foreground mt-1">{talentMapping.performance.justification}</p>
                 </div>
                 <div className="p-4 bg-muted/50 rounded-lg">
-                  <p className="text-sm text-muted-foreground mb-1">Potential</p>
+                  <p className="text-sm text-muted-foreground mb-1">Potential (Sumbu X)</p>
                   <p className="text-lg font-semibold text-foreground">{talentMapping.potential.level}</p>
                   <p className="text-xs text-muted-foreground mt-1">{talentMapping.potential.justification}</p>
                 </div>
