@@ -1229,6 +1229,10 @@ export async function GET(request) {
     return handlePerformanceAssessment(segments.slice(1), request, 'GET');
   }
   
+  if (segments[0] === 'merit') {
+    return handleMeritSystem(segments.slice(1), request, 'GET');
+  }
+  
   if (segments[0] === 'mock-bkn') {
     return handleMockBKN(segments.slice(1), request, 'GET');
   }
@@ -1249,6 +1253,10 @@ export async function POST(request) {
   
   if (segments[0] === 'performance') {
     return handlePerformanceAssessment(segments.slice(1), request, 'POST');
+  }
+  
+  if (segments[0] === 'merit') {
+    return handleMeritSystem(segments.slice(1), request, 'POST');
   }
   
   return NextResponse.json({ error: 'Not found' }, { status: 404 });
