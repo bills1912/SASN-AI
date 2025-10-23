@@ -76,7 +76,7 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
         {
           id: 'app-documentation',
           label: 'Dokumentasi Aplikasi',
-          icon: Book,
+          icon: BookOpen,
           section: 'admin'
         },
         {
