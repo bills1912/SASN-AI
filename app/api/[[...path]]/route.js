@@ -1219,7 +1219,6 @@ async function handleMeritSystem(segments, request, method) {
 async function handleBlockchain(segments, request, method) {
   const user = verifyAuth(request);
   if (!user) {
-    console.log('Blockchain API: No auth token provided');
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
@@ -1228,10 +1227,8 @@ async function handleBlockchain(segments, request, method) {
   // Auto-seed blockchain if empty (first time access)
   const stats = blockchain.getStatistics();
   if (stats.totalBlocks === 1 && segments[0] !== 'seed') { // Only genesis block
-    console.log('Blockchain empty, auto-seeding...');
     try {
       seedBlockchainData();
-      console.log('Blockchain auto-seed completed');
     } catch (error) {
       console.error('Auto-seed error:', error);
     }
