@@ -16,6 +16,7 @@ import {
   getMockSkillAnalysis,
   getMockPerformanceAnalysis
 } from '@/lib/mockAIResponses';
+import mockInstitutions, { generateInstitutionAnalysis } from '@/lib/mockMeritData';
 
 // Helper to extract path segments
 function getPathSegments(request) {
