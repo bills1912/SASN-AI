@@ -27,10 +27,16 @@ import {
   Rocket
 } from 'lucide-react';
 
+import DetailedDocumentation from './DetailedDocumentation';
+
 export default function ApplicationDocumentation({ user }) {
   return (
-    <div className="max-w-7xl mx-auto space-y-6 p-6">
-      {/* Header */}
+    <div className="space-y-8">
+      {/* Use DetailedDocumentation component */}
+      <DetailedDocumentation />
+      
+      {/* Original content below for reference */}
+      <div className="hidden">
       <div className="text-center mb-8">
         <h1 className="text-4xl font-bold text-foreground mb-3 bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
           ASTA-CITA AI
