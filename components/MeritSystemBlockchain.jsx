@@ -86,9 +86,13 @@ export default function MeritSystemBlockchain({ user, selectedProfile }) {
   const verifyCredential = async (credentialHash) => {
     setVerifying(true);
     try {
+      const token = localStorage.getItem('token');
       const res = await fetch('/api/blockchain/verify', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          ...(token && { 'Authorization': `Bearer ${token}` })
+        },
         body: JSON.stringify({
           nip: selectedProfile.nip,
           credentialHash
@@ -97,7 +101,7 @@ export default function MeritSystemBlockchain({ user, selectedProfile }) {
 
       const data = await res.json();
 
-      if (data.verification.verified) {
+      if (data.verification && data.verification.verified) {
         toast({
           title: '✓ Kredensial Terverifikasi',
           description: 'Data telah diverifikasi melalui blockchain',
@@ -105,7 +109,7 @@ export default function MeritSystemBlockchain({ user, selectedProfile }) {
       } else {
         toast({
           title: 'Verifikasi Gagal',
-          description: data.verification.message,
+          description: data.verification?.message || 'Gagal verifikasi',
           variant: 'destructive'
         });
       }
@@ -122,7 +126,12 @@ export default function MeritSystemBlockchain({ user, selectedProfile }) {
 
   const exportAuditTrail = async () => {
     try {
-      const res = await fetch(`/api/blockchain/export/${selectedProfile.nip}`);
+      const token = localStorage.getItem('token');
+      const res = await fetch(`/api/blockchain/export/${selectedProfile.nip}`, {
+        headers: {
+          ...(token && { 'Authorization': `Bearer ${token}` })
+        }
+      });
       const data = await res.json();
       
       // Create and download JSON file
