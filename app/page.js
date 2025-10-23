@@ -649,6 +649,9 @@ export default function App() {
                 currentView={currentView}
               />
             )}
+            {currentView === 'app-documentation' && user?.role === 'admin' && (
+              <ApplicationDocumentation user={user} />
+            )}
             {currentView === 'system-info' && <SystemInfo />}
           </div>
         </div>
