@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
-import { TrendingUp, Award, Target, Code2, Loader2, AlertCircle } from 'lucide-react';
+import { TrendingUp, Award, Target, Code2, Loader2, AlertCircle, Shield, Lock, CheckCircle } from 'lucide-react';
 import ReactECharts from 'echarts-for-react';
 
 export default function TalentManagement({ user, currentView, selectedProfile: globalSelectedProfile }) {
