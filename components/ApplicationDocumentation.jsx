@@ -78,15 +78,19 @@ export default function ApplicationDocumentation({ user }) {
             </li>
             <li className="flex items-start">
               <span className="text-blue-500 mr-2">✓</span>
-              <span>Mengimplementasikan sistem merit berdasarkan Permenpan RB No. 3/2020</span>
+              <span>Mengimplementasikan <strong>Manajemen Talenta ASN</strong> berdasarkan Permenpan RB No. 3 Tahun 2020</span>
             </li>
             <li className="flex items-start">
               <span className="text-blue-500 mr-2">✓</span>
-              <span>Mengukur compliance institusi terhadap prinsip merit system</span>
+              <span>Mengukur compliance institusi terhadap <strong>Sistem Merit ASN</strong> (UU ASN No. 5/2014, Permenpan RB No. 40/2018)</span>
             </li>
             <li className="flex items-start">
               <span className="text-blue-500 mr-2">✓</span>
-              <span>Memberikan rekomendasi berbasis AI untuk pengembangan talenta</span>
+              <span>Memberikan rekomendasi berbasis AI untuk pengembangan talenta dan succession planning</span>
+            </li>
+            <li className="flex items-start">
+              <span className="text-blue-500 mr-2">✓</span>
+              <span>Menjamin keamanan dan integritas data ASN dengan teknologi blockchain</span>
             </li>
           </ul>
         </Card>
