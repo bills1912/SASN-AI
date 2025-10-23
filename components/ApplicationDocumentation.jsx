@@ -751,7 +751,7 @@ export default function ApplicationDocumentation({ user }) {
         <p>© 2024 ASTA-CITA AI - BKN Hackathon Proposal</p>
         <p className="mt-1">Developed with 💙 for Indonesian Civil Service Transformation</p>
       </div>
-      </div>
+      </div> {/* End hidden div */}
     </div>
   );
 }
