@@ -54,27 +54,24 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
         { id: 'skill-analysis', label: 'Analisis Skill', icon: Code },
         { id: 'development-area', label: 'Area Pengembangan', icon: TrendingUp }
       ]
-    },
-    {
-      id: 'performance-assessment',
-      label: 'Penilaian Kinerja',
-      icon: ChartBar,
-      section: 'performance',
-      submenu: [
-        { id: 'performance-overview', label: 'Overview Kinerja', icon: Activity },
-        { id: 'performance-classification', label: 'Klasifikasi', icon: TargetIcon },
-        { id: 'performance-strengths', label: 'Kekuatan', icon: Award },
-        { id: 'performance-improvements', label: 'Area Perbaikan', icon: AlertTriangle },
-        { id: 'performance-recommendations', label: 'Rekomendasi', icon: TrendingUp },
-        { id: 'performance-trends', label: 'Trend & News', icon: FileBarChart }
-      ]
     }
   ];
 
-  // Add System Info menu only for admin
+  // Add Admin-only menus
   const allMenuItems = user?.role === 'admin' 
     ? [
         ...menuItems,
+        {
+          id: 'merit-system-index',
+          label: 'Merit System Index',
+          icon: Database,
+          section: 'admin',
+          submenu: [
+            { id: 'merit-dashboard', label: 'Dashboard', icon: BarChart3 },
+            { id: 'merit-institutions', label: 'Analisis Institusi', icon: ChartBar },
+            { id: 'merit-comparison', label: 'Perbandingan', icon: TrendingUp }
+          ]
+        },
         {
           id: 'system-info',
           label: 'System Info',
