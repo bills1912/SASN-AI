@@ -88,7 +88,7 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
     )}>
       {/* Header */}
       <div className={cn(
-        "border-b border-slate-800 transition-all duration-300",
+        "border-b border-sidebar-border transition-all duration-300",
         isCollapsed && !isMobile ? "p-4" : "p-6"
       )}>
         <div className="flex items-center justify-between">
@@ -100,8 +100,8 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
                 </svg>
               </div>
               <div>
-                <h1 className="text-lg font-bold text-white leading-tight">ASTA-CITA AI</h1>
-                <p className="text-xs text-slate-400">BKN Hackathon 2024</p>
+                <h1 className="text-lg font-bold text-sidebar-foreground leading-tight">ASTA-CITA AI</h1>
+                <p className="text-xs text-muted-foreground">BKN Hackathon 2024</p>
               </div>
             </div>
           )}
