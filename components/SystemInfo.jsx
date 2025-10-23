@@ -1,7 +1,10 @@
 'use client'
 
+import { useState } from 'react';
 import { Card } from '@/components/ui/card';
-import { Database, Cpu, Server, Activity, CheckCircle } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Database, Cpu, Server, Activity, CheckCircle, BookOpen, FileText, Target, Zap, Shield, TrendingUp } from 'lucide-react';
 
 export default function SystemInfo() {
   const models = [
