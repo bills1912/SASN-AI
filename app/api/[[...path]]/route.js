@@ -1438,6 +1438,10 @@ export async function GET(request) {
     return handleMockBKN(segments.slice(1), request, 'GET');
   }
   
+  if (segments[0] === 'blockchain') {
+    return handleBlockchain(segments.slice(1), request, 'GET');
+  }
+  
   return NextResponse.json({ message: 'ASTA-CITA AI API' });
 }
 
@@ -1458,6 +1462,10 @@ export async function POST(request) {
   
   if (segments[0] === 'merit') {
     return handleMeritSystem(segments.slice(1), request, 'POST');
+  }
+  
+  if (segments[0] === 'blockchain') {
+    return handleBlockchain(segments.slice(1), request, 'POST');
   }
   
   return NextResponse.json({ error: 'Not found' }, { status: 404 });
