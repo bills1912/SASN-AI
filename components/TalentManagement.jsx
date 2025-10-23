@@ -13,6 +13,12 @@ export default function TalentManagement({ user, currentView, selectedProfile: g
   const [skillAnalysis, setSkillAnalysis] = useState(null);
   const [loading, setLoading] = useState(false);
   const [hasGeneratedData, setHasGeneratedData] = useState(false);
+  
+  // Blockchain state
+  const [blockchainStats, setBlockchainStats] = useState(null);
+  const [meritAudit, setMeritAudit] = useState(null);
+  const [credentialHistory, setCredentialHistory] = useState([]);
+  
   const { toast } = useToast();
 
   // Sync with global selected profile
