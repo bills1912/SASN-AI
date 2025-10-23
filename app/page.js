@@ -12,6 +12,7 @@ import TalentManagement from '@/components/TalentManagement';
 import InputData from '@/components/InputData';
 import SystemInfo from '@/components/SystemInfo';
 import MeritSystemIndex from '@/components/MeritSystemIndex';
+import MeritSystemBlockchain from '@/components/MeritSystemBlockchain';
 import ApplicationDocumentation from '@/components/ApplicationDocumentation';
 import { CheckCircle, Target, TrendingUp, BarChart3, Eye, EyeOff, RefreshCw } from 'lucide-react';
 
