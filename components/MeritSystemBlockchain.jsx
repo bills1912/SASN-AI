@@ -366,7 +366,7 @@ export default function MeritSystemBlockchain({ user, selectedProfile }) {
               Performance Records (Immutable)
             </h3>
             
-            {credentialHistory.filter(h => h.type === 'PERFORMANCE').length === 0 ? (
+            {(!credentialHistory || credentialHistory.filter(h => h.type === 'PERFORMANCE').length === 0) ? (
               <p className="text-muted-foreground text-center py-8">Belum ada penilaian kinerja tercatat</p>
             ) : (
               <div className="space-y-3">
