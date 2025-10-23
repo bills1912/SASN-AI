@@ -218,3 +218,7 @@ test_plan:
 agent_communication:
   - agent: "main"
     message: "Starting implementation of requirements. Will proceed in 3 phases: 1) Remove performance features, 2) Enhance talent management with regulations, 3) Add merit system index with ML"
+  - agent: "main"
+    message: "Fixed error 502 - increased Node.js memory from 512MB to 2048MB, added Toaster component to layout.js. Application now running successfully."
+  - agent: "main"  
+    message: "Added comprehensive documentation to System Info menu. Created new tab 'Dokumentasi Lengkap' with complete ASTA-CITA AI documentation including: problems solved, innovative solutions, tech stack, ROI metrics, budget plan, and unique selling points."
