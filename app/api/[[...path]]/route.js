@@ -1214,6 +1214,206 @@ async function handleMeritSystem(segments, request, method) {
   return null;
 }
 
+// Blockchain endpoints for Merit System
+async function handleBlockchain(segments, request, method) {
+  const user = verifyAuth(request);
+  if (!user) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  const blockchain = getBlockchainInstance();
+
+  // GET /api/blockchain/statistics - Get blockchain statistics
+  if (segments[0] === 'statistics' && method === 'GET') {
+    try {
+      const stats = blockchain.getStatistics();
+      return NextResponse.json({ statistics: stats });
+    } catch (error) {
+      console.error('Error getting blockchain statistics:', error);
+      return NextResponse.json(
+        { error: 'Failed to get statistics' },
+        { status: 500 }
+      );
+    }
+  }
+
+  // GET /api/blockchain/history/:nip - Get ASN history from blockchain
+  if (segments[0] === 'history' && segments[1] && method === 'GET') {
+    try {
+      const nip = segments[1];
+      const history = blockchain.getASNHistory(nip);
+      return NextResponse.json({ nip, history });
+    } catch (error) {
+      console.error('Error getting ASN history:', error);
+      return NextResponse.json(
+        { error: 'Failed to get history' },
+        { status: 500 }
+      );
+    }
+  }
+
+  // GET /api/blockchain/merit-audit/:nip - Get merit audit trail
+  if (segments[0] === 'merit-audit' && segments[1] && method === 'GET') {
+    try {
+      const nip = segments[1];
+      const audit = blockchain.getMeritAuditTrail(nip);
+      return NextResponse.json({ audit });
+    } catch (error) {
+      console.error('Error getting merit audit:', error);
+      return NextResponse.json(
+        { error: 'Failed to get audit trail' },
+        { status: 500 }
+      );
+    }
+  }
+
+  // POST /api/blockchain/verify - Verify credential
+  if (segments[0] === 'verify' && method === 'POST') {
+    try {
+      const { nip, credentialHash } = await request.json();
+      const verification = blockchain.verifyCredential(nip, credentialHash);
+      return NextResponse.json({ verification });
+    } catch (error) {
+      console.error('Error verifying credential:', error);
+      return NextResponse.json(
+        { error: 'Failed to verify credential' },
+        { status: 500 }
+      );
+    }
+  }
+
+  // GET /api/blockchain/export/:nip - Export audit trail
+  if (segments[0] === 'export' && segments[1] && method === 'GET') {
+    try {
+      const nip = segments[1];
+      const audit = blockchain.getMeritAuditTrail(nip);
+      const exportData = {
+        nip,
+        exportDate: new Date().toISOString(),
+        audit,
+        blockchainExport: blockchain.exportBlockchain()
+      };
+      return NextResponse.json(exportData);
+    } catch (error) {
+      console.error('Error exporting audit:', error);
+      return NextResponse.json(
+        { error: 'Failed to export audit trail' },
+        { status: 500 }
+      );
+    }
+  }
+
+  // POST /api/blockchain/add-credential - Add credential to blockchain
+  if (segments[0] === 'add-credential' && method === 'POST') {
+    try {
+      const credential = await request.json();
+      const result = blockchain.addCredential(credential);
+      
+      // Also save to MongoDB for persistence
+      const client = await clientPromise;
+      const db = client.db('asta_cita_ai');
+      await db.collection('blockchain_records').insertOne({
+        type: 'CREDENTIAL',
+        nip: credential.nip,
+        blockInfo: result,
+        data: credential,
+        timestamp: new Date()
+      });
+
+      return NextResponse.json({ success: true, blockInfo: result });
+    } catch (error) {
+      console.error('Error adding credential:', error);
+      return NextResponse.json(
+        { error: 'Failed to add credential' },
+        { status: 500 }
+      );
+    }
+  }
+
+  // POST /api/blockchain/add-performance - Add performance record
+  if (segments[0] === 'add-performance' && method === 'POST') {
+    try {
+      const performance = await request.json();
+      const result = blockchain.addPerformanceRecord(performance);
+      
+      // Save to MongoDB
+      const client = await clientPromise;
+      const db = client.db('asta_cita_ai');
+      await db.collection('blockchain_records').insertOne({
+        type: 'PERFORMANCE',
+        nip: performance.nip,
+        blockInfo: result,
+        data: performance,
+        timestamp: new Date()
+      });
+
+      return NextResponse.json({ success: true, blockInfo: result });
+    } catch (error) {
+      console.error('Error adding performance:', error);
+      return NextResponse.json(
+        { error: 'Failed to add performance record' },
+        { status: 500 }
+      );
+    }
+  }
+
+  // POST /api/blockchain/add-career - Add career movement
+  if (segments[0] === 'add-career' && method === 'POST') {
+    try {
+      const career = await request.json();
+      const result = blockchain.addCareerMovement(career);
+      
+      // Save to MongoDB
+      const client = await clientPromise;
+      const db = client.db('asta_cita_ai');
+      await db.collection('blockchain_records').insertOne({
+        type: 'CAREER_MOVEMENT',
+        nip: career.nip,
+        blockInfo: result,
+        data: career,
+        timestamp: new Date()
+      });
+
+      return NextResponse.json({ success: true, blockInfo: result });
+    } catch (error) {
+      console.error('Error adding career movement:', error);
+      return NextResponse.json(
+        { error: 'Failed to add career movement' },
+        { status: 500 }
+      );
+    }
+  }
+
+  // POST /api/blockchain/add-assessment - Add talent assessment
+  if (segments[0] === 'add-assessment' && method === 'POST') {
+    try {
+      const assessment = await request.json();
+      const result = blockchain.addTalentAssessment(assessment);
+      
+      // Save to MongoDB
+      const client = await clientPromise;
+      const db = client.db('asta_cita_ai');
+      await db.collection('blockchain_records').insertOne({
+        type: 'TALENT_ASSESSMENT',
+        nip: assessment.nip,
+        blockInfo: result,
+        data: assessment,
+        timestamp: new Date()
+      });
+
+      return NextResponse.json({ success: true, blockInfo: result });
+    } catch (error) {
+      console.error('Error adding assessment:', error);
+      return NextResponse.json(
+        { error: 'Failed to add talent assessment' },
+        { status: 500 }
+      );
+    }
+  }
+
+  return null;
+}
+
 // Main router
 export async function GET(request) {
   const segments = getPathSegments(request);
