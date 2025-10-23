@@ -642,11 +642,10 @@ export default function App() {
                 selectedProfile={selectedProfile}
               />
             )}
-            {(currentView === 'performance-assessment' || currentView.startsWith('performance-')) && (
-              <PerformanceAssessment 
+            {(currentView === 'merit-system-index' || currentView.startsWith('merit-')) && user?.role === 'admin' && (
+              <MeritSystemIndex 
                 user={user} 
                 currentView={currentView}
-                selectedProfile={selectedProfile}
               />
             )}
             {currentView === 'system-info' && <SystemInfo />}
