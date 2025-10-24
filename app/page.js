@@ -228,7 +228,7 @@ export default function App() {
     }
     setIsAuthenticated(false);
     setUser(null);
-    setCurrentView('input-data');
+    setCurrentView('');
     // Reset form
     if (!rememberMe) {
       setUsername('');
