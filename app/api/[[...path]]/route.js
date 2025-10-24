@@ -911,39 +911,59 @@ Return JSON:
         }
       }
 
-      // Save to MongoDB
-      const client = await clientPromise;
-      const db = client.db(process.env.MONGO_DB_NAME || 'astacita');
-      
-      const analysisDoc = {
-        institutionName,
-        analyzedBy: user.id,
-        analyzedByName: user.name,
-        analyzedAt: new Date(),
-        employees: employeeResults,
-        totalEmployees: employeeResults.length,
-        summary: {
-          successfulAnalyses: employeeResults.filter(e => !e.error).length,
-          failedAnalyses: employeeResults.filter(e => e.error).length
-        }
-      };
+      console.log(`✓ All ${employeeResults.length} employees analyzed successfully`);
 
-      await db.collection('institution_talent_analyses').updateOne(
-        { institutionName },
-        { $set: analysisDoc },
-        { upsert: true }
-      );
+      // Save to MongoDB (with fallback)
+      try {
+        const client = await clientPromise;
+        const db = client.db(process.env.MONGO_DB_NAME || 'astacita');
+        
+        const analysisDoc = {
+          institutionName,
+          analyzedBy: user.id,
+          analyzedByName: user.name,
+          analyzedAt: new Date(),
+          employees: employeeResults,
+          totalEmployees: employeeResults.length,
+          summary: {
+            successfulAnalyses: employeeResults.filter(e => !e.error).length,
+            failedAnalyses: employeeResults.filter(e => e.error).length
+          }
+        };
 
-      console.log(`✓ Institution analysis completed for ${institutionName}`);
+        await db.collection('institution_talent_analyses').updateOne(
+          { institutionName },
+          { $set: analysisDoc },
+          { upsert: true }
+        );
+        
+        console.log(`✓ Analysis saved to MongoDB for ${institutionName}`);
 
-      return NextResponse.json({
-        success: true,
-        institutionName,
-        totalEmployees: employeeResults.length,
-        employees: employeeResults,
-        summary: analysisDoc.summary,
-        analyzedAt: analysisDoc.analyzedAt
-      });
+        return NextResponse.json({
+          success: true,
+          institutionName,
+          totalEmployees: employeeResults.length,
+          employees: employeeResults,
+          summary: analysisDoc.summary,
+          analyzedAt: analysisDoc.analyzedAt
+        });
+      } catch (mongoError) {
+        console.warn('⚠️ MongoDB save failed, returning analysis without saving:', mongoError.message);
+        
+        // Return analysis even if MongoDB save fails
+        return NextResponse.json({
+          success: true,
+          institutionName,
+          totalEmployees: employeeResults.length,
+          employees: employeeResults,
+          summary: {
+            successfulAnalyses: employeeResults.filter(e => !e.error).length,
+            failedAnalyses: employeeResults.filter(e => e.error).length
+          },
+          analyzedAt: new Date(),
+          warning: 'Analysis completed but not saved to database'
+        });
+      }
 
     } catch (error) {
       console.error('Error in bulk institution analysis:', error);
