@@ -346,19 +346,29 @@ export default function TalentManagement({ user, currentView, selectedProfile: g
 
       {/* TALENT MAPPING VIEW */}
       {currentView === 'talent-mapping' && talentMapping && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* 9-Box Matrix - Sesuai Menpan RB */}
-          <Card className="p-4 md:p-6">
-            <NineBoxMatrix 
-              position={{
-                box: talentMapping.boxNumber || 5,
-                label: talentMapping.talentBox,
-                quadrant: `Potensi: ${talentMapping.potential?.level || 'Medium'}, Kinerja: ${talentMapping.performance?.level || 'Medium'}`,
-                priority: talentMapping.priority || 'Medium'
-              }}
-              showLabels={true}
-            />
-          </Card>
+        <div className="space-y-6">
+          {/* Detailed 9-Box Visual Matrix */}
+          <DetailedNineBoxMatrix 
+            performance={talentMapping.performance}
+            potential={talentMapping.potential}
+            talentBox={talentMapping.talentBox}
+            boxNumber={talentMapping.boxNumber}
+            priority={talentMapping.priority}
+          />
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* 9-Box Matrix - Sesuai Menpan RB */}
+            <Card className="p-4 md:p-6">
+              <NineBoxMatrix 
+                position={{
+                  box: talentMapping.boxNumber || 5,
+                  label: talentMapping.talentBox,
+                  quadrant: `Potensi: ${talentMapping.potential?.level || 'Medium'}, Kinerja: ${talentMapping.performance?.level || 'Medium'}`,
+                  priority: talentMapping.priority || 'Medium'
+                }}
+                showLabels={true}
+              />
+            </Card>
 
           {/* Talent Box Classification with Real-time Calculation */}
           <Card className="p-4 md:p-6">
