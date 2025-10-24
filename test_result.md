@@ -113,6 +113,21 @@ user_problem_statement: |
      - Deep learning model using TensorFlow.js
      - Calculate index (0-100) with: compliance score, talent pipeline strength, training adequacy
      - Compare institutions against each other
+  
+  CONTINUATION TASK - Major Improvements:
+  5. Modify Talent Management Analysis to work per institution (not per employee):
+     - Admin selects institution
+     - Analysis runs for ALL employees at once
+     - Results displayed in dashboard table with: Name, NIP, 9-Box Category, Job Recommendations
+     - Analysis results saved to database
+     - Export functionality to Excel/CSV
+  
+  6. Add new role: Kepala Instansi (Institution Head):
+     - Can view list of employees in their institution
+     - Can view talent management analysis results (after admin runs analysis)
+     - Can view merit system index for their own institution only
+     - Advanced filters: by 9-box category, by job recommendations
+     - Cannot run analysis (admin only)
 
 backend:
   - task: "Remove Performance Analysis API endpoints"
