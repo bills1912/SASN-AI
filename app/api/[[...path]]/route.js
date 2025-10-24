@@ -74,11 +74,14 @@ async function handleTalentManagement(segments, request, method) {
   const isPublicEndpoint = publicEndpoints.includes(segments[0]);
   
   // Verify authentication for non-public endpoints
+  let user = null;
   if (!isPublicEndpoint) {
-    const user = verifyAuth(request);
+    user = verifyAuth(request);
     if (!user) {
+      console.error(`❌ Unauthorized access attempt to /api/talent/${segments[0]}`);
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
+    console.log(`✓ Authenticated user: ${user.username} (${user.role})`);
   } else {
     console.log(`📢 Public endpoint accessed: /api/talent/${segments[0]}`);
   }
