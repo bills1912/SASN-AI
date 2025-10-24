@@ -155,18 +155,23 @@ Return the analysis in JSON format with these fields:
   if (segments[0] === 'talent-mapping' && method === 'POST') {
     try {
       const { nip } = await request.json();
+      console.log(`🔍 Talent mapping request for NIP: ${nip}`);
       
       const profile = getASNProfile(nip);
       if (!profile) {
+        console.error(`❌ Profile not found for NIP: ${nip}`);
         return NextResponse.json({ error: 'Profile not found' }, { status: 404 });
       }
       
+      console.log(`✓ Profile found: ${profile.name} (${profile.position})`);
       const performanceData = getPerformanceData(nip);
+      console.log(`✓ Performance data retrieved, USE_MOCK_MODE: ${USE_MOCK_MODE}`);
       
       let mapping;
       
       if (USE_MOCK_MODE) {
         // Use mock AI response for demonstration
+        console.log('📊 Using mock talent mapping');
         mapping = getMockTalentMapping(profile);
       } else {
         // Use actual OpenAI API
