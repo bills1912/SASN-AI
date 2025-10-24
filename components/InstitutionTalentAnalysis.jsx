@@ -594,6 +594,188 @@ export default function InstitutionTalentAnalysis({ user }) {
           </div>
         </Card>
       )}
+
+      {/* Detail Modal */}
+      <Dialog open={showDetailModal} onOpenChange={setShowDetailModal}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-bold">
+              Detail Analisis Manajemen Talenta
+            </DialogTitle>
+            <DialogDescription>
+              Hasil analisis lengkap untuk {selectedEmployee?.name}
+            </DialogDescription>
+          </DialogHeader>
+
+          {selectedEmployee && selectedEmployee.fullAnalysis && (
+            <div className="space-y-6 mt-4">
+              {/* Employee Info */}
+              <Card className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20">
+                <div className="grid md:grid-cols-3 gap-4">
+                  <div>
+                    <p className="text-xs text-muted-foreground">Nama</p>
+                    <p className="font-semibold text-foreground">{selectedEmployee.name}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground">NIP</p>
+                    <p className="font-semibold text-foreground font-mono">{selectedEmployee.nip}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground">Jabatan</p>
+                    <p className="font-semibold text-foreground">{selectedEmployee.position}</p>
+                  </div>
+                </div>
+              </Card>
+
+              {/* 9-Box Classification */}
+              <Card className="p-4">
+                <h3 className="font-semibold text-foreground mb-3 flex items-center gap-2">
+                  <Target className="w-5 h-5 text-blue-600" />
+                  Klasifikasi 9-Box Talent Matrix
+                </h3>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="p-3 bg-blue-50 dark:bg-blue-950/20 rounded-lg">
+                    <p className="text-xs text-muted-foreground mb-1">Kategori Talenta</p>
+                    <Badge className={`${getBoxColor(selectedEmployee.talentBox)} text-white text-sm`}>
+                      {selectedEmployee.talentBox}
+                    </Badge>
+                    <p className="text-xs text-muted-foreground mt-2">Box #{selectedEmployee.boxNumber}</p>
+                  </div>
+                  <div className="p-3 bg-purple-50 dark:bg-purple-950/20 rounded-lg">
+                    <p className="text-xs text-muted-foreground mb-1">Priority Level</p>
+                    <p className="text-lg font-bold text-foreground">{selectedEmployee.priority}</p>
+                  </div>
+                </div>
+              </Card>
+
+              {/* Performance & Potential */}
+              <div className="grid md:grid-cols-2 gap-4">
+                <Card className="p-4">
+                  <h4 className="font-semibold text-foreground mb-3 text-sm">
+                    Performance (Kinerja)
+                  </h4>
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-muted-foreground">Level:</span>
+                      <Badge variant="outline">{selectedEmployee.performance?.level}</Badge>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-muted-foreground">Score:</span>
+                      <span className="font-semibold text-foreground">{selectedEmployee.performance?.score}/3</span>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-2 border-t pt-2">
+                      {selectedEmployee.performance?.justification}
+                    </p>
+                  </div>
+                </Card>
+
+                <Card className="p-4">
+                  <h4 className="font-semibold text-foreground mb-3 text-sm">
+                    Potential (Potensi)
+                  </h4>
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-muted-foreground">Level:</span>
+                      <Badge variant="outline">{selectedEmployee.potential?.level}</Badge>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-muted-foreground">Score:</span>
+                      <span className="font-semibold text-foreground">{selectedEmployee.potential?.score}/3</span>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-2 border-t pt-2">
+                      {selectedEmployee.potential?.justification}
+                    </p>
+                  </div>
+                </Card>
+              </div>
+
+              {/* Recommended Positions */}
+              <Card className="p-4">
+                <h3 className="font-semibold text-foreground mb-3 flex items-center gap-2">
+                  <ChevronRight className="w-5 h-5 text-green-600" />
+                  Rekomendasi Jabatan
+                </h3>
+                <div className="space-y-3">
+                  {(selectedEmployee.recommendedPositions || []).map((pos, idx) => (
+                    <div key={idx} className="p-3 bg-green-50 dark:bg-green-950/20 rounded-lg border border-green-200 dark:border-green-800">
+                      <div className="flex justify-between items-start mb-1">
+                        <p className="font-medium text-foreground text-sm">
+                          {typeof pos === 'string' ? pos : pos.position}
+                        </p>
+                        {pos.fit && (
+                          <Badge className="bg-green-600 text-white text-xs">
+                            Fit: {pos.fit}%
+                          </Badge>
+                        )}
+                      </div>
+                      {pos.reason && (
+                        <p className="text-xs text-muted-foreground">{pos.reason}</p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </Card>
+
+              {/* Development Areas */}
+              {selectedEmployee.developmentAreas && selectedEmployee.developmentAreas.length > 0 && (
+                <Card className="p-4">
+                  <h3 className="font-semibold text-foreground mb-3 flex items-center gap-2">
+                    <TrendingUp className="w-5 h-5 text-orange-600" />
+                    Area Pengembangan
+                  </h3>
+                  <div className="grid md:grid-cols-2 gap-2">
+                    {selectedEmployee.developmentAreas.map((area, idx) => (
+                      <div key={idx} className="p-2 bg-orange-50 dark:bg-orange-950/20 rounded border border-orange-200 dark:border-orange-800">
+                        <p className="text-sm text-foreground">{area}</p>
+                      </div>
+                    ))}
+                  </div>
+                </Card>
+              )}
+
+              {/* Risk Assessment */}
+              {selectedEmployee.riskLevel && (
+                <Card className="p-4">
+                  <h3 className="font-semibold text-foreground mb-3 flex items-center gap-2">
+                    <AlertCircle className="w-5 h-5 text-red-600" />
+                    Risk Assessment
+                  </h3>
+                  <div className={`inline-flex px-4 py-2 rounded-full text-sm font-medium ${
+                    selectedEmployee.riskLevel === 'High' ? 'bg-red-500/20 text-red-600' :
+                    selectedEmployee.riskLevel === 'Medium' ? 'bg-yellow-500/20 text-yellow-600' :
+                    'bg-green-500/20 text-green-600'
+                  }`}>
+                    Risk Level: {selectedEmployee.riskLevel}
+                  </div>
+                </Card>
+              )}
+
+              {/* AI Recommendations */}
+              {selectedEmployee.fullAnalysis?.recommendations && (
+                <Card className="p-4">
+                  <h3 className="font-semibold text-foreground mb-3">
+                    Rekomendasi AI
+                  </h3>
+                  <ul className="space-y-2">
+                    {selectedEmployee.fullAnalysis.recommendations.map((rec, idx) => (
+                      <li key={idx} className="flex items-start gap-2 text-sm">
+                        <CheckCircle className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" />
+                        <span className="text-muted-foreground">{rec}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </Card>
+              )}
+            </div>
+          )}
+
+          <div className="flex justify-end mt-4">
+            <Button onClick={closeDetailModal} variant="outline">
+              Tutup
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
