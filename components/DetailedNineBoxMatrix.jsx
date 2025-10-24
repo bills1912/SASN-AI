@@ -79,7 +79,7 @@ export default function DetailedNineBoxMatrix({ performance, potential, talentBo
           )}
           
           {/* Axis Labels - Better positioning for mobile and desktop */}
-          <div className="absolute -bottom-12 left-0 right-0 text-center text-xs font-semibold text-muted-foreground">
+          <div className="absolute -bottom-14 left-0 right-0 text-center text-xs font-semibold text-muted-foreground">
             Potential (Potensi) →
           </div>
           <div className="hidden md:flex absolute -left-20 top-1/2 -translate-y-1/2 items-center">
@@ -89,9 +89,9 @@ export default function DetailedNineBoxMatrix({ performance, potential, talentBo
           </div>
           
           {/* Scale Labels - More spacing */}
-          <div className="absolute -bottom-20 left-0 text-xs text-muted-foreground">Low</div>
-          <div className="absolute -bottom-20 left-1/2 -translate-x-1/2 text-xs text-muted-foreground">Med</div>
-          <div className="absolute -bottom-20 right-0 text-xs text-muted-foreground">High</div>
+          <div className="absolute -bottom-24 left-0 text-xs text-muted-foreground">Low</div>
+          <div className="absolute -bottom-24 left-1/2 -translate-x-1/2 text-xs text-muted-foreground">Med</div>
+          <div className="absolute -bottom-24 right-0 text-xs text-muted-foreground">High</div>
           
           {/* Y-axis scale labels - hidden on mobile, adjusted on desktop */}
           <div className="hidden md:block absolute -left-12 bottom-0 text-xs text-muted-foreground">Low</div>
@@ -104,7 +104,7 @@ export default function DetailedNineBoxMatrix({ performance, potential, talentBo
           </div>
         </div>
         
-        <div className="flex items-center justify-center gap-2 mt-16">
+        <div className="flex items-center justify-center gap-2 mt-20">
           <div className="flex items-center gap-1">
             <div className="w-4 h-4 bg-red-600 border-2 border-white rounded-full"></div>
             <span className="text-xs text-muted-foreground">Posisi Anda</span>
