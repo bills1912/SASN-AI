@@ -153,6 +153,42 @@ backend:
       - working: "NA"
         agent: "main"
         comment: "Need to implement strict 9-Box Grid system and merit principles"
+  
+  - task: "Add Institution Bulk Analysis API endpoints"
+    implemented: true
+    working: true
+    file: "/app/app/api/[[...path]]/route.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Added endpoints for bulk institution analysis: /api/talent/analyze-institution-bulk, /api/talent/institution-analysis/:name, /api/talent/institution-employees/:name, /api/talent/export-institution-analysis/:name, /api/talent/institutions-list"
+
+  - task: "Add Kepala Instansi role and authentication"
+    implemented: true
+    working: true
+    file: "/app/lib/mockAuth.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Added 3 kepala_instansi users for Kemenkeu, Kemendikbud, and Kemendagri"
+  
+  - task: "Expand mock ASN data for testing"
+    implemented: true
+    working: true
+    file: "/app/lib/mockBKNData.js"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Added 12 employees total (4 per institution) for comprehensive testing"
 
   - task: "Add Merit System Index API endpoints (Admin-only)"
     implemented: false
