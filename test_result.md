@@ -238,6 +238,54 @@ frontend:
       - working: "NA"
         agent: "main"
         comment: "Remove all performance-related UI components"
+  
+  - task: "Add Institution Talent Analysis component (Admin)"
+    implemented: true
+    working: true
+    file: "/app/components/InstitutionTalentAnalysis.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Created component with institution selection, bulk analysis trigger, dashboard table, filters (9-box, position, search), and CSV export functionality"
+  
+  - task: "Add Kepala Instansi Dashboard component"
+    implemented: true
+    working: true
+    file: "/app/components/KepalaInstansiDashboard.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Created dashboard for kepala instansi with employee list, analysis results, merit index display, and advanced filters"
+  
+  - task: "Update Sidebar for role-based navigation"
+    implemented: true
+    working: true
+    file: "/app/components/CollapsibleSidebar.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Added menu for kepala_instansi role and institution analysis menu for admin"
+  
+  - task: "Update main page routing"
+    implemented: true
+    working: true
+    file: "/app/app/page.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Added routing for InstitutionTalentAnalysis and KepalaInstansiDashboard components with role-based access control"
 
   - task: "Add Merit System Index component (Admin-only)"
     implemented: false
