@@ -337,3 +337,7 @@ agent_communication:
     message: "BUG REPORT: Login failing with error 500"
   - agent: "main"
     message: "FIX: Created missing .env file with MONGO_URL=mongodb://localhost:27017/astacita, NEXT_PUBLIC_BASE_URL, and NODE_ENV. Restarted nextjs service. Login now working successfully with status 200."
+  - agent: "user"
+    message: "BUG REPORT: 'Posisi Pegawai' text still overlapping with 'Med' label on X-axis in InstitutionTalentAnalysis and KepalaInstansiDashboard components"
+  - agent: "main"
+    message: "FIX: Updated margin from mt-20 to mt-32 (mobile) and md:mt-28 (desktop) in both InstitutionTalentAnalysis.jsx and KepalaInstansiDashboard.jsx. All 9-Box Matrix visualizations now properly spaced."
