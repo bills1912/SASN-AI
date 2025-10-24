@@ -356,98 +356,86 @@ export default function TalentManagement({ user, currentView, selectedProfile: g
             priority={talentMapping.priority}
           />
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* 9-Box Matrix - Sesuai Menpan RB */}
-            <Card className="p-4 md:p-6">
-              <NineBoxMatrix 
-                position={{
-                  box: talentMapping.boxNumber || 5,
-                  label: talentMapping.talentBox,
-                  quadrant: `Potensi: ${talentMapping.potential?.level || 'Medium'}, Kinerja: ${talentMapping.performance?.level || 'Medium'}`,
-                  priority: talentMapping.priority || 'Medium'
-                }}
-                showLabels={true}
-              />
-            </Card>
+          {/* Talent Box Classification with Real-time Calculation */}
+          <Card className="p-4 md:p-6">
+            <h3 className="text-base md:text-lg font-semibold text-foreground mb-4">Klasifikasi Talenta (Real-time)</h3>
+            <div className="space-y-4">
+              <div className="p-4 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 rounded-lg border border-blue-500/30">
+                <div className="flex items-center justify-between mb-2">
+                  <p className="text-sm text-muted-foreground">Talent Box</p>
+                  <Badge variant="outline" className="text-xs">
+                    Box {talentMapping.boxNumber || 5}
+                  </Badge>
+                </div>
+                <p className="text-xl md:text-2xl font-bold text-blue-400">{talentMapping.talentBox}</p>
+                <p className="text-xs text-muted-foreground mt-2">
+                  Priority: <span className="font-semibold">{talentMapping.priority}</span>
+                </p>
+              </div>
 
-            {/* Talent Box Classification with Real-time Calculation */}
-            <Card className="p-4 md:p-6">
-              <h3 className="text-base md:text-lg font-semibold text-foreground mb-4">Klasifikasi Talenta (Real-time)</h3>
-              <div className="space-y-4">
-                <div className="p-4 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 rounded-lg border border-blue-500/30">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="p-4 bg-muted/50 rounded-lg">
                   <div className="flex items-center justify-between mb-2">
-                    <p className="text-sm text-muted-foreground">Talent Box</p>
-                    <Badge variant="outline" className="text-xs">
-                      Box {talentMapping.boxNumber || 5}
+                    <p className="text-sm text-muted-foreground">Kinerja (Sumbu Y)</p>
+                    <Badge className="bg-purple-500 text-white text-xs">
+                      {talentMapping.performance.sumbuY?.toFixed(2) || '0.00'}/3.0
                     </Badge>
                   </div>
-                  <p className="text-xl md:text-2xl font-bold text-blue-400">{talentMapping.talentBox}</p>
-                  <p className="text-xs text-muted-foreground mt-2">
-                    Priority: <span className="font-semibold">{talentMapping.priority}</span>
-                  </p>
+                  <p className="text-lg font-semibold text-foreground">{talentMapping.performance.level}</p>
+                  <p className="text-xs text-muted-foreground mt-1">{talentMapping.performance.justification}</p>
                 </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="p-4 bg-muted/50 rounded-lg">
-                    <div className="flex items-center justify-between mb-2">
-                      <p className="text-sm text-muted-foreground">Kinerja (Sumbu Y)</p>
-                      <Badge className="bg-purple-500 text-white text-xs">
-                        {talentMapping.performance.sumbuY?.toFixed(2) || '0.00'}/3.0
-                      </Badge>
-                    </div>
-                    <p className="text-lg font-semibold text-foreground">{talentMapping.performance.level}</p>
-                    <p className="text-xs text-muted-foreground mt-1">{talentMapping.performance.justification}</p>
+                <div className="p-4 bg-muted/50 rounded-lg">
+                  <div className="flex items-center justify-between mb-2">
+                    <p className="text-sm text-muted-foreground">Potensi (Sumbu X)</p>
+                    <Badge className="bg-green-500 text-white text-xs">
+                      {talentMapping.potential.sumbuX?.toFixed(2) || '0.00'}/3.0
+                    </Badge>
                   </div>
-                  <div className="p-4 bg-muted/50 rounded-lg">
-                    <div className="flex items-center justify-between mb-2">
-                      <p className="text-sm text-muted-foreground">Potensi (Sumbu X)</p>
-                      <Badge className="bg-green-500 text-white text-xs">
-                        {talentMapping.potential.sumbuX?.toFixed(2) || '0.00'}/3.0
-                      </Badge>
-                    </div>
-                    <p className="text-lg font-semibold text-foreground">{talentMapping.potential.level}</p>
-                    <p className="text-xs text-muted-foreground mt-1">{talentMapping.potential.justification}</p>
-                  </div>
-                </div>
-
-                {/* Breakdown Sumbu X (jika ada) */}
-                {talentMapping.potential.breakdown && (
-                  <div className="p-3 bg-green-50 dark:bg-green-950/20 rounded-lg border border-green-200 dark:border-green-800">
-                    <p className="text-xs font-semibold text-green-800 dark:text-green-400 mb-2">
-                      Breakdown Sumbu X (Potensi):
-                    </p>
-                    <div className="space-y-1 text-xs">
-                      {Object.entries(talentMapping.potential.breakdown).map(([key, data]) => (
-                        <div key={key} className="flex justify-between items-center">
-                          <span className="text-muted-foreground capitalize">
-                            {key === 'jobFit' ? 'Job Fit' :
-                             key === 'gapPotensi' ? 'Gap Potensi' :
-                             key === 'diklatTeknis' ? 'Diklat Teknis' :
-                             key === 'pendidikan' ? 'Pendidikan' :
-                             key === 'pengalaman' ? 'Pengalaman' : key}:
-                          </span>
-                          <span className="font-mono text-foreground">
-                            {data.converted} × {(data.weight * 100).toFixed(0)}% = {data.score.toFixed(2)}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                <div>
-                  <p className="text-sm font-medium text-foreground mb-2">Risk Level</p>
-                  <div className={`inline-flex px-3 py-1 rounded-full text-sm font-medium ${
-                    talentMapping.riskLevel === 'High' ? 'bg-red-500/20 text-red-400' :
-                    talentMapping.riskLevel === 'Medium' ? 'bg-yellow-500/20 text-yellow-400' :
-                    'bg-green-500/20 text-green-400'
-                  }`}>
-                    {talentMapping.riskLevel}
-                  </div>
+                  <p className="text-lg font-semibold text-foreground">{talentMapping.potential.level}</p>
+                  <p className="text-xs text-muted-foreground mt-1">{talentMapping.potential.justification}</p>
                 </div>
               </div>
-            </Card>
-          </div>
+
+              {/* Breakdown Sumbu X (jika ada) */}
+              {talentMapping.potential.breakdown && (
+                <div className="p-3 bg-green-50 dark:bg-green-950/20 rounded-lg border border-green-200 dark:border-green-800">
+                  <p className="text-xs font-semibold text-green-800 dark:text-green-400 mb-2">
+                    Breakdown Sumbu X (Potensi):
+                  </p>
+                  <div className="space-y-1 text-xs">
+                    {Object.entries(talentMapping.potential.breakdown).map(([key, data]) => (
+                      <div key={key} className="flex justify-between items-center">
+                        <span className="text-muted-foreground capitalize">
+                          {key === 'jobFit' ? 'Job Fit' :
+                           key === 'gapPotensi' ? 'Gap Potensi' :
+                           key === 'diklatTeknis' ? 'Diklat Teknis' :
+                           key === 'pendidikan' ? 'Pendidikan' :
+                           key === 'pengalaman' ? 'Pengalaman' : key}:
+                        </span>
+                        <span className="font-mono text-foreground">
+                          {data.converted} × {(data.weight * 100).toFixed(0)}% = {data.score.toFixed(2)}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div>
+                <p className="text-sm font-medium text-foreground mb-2">Risk Level</p>
+                <div className={`inline-flex px-3 py-1 rounded-full text-sm font-medium ${
+                  talentMapping.riskLevel === 'High' ? 'bg-red-500/20 text-red-400' :
+                  talentMapping.riskLevel === 'Medium' ? 'bg-yellow-500/20 text-yellow-400' :
+                  'bg-green-500/20 text-green-400'
+                }`}>
+                  {talentMapping.riskLevel}
+                </div>
+              </div>
+            </div>
+          </Card>
+
+          {/* Career Path & Job Recommendations */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         </div>
       )}
 
