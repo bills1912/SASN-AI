@@ -86,7 +86,14 @@ async function handleAuth(segments, request, method) {
 // Talent Management endpoints
 async function handleTalentManagement(segments, request, method) {
   // Public endpoints that don't require authentication
-  const publicEndpoints = ['institutions-list'];
+  // Made public for demo purposes with mock data
+  const publicEndpoints = [
+    'institutions-list',
+    'analyze-institution-bulk',
+    'institution-employees',
+    'institution-analysis',
+    'export-institution-analysis'
+  ];
   
   // Check if this is a public endpoint
   const isPublicEndpoint = publicEndpoints.includes(segments[0]);
@@ -102,6 +109,20 @@ async function handleTalentManagement(segments, request, method) {
     console.log(`✓ Authenticated user: ${user.username} (${user.role})`);
   } else {
     console.log(`📢 Public endpoint accessed: /api/talent/${segments[0]}`);
+    // For public endpoints that need user context, try to get it but don't fail
+    user = verifyAuth(request);
+    if (user) {
+      console.log(`✓ Optional auth provided: ${user.username} (${user.role})`);
+    } else {
+      console.log(`ℹ️ No auth provided for public endpoint (using defaults)`);
+      // Create default admin user for public access
+      user = {
+        id: 'public-admin',
+        username: 'public',
+        role: 'admin',
+        name: 'Public User'
+      };
+    }
   }
   
   // Get all ASN profiles
