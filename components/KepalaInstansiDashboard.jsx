@@ -432,6 +432,7 @@ export default function KepalaInstansiDashboard({ user }) {
                     <th className="text-left py-3 px-2 text-sm font-semibold text-foreground">Jabatan</th>
                     <th className="text-left py-3 px-2 text-sm font-semibold text-foreground">Kategori 9-Box</th>
                     <th className="text-left py-3 px-2 text-sm font-semibold text-foreground">Rekomendasi Jabatan</th>
+                    <th className="text-center py-3 px-2 text-sm font-semibold text-foreground">Aksi</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -456,11 +457,22 @@ export default function KepalaInstansiDashboard({ user }) {
                             ))}
                           </div>
                         </td>
+                        <td className="py-3 px-2 text-center">
+                          <Button
+                            onClick={() => openDetailModal(employee)}
+                            variant="ghost"
+                            size="sm"
+                            className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-950"
+                          >
+                            <Eye className="w-4 h-4 mr-1" />
+                            Detail
+                          </Button>
+                        </td>
                       </tr>
                     ))
                   ) : (
                     <tr>
-                      <td colSpan="6" className="py-8 text-center text-muted-foreground">
+                      <td colSpan="7" className="py-8 text-center text-muted-foreground">
                         Tidak ada data yang sesuai dengan filter
                       </td>
                     </tr>
