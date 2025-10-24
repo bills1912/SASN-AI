@@ -41,7 +41,9 @@ export default function App() {
     if (user) {
       if (user.role === 'kepala_instansi') {
         setCurrentView('kepala-dashboard');
-      } else if (!currentView) {
+      } else if (user.role === 'admin') {
+        setCurrentView('institution-talent-analysis');
+      } else if (user.role === 'asn' && !currentView) {
         setCurrentView('input-data');
       }
     }
