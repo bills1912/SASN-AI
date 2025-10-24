@@ -31,10 +31,21 @@ export default function App() {
   const [loginLoading, setLoginLoading] = useState(false);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [resetEmail, setResetEmail] = useState('');
-  const [currentView, setCurrentView] = useState('input-data');
+  const [currentView, setCurrentView] = useState('');
   const [theme, setTheme] = useState('system'); // default to system
   const [selectedProfile, setSelectedProfile] = useState(null); // Global selected profile
   const { toast } = useToast();
+
+  // Set default view based on user role
+  useEffect(() => {
+    if (user) {
+      if (user.role === 'kepala_instansi') {
+        setCurrentView('kepala-dashboard');
+      } else if (!currentView) {
+        setCurrentView('input-data');
+      }
+    }
+  }, [user]);
 
   // Generate captcha
   const generateCaptcha = () => {
