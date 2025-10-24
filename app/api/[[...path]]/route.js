@@ -156,11 +156,20 @@ Return the analysis in JSON format with these fields:
     try {
       const { nip } = await request.json();
       console.log(`🔍 Talent mapping request for NIP: ${nip}`);
+      console.log(`🌍 Environment check:`, {
+        MONGO_URL: process.env.MONGO_URL ? 'SET' : 'NOT SET',
+        MONGO_DB_NAME: process.env.MONGO_DB_NAME || 'USING DEFAULT',
+        USE_MOCK_MODE,
+        NODE_ENV: process.env.NODE_ENV
+      });
       
       const profile = getASNProfile(nip);
       if (!profile) {
         console.error(`❌ Profile not found for NIP: ${nip}`);
-        return NextResponse.json({ error: 'Profile not found' }, { status: 404 });
+        return NextResponse.json({ 
+          error: 'Profile not found', 
+          details: `No ASN profile exists for NIP: ${nip}. Please check the NIP and try again.` 
+        }, { status: 404 });
       }
       
       console.log(`✓ Profile found: ${profile.name} (${profile.position})`);
@@ -169,11 +178,12 @@ Return the analysis in JSON format with these fields:
       
       let mapping;
       
-      if (USE_MOCK_MODE) {
-        // Use mock AI response for demonstration
-        console.log('📊 Using mock talent mapping');
-        mapping = getMockTalentMapping(profile);
-      } else {
+      try {
+        if (USE_MOCK_MODE) {
+          // Use mock AI response for demonstration
+          console.log('📊 Using mock talent mapping');
+          mapping = getMockTalentMapping(profile);
+        } else {
         // Use actual OpenAI API
         const prompt = `Based on this ASN profile, perform a comprehensive talent mapping analysis:
 
