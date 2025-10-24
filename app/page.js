@@ -632,19 +632,30 @@ export default function App() {
         <div className="flex-1 h-screen overflow-y-auto w-full">
           {/* Content container with proper spacing from sidebar and mobile menu button */}
           <div className="p-4 md:p-6 pt-16 lg:pt-6">
-            {currentView === 'input-data' && (
+            {/* Kepala Instansi Dashboard */}
+            {currentView === 'kepala-dashboard' && user?.role === 'kepala_instansi' && (
+              <KepalaInstansiDashboard user={user} />
+            )}
+            
+            {/* Admin & ASN Views */}
+            {currentView === 'input-data' && (user?.role === 'admin' || user?.role === 'asn') && (
               <InputData 
                 user={user} 
                 selectedProfile={selectedProfile}
                 setSelectedProfile={setSelectedProfile}
               />
             )}
-            {(currentView === 'talent-management' || currentView.startsWith('talent-') || currentView.startsWith('analysis-') || currentView.startsWith('job-') || currentView.startsWith('skill-') || currentView.startsWith('development-')) && (
+            {(currentView === 'talent-management' || currentView.startsWith('talent-') || currentView.startsWith('analysis-') || currentView.startsWith('job-') || currentView.startsWith('skill-') || currentView.startsWith('development-')) && (user?.role === 'admin' || user?.role === 'asn') && (
               <TalentManagement 
                 user={user} 
                 currentView={currentView}
                 selectedProfile={selectedProfile}
               />
+            )}
+            
+            {/* Admin Only Views */}
+            {currentView === 'institution-talent-analysis' && user?.role === 'admin' && (
+              <InstitutionTalentAnalysis user={user} />
             )}
             {(currentView === 'merit-system-index' || currentView.startsWith('merit-')) && user?.role === 'admin' && (
               <MeritSystemIndex 
