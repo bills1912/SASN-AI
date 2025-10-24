@@ -765,12 +765,17 @@ IMPORTANT: Only include information that is actually found in the content. If a 
   // Analyze institution - bulk analysis for all employees (Admin only)
   if (segments[0] === 'analyze-institution-bulk' && method === 'POST') {
     try {
+      console.log('🔍 Bulk institution analysis requested');
+      console.log(`User: ${user?.username} (${user?.role})`);
+      
       // Only admin can access
-      if (user.role !== 'admin') {
+      if (!user || user.role !== 'admin') {
+        console.error(`❌ Forbidden - User ${user?.username || 'unknown'} is not admin`);
         return NextResponse.json({ error: 'Forbidden - Admin access required' }, { status: 403 });
       }
 
       const { institutionName } = await request.json();
+      console.log(`📊 Analyzing institution: ${institutionName}`);
       
       if (!institutionName) {
         return NextResponse.json({ error: 'Institution name is required' }, { status: 400 });
@@ -781,10 +786,11 @@ IMPORTANT: Only include information that is actually found in the content. If a 
       const institutionProfiles = allProfiles.filter(p => p.agency === institutionName);
 
       if (institutionProfiles.length === 0) {
+        console.warn(`⚠️ No employees found for ${institutionName}`);
         return NextResponse.json({ error: 'No employees found for this institution' }, { status: 404 });
       }
 
-      console.log(`Analyzing ${institutionProfiles.length} employees from ${institutionName}...`);
+      console.log(`✓ Found ${institutionProfiles.length} employees from ${institutionName}`);
 
       const employeeResults = [];
 
