@@ -67,9 +67,20 @@ async function handleAuth(segments, request, method) {
 
 // Talent Management endpoints
 async function handleTalentManagement(segments, request, method) {
-  const user = verifyAuth(request);
-  if (!user) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  // Public endpoints that don't require authentication
+  const publicEndpoints = ['institutions-list'];
+  
+  // Check if this is a public endpoint
+  const isPublicEndpoint = publicEndpoints.includes(segments[0]);
+  
+  // Verify authentication for non-public endpoints
+  if (!isPublicEndpoint) {
+    const user = verifyAuth(request);
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+  } else {
+    console.log(`📢 Public endpoint accessed: /api/talent/${segments[0]}`);
   }
   
   // Get all ASN profiles
