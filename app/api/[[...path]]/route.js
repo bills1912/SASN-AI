@@ -29,12 +29,30 @@ function getPathSegments(request) {
 
 // Helper for authentication
 function verifyAuth(request) {
-  const authHeader = request.headers.get('authorization');
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+  try {
+    const authHeader = request.headers.get('authorization');
+    console.log('🔐 Auth check - Header present:', !!authHeader);
+    
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      console.warn('⚠️ No valid Authorization header found');
+      return null;
+    }
+    
+    const token = authHeader.substring(7);
+    console.log('🔐 Token extracted, length:', token.length);
+    
+    const user = verifyMockToken(token);
+    if (user) {
+      console.log('✓ Auth successful:', user.username, user.role);
+    } else {
+      console.warn('❌ Token verification failed');
+    }
+    
+    return user;
+  } catch (error) {
+    console.error('❌ Error in verifyAuth:', error);
     return null;
   }
-  const token = authHeader.substring(7);
-  return verifyMockToken(token);
 }
 
 // Auth endpoints
