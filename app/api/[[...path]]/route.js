@@ -719,6 +719,343 @@ IMPORTANT: Only include information that is actually found in the content. If a 
     }
   }
   
+  // Analyze institution - bulk analysis for all employees (Admin only)
+  if (segments[0] === 'analyze-institution-bulk' && method === 'POST') {
+    try {
+      // Only admin can access
+      if (user.role !== 'admin') {
+        return NextResponse.json({ error: 'Forbidden - Admin access required' }, { status: 403 });
+      }
+
+      const { institutionName } = await request.json();
+      
+      if (!institutionName) {
+        return NextResponse.json({ error: 'Institution name is required' }, { status: 400 });
+      }
+
+      // Get all profiles from this institution
+      const allProfiles = getAllASNProfiles();
+      const institutionProfiles = allProfiles.filter(p => p.agency === institutionName);
+
+      if (institutionProfiles.length === 0) {
+        return NextResponse.json({ error: 'No employees found for this institution' }, { status: 404 });
+      }
+
+      console.log(`Analyzing ${institutionProfiles.length} employees from ${institutionName}...`);
+
+      const employeeResults = [];
+
+      // Analyze each employee
+      for (const profile of institutionProfiles) {
+        try {
+          const performanceData = getPerformanceData(profile.nip);
+          
+          let mapping;
+          
+          if (USE_MOCK_MODE) {
+            mapping = getMockTalentMapping(profile);
+          } else {
+            const prompt = `Based on this ASN profile, perform a comprehensive talent mapping analysis:
+
+Profile:
+- Name: ${profile.name}
+- Position: ${profile.position}
+- Agency: ${profile.agency}
+- Years of Service: ${profile.yearsOfService}
+- Education: ${profile.education}
+- Performance Score: ${profile.performanceScore}
+- Skills: ${JSON.stringify(profile.skills)}
+- Achievements: ${JSON.stringify(profile.achievements)}
+- Projects: ${JSON.stringify(profile.projects)}
+- Trainings: ${JSON.stringify(profile.trainings)}
+
+Performance Data: ${JSON.stringify(performanceData)}
+
+Provide a 9-box talent matrix mapping with:
+1. Performance axis (1-3): Low, Medium, High
+2. Potential axis (1-3): Low, Medium, High
+3. Quadrant classification
+4. Career recommendations
+5. Development areas
+6. Suitable positions
+7. Risk assessment
+
+Return JSON:
+{
+  "performance": {"score": 1-3, "level": "Low|Medium|High", "justification": "why"},
+  "potential": {"score": 1-3, "level": "Low|Medium|High", "justification": "why"},
+  "quadrant": {"x": 1-3, "y": 1-3, "category": "category name", "description": "description"},
+  "talentBox": "High Performer|High Potential|Solid Professional|Underperformer|etc",
+  "careerPath": ["recommended positions"],
+  "developmentAreas": ["areas to develop"],
+  "suitablePositions": [{"position": "title", "fit": 0-100, "reason": "why"}],
+  "riskLevel": "Low|Medium|High",
+  "recommendations": ["detailed recommendations"]
+}`;
+          
+            const response = await openai.chat.completions.create({
+              model: process.env.OPENAI_MODEL || 'gpt-4o',
+              messages: [
+                {
+                  role: 'system',
+                  content: 'You are an expert in talent management and 9-box grid analysis for civil service personnel.'
+                },
+                {
+                  role: 'user',
+                  content: prompt
+                }
+              ],
+              temperature: 0.3,
+              response_format: { type: "json_object" }
+            });
+          
+            mapping = JSON.parse(response.choices[0].message.content);
+          }
+
+          // Store result
+          employeeResults.push({
+            nip: profile.nip,
+            name: profile.name,
+            position: profile.position,
+            talentBox: mapping.talentBox,
+            boxNumber: mapping.boxNumber || 5,
+            performance: mapping.performance,
+            potential: mapping.potential,
+            recommendedPositions: mapping.suitablePositions || mapping.careerPath || [],
+            priority: mapping.priority || 'Medium',
+            riskLevel: mapping.riskLevel,
+            developmentAreas: mapping.developmentAreas || [],
+            fullAnalysis: mapping
+          });
+
+          console.log(`✓ Analyzed: ${profile.name} - ${mapping.talentBox}`);
+
+        } catch (error) {
+          console.error(`Error analyzing ${profile.name}:`, error.message);
+          // Continue with other employees even if one fails
+          employeeResults.push({
+            nip: profile.nip,
+            name: profile.name,
+            position: profile.position,
+            talentBox: 'Analysis Failed',
+            boxNumber: 0,
+            error: error.message
+          });
+        }
+      }
+
+      // Save to MongoDB
+      const client = await clientPromise;
+      const db = client.db('asta_cita_ai');
+      
+      const analysisDoc = {
+        institutionName,
+        analyzedBy: user.id,
+        analyzedByName: user.name,
+        analyzedAt: new Date(),
+        employees: employeeResults,
+        totalEmployees: employeeResults.length,
+        summary: {
+          successfulAnalyses: employeeResults.filter(e => !e.error).length,
+          failedAnalyses: employeeResults.filter(e => e.error).length
+        }
+      };
+
+      await db.collection('institution_talent_analyses').updateOne(
+        { institutionName },
+        { $set: analysisDoc },
+        { upsert: true }
+      );
+
+      console.log(`✓ Institution analysis completed for ${institutionName}`);
+
+      return NextResponse.json({
+        success: true,
+        institutionName,
+        totalEmployees: employeeResults.length,
+        employees: employeeResults,
+        summary: analysisDoc.summary,
+        analyzedAt: analysisDoc.analyzedAt
+      });
+
+    } catch (error) {
+      console.error('Error in bulk institution analysis:', error);
+      return NextResponse.json(
+        { error: 'Failed to analyze institution', details: error.message },
+        { status: 500 }
+      );
+    }
+  }
+
+  // Get institution analysis results
+  if (segments[0] === 'institution-analysis' && segments[1] && method === 'GET') {
+    try {
+      const institutionName = decodeURIComponent(segments[1]);
+
+      // Allow admin and kepala_instansi (but kepala can only see their own institution)
+      if (user.role === 'kepala_instansi' && user.institution !== institutionName) {
+        return NextResponse.json({ error: 'Forbidden - You can only view your institution' }, { status: 403 });
+      }
+
+      const client = await clientPromise;
+      const db = client.db('asta_cita_ai');
+      
+      const analysis = await db.collection('institution_talent_analyses').findOne({ institutionName });
+
+      if (!analysis) {
+        return NextResponse.json({ 
+          error: 'No analysis found for this institution',
+          message: 'Please run the analysis first'
+        }, { status: 404 });
+      }
+
+      return NextResponse.json({ 
+        success: true,
+        analysis 
+      });
+
+    } catch (error) {
+      console.error('Error fetching institution analysis:', error);
+      return NextResponse.json(
+        { error: 'Failed to fetch analysis', details: error.message },
+        { status: 500 }
+      );
+    }
+  }
+
+  // Get employees for institution (for kepala_instansi)
+  if (segments[0] === 'institution-employees' && segments[1] && method === 'GET') {
+    try {
+      const institutionName = decodeURIComponent(segments[1]);
+
+      // Kepala can only see their own institution
+      if (user.role === 'kepala_instansi' && user.institution !== institutionName) {
+        return NextResponse.json({ error: 'Forbidden - You can only view your institution' }, { status: 403 });
+      }
+
+      const allProfiles = getAllASNProfiles();
+      const employees = allProfiles.filter(p => p.agency === institutionName);
+
+      // Try to get analysis if exists
+      const client = await clientPromise;
+      const db = client.db('asta_cita_ai');
+      const analysis = await db.collection('institution_talent_analyses').findOne({ institutionName });
+
+      return NextResponse.json({
+        success: true,
+        institutionName,
+        employees,
+        totalEmployees: employees.length,
+        hasAnalysis: !!analysis,
+        analysis: analysis || null
+      });
+
+    } catch (error) {
+      console.error('Error fetching institution employees:', error);
+      return NextResponse.json(
+        { error: 'Failed to fetch employees', details: error.message },
+        { status: 500 }
+      );
+    }
+  }
+
+  // Export institution analysis (Excel/CSV format as JSON)
+  if (segments[0] === 'export-institution-analysis' && segments[1] && method === 'GET') {
+    try {
+      const institutionName = decodeURIComponent(segments[1]);
+
+      // Check permissions
+      if (user.role === 'kepala_instansi' && user.institution !== institutionName) {
+        return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+      }
+
+      const client = await clientPromise;
+      const db = client.db('asta_cita_ai');
+      
+      const analysis = await db.collection('institution_talent_analyses').findOne({ institutionName });
+
+      if (!analysis) {
+        return NextResponse.json({ error: 'No analysis found' }, { status: 404 });
+      }
+
+      // Prepare export data
+      const exportData = {
+        institutionName: analysis.institutionName,
+        analyzedAt: analysis.analyzedAt,
+        analyzedBy: analysis.analyzedByName,
+        totalEmployees: analysis.totalEmployees,
+        employees: analysis.employees.map(emp => ({
+          NIP: emp.nip,
+          Nama: emp.name,
+          Jabatan: emp.position,
+          'Kategori 9-Box': emp.talentBox,
+          'Box Number': emp.boxNumber,
+          'Performance Level': emp.performance?.level || '-',
+          'Performance Score': emp.performance?.score || '-',
+          'Potential Level': emp.potential?.level || '-',
+          'Potential Score': emp.potential?.score || '-',
+          'Rekomendasi Jabatan': emp.recommendedPositions.map(p => 
+            typeof p === 'string' ? p : p.position
+          ).join('; '),
+          'Priority': emp.priority,
+          'Risk Level': emp.riskLevel
+        }))
+      };
+
+      return NextResponse.json({
+        success: true,
+        exportData,
+        filename: `Analisis_Talenta_${institutionName.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.json`
+      });
+
+    } catch (error) {
+      console.error('Error exporting analysis:', error);
+      return NextResponse.json(
+        { error: 'Failed to export', details: error.message },
+        { status: 500 }
+      );
+    }
+  }
+
+  // Get available institutions list
+  if (segments[0] === 'institutions-list' && method === 'GET') {
+    try {
+      const allProfiles = getAllASNProfiles();
+      const institutions = [...new Set(allProfiles.map(p => p.agency))];
+      
+      // Get analysis status for each institution
+      const client = await clientPromise;
+      const db = client.db('asta_cita_ai');
+      
+      const institutionsWithStatus = await Promise.all(
+        institutions.map(async (inst) => {
+          const analysis = await db.collection('institution_talent_analyses').findOne({ institutionName: inst });
+          const employeeCount = allProfiles.filter(p => p.agency === inst).length;
+          
+          return {
+            name: inst,
+            employeeCount,
+            hasAnalysis: !!analysis,
+            lastAnalyzed: analysis?.analyzedAt || null,
+            analyzedBy: analysis?.analyzedByName || null
+          };
+        })
+      );
+
+      return NextResponse.json({
+        success: true,
+        institutions: institutionsWithStatus
+      });
+
+    } catch (error) {
+      console.error('Error fetching institutions:', error);
+      return NextResponse.json(
+        { error: 'Failed to fetch institutions', details: error.message },
+        { status: 500 }
+      );
+    }
+  }
+
   // Extract resume/CV file
   if (segments[0] === 'extract-resume' && method === 'POST') {
     try {
