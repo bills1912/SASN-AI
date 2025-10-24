@@ -14,6 +14,8 @@ import SystemInfo from '@/components/SystemInfo';
 import MeritSystemIndex from '@/components/MeritSystemIndex';
 import MeritSystemBlockchain from '@/components/MeritSystemBlockchain';
 import ApplicationDocumentation from '@/components/ApplicationDocumentation';
+import InstitutionTalentAnalysis from '@/components/InstitutionTalentAnalysis';
+import KepalaInstansiDashboard from '@/components/KepalaInstansiDashboard';
 import { CheckCircle, Target, TrendingUp, BarChart3, Eye, EyeOff, RefreshCw } from 'lucide-react';
 
 export default function App() {
