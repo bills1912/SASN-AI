@@ -22,6 +22,13 @@ export default function MeritSystemIndex({ user, currentView }) {
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
+      
+      if (!token) {
+        console.warn('No authentication token found');
+        setLoading(false);
+        return;
+      }
+      
       const response = await fetch('/api/merit/institutions-list', {
         headers: {
           'Authorization': `Bearer ${token}`
@@ -31,6 +38,10 @@ export default function MeritSystemIndex({ user, currentView }) {
       if (response.ok) {
         const data = await response.json();
         setInstitutions(data.institutions || []);
+      } else if (response.status === 401) {
+        console.error('Unauthorized - token may be invalid or expired');
+      } else {
+        console.error('Failed to load institutions:', response.status, response.statusText);
       }
     } catch (error) {
       console.error('Error loading institutions:', error);
