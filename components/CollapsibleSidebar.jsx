@@ -62,11 +62,10 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
   ];
 
   // Add role-specific menus
-  let allMenuItems = [...menuItems];
+  let allMenuItems = [];
   
   if (user?.role === 'admin') {
     allMenuItems = [
-      ...menuItems,
       {
         id: 'institution-talent-analysis',
         label: 'Analisis Talenta Institusi',
@@ -110,6 +109,8 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
         section: 'main'
       }
     ];
+  } else if (user?.role === 'asn') {
+    allMenuItems = asnMenuItems;
   }
 
   const SidebarContent = ({ isMobile = false }) => (
