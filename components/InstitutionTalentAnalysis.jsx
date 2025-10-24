@@ -714,7 +714,7 @@ export default function InstitutionTalentAnalysis({ user }) {
                     </div>
                   </div>
                   
-                  <div className="flex items-center justify-center gap-2 mt-20">
+                  <div className="flex items-center justify-center gap-2 mt-32 md:mt-28">
                     <div className="flex items-center gap-1">
                       <div className="w-4 h-4 bg-red-600 border-2 border-white rounded-full"></div>
                       <span className="text-xs text-muted-foreground">Posisi Pegawai</span>
