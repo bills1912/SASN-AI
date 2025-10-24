@@ -45,6 +45,10 @@ export default function KepalaInstansiDashboard({ user }) {
   const [meritIndex, setMeritIndex] = useState(null);
   const [loading, setLoading] = useState(false);
   
+  // Detail modal
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [showDetailModal, setShowDetailModal] = useState(false);
+  
   // Filters
   const [filterBox, setFilterBox] = useState('all');
   const [filterPosition, setFilterPosition] = useState('');
