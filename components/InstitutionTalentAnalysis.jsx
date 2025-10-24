@@ -25,7 +25,9 @@ import {
   Filter,
   X,
   Search,
-  FileSpreadsheet
+  FileSpreadsheet,
+  Eye,
+  ChevronRight
 } from 'lucide-react';
 
 export default function InstitutionTalentAnalysis({ user }) {
