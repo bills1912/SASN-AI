@@ -78,27 +78,27 @@ export default function DetailedNineBoxMatrix({ performance, potential, talentBo
             />
           )}
           
-          {/* Axis Labels */}
-          <div className="absolute -bottom-6 left-0 right-0 text-center text-xs font-semibold text-muted-foreground">
+          {/* Axis Labels - Repositioned to avoid overlap */}
+          <div className="absolute -bottom-8 left-0 right-0 text-center text-xs font-semibold text-muted-foreground">
             Potential (Potensi) →
           </div>
-          <div className="absolute -left-16 top-0 bottom-0 flex items-center">
+          <div className="absolute -left-20 top-1/2 -translate-y-1/2 flex items-center">
             <span className="text-xs font-semibold text-muted-foreground transform -rotate-90 whitespace-nowrap">
               Performance (Kinerja) →
             </span>
           </div>
           
-          {/* Scale Labels */}
-          <div className="absolute -bottom-6 left-0 text-xs text-muted-foreground">Low</div>
-          <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-xs text-muted-foreground">Med</div>
-          <div className="absolute -bottom-6 right-0 text-xs text-muted-foreground">High</div>
+          {/* Scale Labels - Adjusted positioning */}
+          <div className="absolute -bottom-16 left-0 text-xs text-muted-foreground">Low</div>
+          <div className="absolute -bottom-16 left-1/2 -translate-x-1/2 text-xs text-muted-foreground">Med</div>
+          <div className="absolute -bottom-16 right-0 text-xs text-muted-foreground">High</div>
           
-          <div className="absolute -left-8 bottom-0 text-xs text-muted-foreground">Low</div>
-          <div className="absolute -left-8 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">Med</div>
-          <div className="absolute -left-8 top-0 text-xs text-muted-foreground">High</div>
+          <div className="absolute -left-12 bottom-0 text-xs text-muted-foreground">Low</div>
+          <div className="absolute -left-12 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">Med</div>
+          <div className="absolute -left-12 top-0 text-xs text-muted-foreground">High</div>
         </div>
         
-        <div className="flex items-center justify-center gap-2 mt-8">
+        <div className="flex items-center justify-center gap-2 mt-12">
           <div className="flex items-center gap-1">
             <div className="w-4 h-4 bg-red-600 border-2 border-white rounded-full"></div>
             <span className="text-xs text-muted-foreground">Posisi Anda</span>
