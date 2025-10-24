@@ -225,6 +225,16 @@ export default function KepalaInstansiDashboard({ user }) {
     ? [...new Set(analysisResults.employees.map(e => e.talentBox).filter(Boolean))]
     : [];
 
+  const openDetailModal = (employee) => {
+    setSelectedEmployee(employee);
+    setShowDetailModal(true);
+  };
+
+  const closeDetailModal = () => {
+    setSelectedEmployee(null);
+    setShowDetailModal(false);
+  };
+
   if (loading) {
     return (
       <div className="max-w-7xl mx-auto">
