@@ -70,6 +70,12 @@ export default function InstitutionTalentAnalysis({ user }) {
     try {
       setLoading(true);
       const token = localStorage.getItem('token');
+      
+      if (!token) {
+        console.warn('No authentication token found');
+        return;
+      }
+      
       const response = await fetch('/api/talent/institutions-list', {
         headers: {
           'Authorization': `Bearer ${token}`
@@ -79,6 +85,20 @@ export default function InstitutionTalentAnalysis({ user }) {
       if (response.ok) {
         const data = await response.json();
         setInstitutions(data.institutions);
+      } else if (response.status === 401) {
+        console.error('Unauthorized - token may be invalid or expired');
+        toast({
+          title: 'Session Expired',
+          description: 'Silakan login kembali',
+          variant: 'destructive'
+        });
+      } else {
+        console.error('Failed to load institutions:', response.status, response.statusText);
+        toast({
+          title: 'Error',
+          description: `Gagal memuat daftar instansi (${response.status})`,
+          variant: 'destructive'
+        });
       }
     } catch (error) {
       console.error('Error loading institutions:', error);
