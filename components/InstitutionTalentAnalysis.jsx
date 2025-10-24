@@ -34,7 +34,9 @@ import {
   Search,
   FileSpreadsheet,
   Eye,
-  ChevronRight
+  ChevronRight,
+  TrendingUp,
+  Target
 } from 'lucide-react';
 
 export default function InstitutionTalentAnalysis({ user }) {
