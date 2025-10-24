@@ -45,6 +45,10 @@ export default function InstitutionTalentAnalysis({ user }) {
   const [analysisResults, setAnalysisResults] = useState(null);
   const [filteredResults, setFilteredResults] = useState([]);
   
+  // Detail modal
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [showDetailModal, setShowDetailModal] = useState(false);
+  
   // Filters
   const [filterBox, setFilterBox] = useState('all');
   const [filterPosition, setFilterPosition] = useState('');
