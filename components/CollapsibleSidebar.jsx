@@ -28,7 +28,8 @@ import {
   Database,
   Cpu,
   BookOpen,
-  Shield
+  Shield,
+  Building2
 } from 'lucide-react';
 
 export default function CollapsibleSidebar({ currentView, setCurrentView, user, onLogout, theme, toggleTheme }) {
