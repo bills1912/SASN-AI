@@ -227,18 +227,25 @@ Return JSON:
         mapping = JSON.parse(response.choices[0].message.content);
       }
       
-      // Save to MongoDB
-      const client = await clientPromise;
-      const db = client.db(process.env.MONGO_DB_NAME || 'astacita');
-      await db.collection('talent_mappings').insertOne({
-        nip,
-        mapping,
-        timestamp: new Date()
-      });
+      // Save to MongoDB (with error handling for deployment)
+      try {
+        const client = await clientPromise;
+        const db = client.db(process.env.MONGO_DB_NAME || 'astacita');
+        await db.collection('talent_mappings').insertOne({
+          nip,
+          mapping,
+          timestamp: new Date()
+        });
+        console.log(`✓ Talent mapping saved to MongoDB for NIP: ${nip}`);
+      } catch (dbError) {
+        console.warn('MongoDB save failed (continuing without save):', dbError.message);
+        // Continue without saving to MongoDB - not a critical failure
+      }
       
       return NextResponse.json({ mapping, profile });
     } catch (error) {
       console.error('Error generating talent mapping:', error);
+      console.error('Error stack:', error.stack);
       return NextResponse.json(
         { error: 'Failed to generate talent mapping', details: error.message },
         { status: 500 }
