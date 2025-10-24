@@ -433,9 +433,6 @@ export default function TalentManagement({ user, currentView, selectedProfile: g
               </div>
             </div>
           </Card>
-
-          {/* Career Path & Job Recommendations */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         </div>
       )}
 
