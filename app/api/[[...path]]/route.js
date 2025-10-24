@@ -240,6 +240,13 @@ Return JSON:
         });
       
         mapping = JSON.parse(response.choices[0].message.content);
+        console.log('✓ OpenAI talent mapping generated');
+      }
+      } catch (mappingError) {
+        console.error('⚠️ Error generating mapping (falling back to mock):', mappingError.message);
+        // Fallback to mock if OpenAI fails
+        mapping = getMockTalentMapping(profile);
+        console.log('✓ Using fallback mock talent mapping');
       }
       
       // Save to MongoDB (with error handling for deployment)
