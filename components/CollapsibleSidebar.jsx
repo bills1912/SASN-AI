@@ -59,39 +59,56 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
     }
   ];
 
-  // Add Admin-only menus
-  const allMenuItems = user?.role === 'admin' 
-    ? [
-        ...menuItems,
-        {
-          id: 'merit-system-index',
-          label: 'Merit System Index',
-          icon: Database,
-          section: 'admin',
-          submenu: [
-            { id: 'merit-dashboard', label: 'Dashboard', icon: BarChart3 },
-            { id: 'merit-institutions', label: 'Analisis Institusi', icon: ChartBar },
-            { id: 'merit-comparison', label: 'Perbandingan', icon: TrendingUp }
-          ]
-        },
-        {
-          id: 'app-documentation',
-          label: 'Dokumentasi Aplikasi',
-          icon: BookOpen,
-          section: 'admin'
-        },
-        {
-          id: 'system-info',
-          label: 'System Info',
-          icon: Cpu,
-          section: 'admin',
-          submenu: [
-            { id: 'system-overview', label: 'System Overview', icon: Activity },
-            { id: 'technical-docs', label: 'Technical Documentation', icon: FileBarChart }
-          ]
-        }
-      ]
-    : menuItems;
+  // Add role-specific menus
+  let allMenuItems = [...menuItems];
+  
+  if (user?.role === 'admin') {
+    allMenuItems = [
+      ...menuItems,
+      {
+        id: 'institution-talent-analysis',
+        label: 'Analisis Talenta Institusi',
+        icon: Building2,
+        section: 'admin'
+      },
+      {
+        id: 'merit-system-index',
+        label: 'Merit System Index',
+        icon: Database,
+        section: 'admin',
+        submenu: [
+          { id: 'merit-dashboard', label: 'Dashboard', icon: BarChart3 },
+          { id: 'merit-institutions', label: 'Analisis Institusi', icon: ChartBar },
+          { id: 'merit-comparison', label: 'Perbandingan', icon: TrendingUp }
+        ]
+      },
+      {
+        id: 'app-documentation',
+        label: 'Dokumentasi Aplikasi',
+        icon: BookOpen,
+        section: 'admin'
+      },
+      {
+        id: 'system-info',
+        label: 'System Info',
+        icon: Cpu,
+        section: 'admin',
+        submenu: [
+          { id: 'system-overview', label: 'System Overview', icon: Activity },
+          { id: 'technical-docs', label: 'Technical Documentation', icon: FileBarChart }
+        ]
+      }
+    ];
+  } else if (user?.role === 'kepala_instansi') {
+    allMenuItems = [
+      {
+        id: 'kepala-dashboard',
+        label: 'Dashboard Kepala Instansi',
+        icon: Building2,
+        section: 'main'
+      }
+    ];
+  }
 
   const SidebarContent = ({ isMobile = false }) => (
     <div className={cn(
