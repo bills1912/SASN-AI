@@ -1049,35 +1049,71 @@ Return JSON:
   // Get available institutions list
   if (segments[0] === 'institutions-list' && method === 'GET') {
     try {
+      console.log('📋 Fetching institutions list...');
       const allProfiles = getAllASNProfiles();
       const institutions = [...new Set(allProfiles.map(p => p.agency))];
+      console.log(`✓ Found ${institutions.length} unique institutions from profiles`);
       
-      // Get analysis status for each institution
-      const client = await clientPromise;
-      const db = client.db(process.env.MONGO_DB_NAME || 'astacita');
+      let institutionsWithStatus;
       
-      const institutionsWithStatus = await Promise.all(
-        institutions.map(async (inst) => {
-          const analysis = await db.collection('institution_talent_analyses').findOne({ institutionName: inst });
+      try {
+        // Try to get analysis status from MongoDB
+        const client = await clientPromise;
+        const db = client.db(process.env.MONGO_DB_NAME || 'astacita');
+        console.log(`✓ MongoDB connected, DB: ${process.env.MONGO_DB_NAME || 'astacita'}`);
+        
+        institutionsWithStatus = await Promise.all(
+          institutions.map(async (inst) => {
+            try {
+              const analysis = await db.collection('institution_talent_analyses').findOne({ institutionName: inst });
+              const employeeCount = allProfiles.filter(p => p.agency === inst).length;
+              
+              return {
+                name: inst,
+                employeeCount,
+                hasAnalysis: !!analysis,
+                lastAnalyzed: analysis?.analyzedAt || null,
+                analyzedBy: analysis?.analyzedByName || null
+              };
+            } catch (instError) {
+              console.warn(`⚠️ Error fetching analysis for ${inst}:`, instError.message);
+              // Return basic info if query fails
+              const employeeCount = allProfiles.filter(p => p.agency === inst).length;
+              return {
+                name: inst,
+                employeeCount,
+                hasAnalysis: false,
+                lastAnalyzed: null,
+                analyzedBy: null
+              };
+            }
+          })
+        );
+        console.log('✓ Institution status fetched from MongoDB');
+      } catch (mongoError) {
+        console.warn('⚠️ MongoDB query failed, using fallback data:', mongoError.message);
+        // Fallback: return basic institution list without analysis status
+        institutionsWithStatus = institutions.map(inst => {
           const employeeCount = allProfiles.filter(p => p.agency === inst).length;
-          
           return {
             name: inst,
             employeeCount,
-            hasAnalysis: !!analysis,
-            lastAnalyzed: analysis?.analyzedAt || null,
-            analyzedBy: analysis?.analyzedByName || null
+            hasAnalysis: false,
+            lastAnalyzed: null,
+            analyzedBy: null
           };
-        })
-      );
+        });
+      }
 
+      console.log(`✓ Returning ${institutionsWithStatus.length} institutions`);
       return NextResponse.json({
         success: true,
         institutions: institutionsWithStatus
       });
 
     } catch (error) {
-      console.error('Error fetching institutions:', error);
+      console.error('❌ Error fetching institutions:', error);
+      console.error('Error stack:', error.stack);
       return NextResponse.json(
         { error: 'Failed to fetch institutions', details: error.message },
         { status: 500 }
