@@ -293,6 +293,16 @@ export default function InstitutionTalentAnalysis({ user }) {
     ? [...new Set(analysisResults.employees.map(e => e.talentBox).filter(Boolean))]
     : [];
 
+  const openDetailModal = (employee) => {
+    setSelectedEmployee(employee);
+    setShowDetailModal(true);
+  };
+
+  const closeDetailModal = () => {
+    setSelectedEmployee(null);
+    setShowDetailModal(false);
+  };
+
   return (
     <div className="max-w-7xl mx-auto space-y-6">
       {/* Header */}
