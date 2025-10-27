@@ -61,6 +61,9 @@ export default function Sidebar({ currentView, setCurrentView, user, onLogout, t
               src="/logo-icon.png" 
               alt="MeritChain Logo" 
               className="w-full h-full object-contain"
+              style={{
+                filter: 'brightness(1.3) saturate(1.5) contrast(1.1)'
+              }}
               onError={(e) => {
                 // Fallback if image fails to load
                 e.target.style.display = 'none';
