@@ -55,14 +55,16 @@ export default function Sidebar({ currentView, setCurrentView, user, onLogout, t
       {/* Header */}
       <div className="p-6 border-b border-slate-800">
         <div className="flex items-center space-x-3">
-          <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center">
-            <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
-            </svg>
+          <div className="relative w-12 h-12 flex-shrink-0">
+            <img 
+              src="/logo-icon.png" 
+              alt="MeritChain Logo" 
+              className="w-full h-full object-contain"
+            />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-white">ASTA-CITA AI</h1>
-            <p className="text-xs text-slate-400">BKN Hackathon 2024</p>
+            <h1 className="text-xl font-bold text-white">MeritChain</h1>
+            <p className="text-xs text-slate-400">AI Talent Management</p>
           </div>
         </div>
       </div>
