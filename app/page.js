@@ -616,17 +616,17 @@ export default function App() {
               ) : (
                 <>
                   <div className="text-center">
-                    <h2 className="text-2xl font-bold text-white mb-1">
+                    <h2 className={`text-2xl font-bold mb-1 ${theme === 'dark' ? 'text-white' : 'text-slate-900'}`}>
                       Lupa Password
                     </h2>
-                    <p className="text-sm text-slate-400">
+                    <p className={`text-sm ${theme === 'dark' ? 'text-slate-400' : 'text-slate-600'}`}>
                       Masukkan email Anda untuk reset password
                     </p>
                   </div>
 
                   <form onSubmit={handleForgotPassword} className="space-y-4">
                     <div>
-                      <Label htmlFor="resetEmail" className="text-slate-300 font-medium text-sm">
+                      <Label htmlFor="resetEmail" className={`font-medium text-sm ${theme === 'dark' ? 'text-slate-300' : 'text-slate-700'}`}>
                         Email
                       </Label>
                       <Input
@@ -635,7 +635,11 @@ export default function App() {
                         value={resetEmail}
                         onChange={(e) => setResetEmail(e.target.value)}
                         required
-                        className="mt-1.5 h-11 bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500"
+                        className={`mt-1.5 h-11 ${
+                          theme === 'dark'
+                            ? 'bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500'
+                            : 'bg-white border-slate-300 text-slate-900 placeholder:text-slate-400'
+                        }`}
                         placeholder="asn@bkn.go.id"
                       />
                     </div>
@@ -650,7 +654,7 @@ export default function App() {
                     <button
                       type="button"
                       onClick={() => setShowForgotPassword(false)}
-                      className="w-full text-sm text-slate-400 hover:text-white text-center"
+                      className={`w-full text-sm text-center ${theme === 'dark' ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'}`}
                     >
                       Kembali ke login
                     </button>
