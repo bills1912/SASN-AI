@@ -395,18 +395,6 @@ export default function App() {
                 <>
                   {/* Mobile Header */}
                   <div className="text-center md:hidden mb-6">
-                    <div className="flex justify-center mb-3">
-                      <img 
-                        src="/logo-full.png" 
-                        alt="MeritChain Logo" 
-                        className="h-12 w-auto object-contain"
-                        onError={(e) => {
-                          e.target.style.display = 'none';
-                          const parent = e.target.parentElement;
-                          parent.innerHTML = '<h1 class="text-2xl font-bold text-white">MeritChain</h1>';
-                        }}
-                      />
-                    </div>
                     <h1 className="text-2xl font-bold mb-2">
                       <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">
                         MeritChain
