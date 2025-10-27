@@ -283,12 +283,20 @@ export default function App() {
             <div className="max-w-lg w-full space-y-6">
               {/* Logo & Title */}
               <div className="flex flex-col items-start">
-                {/* Logo */}
-                <div className="mb-6">
+                {/* Logo with glass background */}
+                <div className="mb-6 bg-white/10 backdrop-blur-sm rounded-2xl p-4 border border-white/20 shadow-xl">
                   <img 
                     src="/logo-full.png" 
                     alt="MeritChain Logo" 
-                    className="h-16 md:h-20 w-auto object-contain"
+                    className="h-16 md:h-20 w-auto object-contain brightness-0 invert"
+                    onError={(e) => {
+                      // Fallback text if image fails
+                      e.target.style.display = 'none';
+                      const parent = e.target.parentElement;
+                      parent.innerHTML = '<h1 class="text-4xl font-bold text-white">MeritChain</h1>';
+                      parent.classList.remove('p-4');
+                      parent.classList.add('p-2');
+                    }}
                   />
                 </div>
                 
