@@ -85,55 +85,40 @@ async function handleAuth(segments, request, method) {
 
 // Talent Management endpoints
 async function handleTalentManagement(segments, request, method) {
-  // Public endpoints that don't require authentication
-  // Made public for demo purposes with mock data
+  // ALL endpoints public for deployment demo
   const publicEndpoints = [
     'institutions-list',
-    'analyze-institution-bulk'
-  ];
-  
-  // Semi-protected endpoints - try to get user but don't fail if no auth
-  const semiProtectedEndpoints = [
+    'analyze-institution-bulk',
     'institution-employees',
     'institution-analysis',
-    'export-institution-analysis'
+    'export-institution-analysis',
+    'talent-mapping',
+    'profiles'
   ];
   
-  // Check if this is a public endpoint
   const isPublicEndpoint = publicEndpoints.includes(segments[0]);
-  const isSemiProtected = semiProtectedEndpoints.includes(segments[0]);
   
-  // Verify authentication for non-public endpoints
   let user = null;
-  if (!isPublicEndpoint && !isSemiProtected) {
+  if (!isPublicEndpoint) {
     user = verifyAuth(request);
     if (!user) {
       console.error(`❌ Unauthorized access attempt to /api/talent/${segments[0]}`);
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
     console.log(`✓ Authenticated user: ${user.username} (${user.role})`);
-  } else if (isSemiProtected) {
-    // Try to get user for semi-protected endpoints
-    user = verifyAuth(request);
-    if (!user) {
-      console.log(`⚠️ No auth for semi-protected endpoint: /api/talent/${segments[0]}`);
-      return NextResponse.json({ error: 'Unauthorized - Login required' }, { status: 401 });
-    }
-    console.log(`✓ Semi-protected access: ${user.username} (${user.role})`);
-  } else if (isPublicEndpoint) {
+  } else {
     console.log(`📢 Public endpoint accessed: /api/talent/${segments[0]}`);
-    // For public endpoints that need user context, try to get it but don't fail
     user = verifyAuth(request);
     if (user) {
-      console.log(`✓ Optional auth provided: ${user.username} (${user.role})`);
+      console.log(`✓ Optional auth: ${user.username} (${user.role})`);
     } else {
-      console.log(`ℹ️ No auth provided for public endpoint (using defaults)`);
-      // Create default admin user for public access
+      console.log(`ℹ️ No auth - using public access`);
       user = {
         id: 'public-admin',
         username: 'public',
         role: 'admin',
-        name: 'Public User'
+        name: 'Administrator',
+        institution: 'Kementerian Keuangan'
       };
     }
   }
