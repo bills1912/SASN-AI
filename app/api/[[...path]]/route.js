@@ -1030,34 +1030,61 @@ Return JSON:
   // Get institution analysis results
   if (segments[0] === 'institution-analysis' && segments[1] && method === 'GET') {
     try {
+      console.log('📊 Fetching institution analysis...');
       const institutionName = decodeURIComponent(segments[1]);
+      console.log(`   Institution: ${institutionName}`);
+      console.log(`   User: ${user?.username || 'none'} (${user?.role || 'none'})`);
+      console.log(`   User institution: ${user?.institution || 'none'}`);
 
       // Allow admin and kepala_instansi (but kepala can only see their own institution)
-      if (user.role === 'kepala_instansi' && user.institution !== institutionName) {
+      if (user && user.role === 'kepala_instansi' && user.institution !== institutionName) {
+        console.error(`❌ Forbidden - User ${user.username} trying to access ${institutionName}, but belongs to ${user.institution}`);
         return NextResponse.json({ error: 'Forbidden - You can only view your institution' }, { status: 403 });
       }
 
+      console.log('✓ Access check passed');
+      console.log(`💾 Connecting to MongoDB...`);
+      console.log(`   MONGO_DB_NAME: ${process.env.MONGO_DB_NAME || 'DEFAULT: text-spacing'}`);
+      
       const client = await clientPromise;
-      const db = client.db(process.env.MONGO_DB_NAME || 'astacita');
+      const db = client.db(process.env.MONGO_DB_NAME || 'text-spacing');
+      console.log(`✓ MongoDB connected`);
+      
+      console.log(`🔍 Querying collection: institution_talent_analyses`);
+      console.log(`   Query: { institutionName: "${institutionName}" }`);
       
       const analysis = await db.collection('institution_talent_analyses').findOne({ institutionName });
-
+      
       if (!analysis) {
+        console.warn(`⚠️ No analysis found for: ${institutionName}`);
         return NextResponse.json({ 
           error: 'No analysis found for this institution',
-          message: 'Please run the analysis first'
+          message: 'Please run the analysis first',
+          institutionName: institutionName
         }, { status: 404 });
       }
 
-      return NextResponse.json({ 
+      console.log(`✅ Analysis found for ${institutionName}`);
+      console.log(`   Employees: ${analysis.totalEmployees}`);
+      console.log(`   Analyzed at: ${analysis.analyzedAt}`);
+
+      return NextResponse.json({
         success: true,
-        analysis 
+        analysis
       });
 
     } catch (error) {
-      console.error('Error fetching institution analysis:', error);
+      console.error('❌ Error fetching institution analysis:', error);
+      console.error('   Error name:', error.name);
+      console.error('   Error message:', error.message);
+      console.error('   Error stack:', error.stack);
+      
       return NextResponse.json(
-        { error: 'Failed to fetch analysis', details: error.message },
+        { 
+          error: 'Failed to fetch institution analysis', 
+          details: error.message,
+          institutionName: segments[1]
+        },
         { status: 500 }
       );
     }
