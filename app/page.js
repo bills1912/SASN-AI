@@ -281,23 +281,8 @@ export default function App() {
           {/* Left Side - Information (Hidden on mobile) */}
           <div className="hidden md:flex flex-1 items-center justify-center p-8 md:p-12">
             <div className="max-w-lg w-full space-y-6">
-              {/* Logo & Title */}
+              {/* Title (Logo removed as requested) */}
               <div className="flex flex-col items-start">
-                {/* Logo */}
-                <div className="mb-6">
-                  <img 
-                    src="/logo-full.png" 
-                    alt="MeritChain Logo" 
-                    className="h-16 md:h-20 w-auto object-contain"
-                    onError={(e) => {
-                      // Fallback text if image fails
-                      e.target.style.display = 'none';
-                      const parent = e.target.parentElement;
-                      parent.innerHTML = '<h1 class="text-4xl font-bold text-white">MeritChain</h1>';
-                    }}
-                  />
-                </div>
-                
                 <h1 className="text-4xl md:text-5xl font-bold mb-3">
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">
                     Sistem AI untuk
