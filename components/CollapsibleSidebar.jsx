@@ -315,7 +315,7 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
                         className={cn(
                           "w-full flex items-center space-x-3 pl-14 pr-6 py-2.5 transition-colors",
                           currentView === subitem.id
-                            ? "text-purple-400 bg-slate-900"
+                            ? "text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-slate-900"
                             : "text-muted-foreground hover:text-sidebar-accent-foreground hover:bg-sidebar-accent/80"
                         )}
                       >
