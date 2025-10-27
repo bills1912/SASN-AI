@@ -437,7 +437,7 @@ export default function App() {
                   <form onSubmit={handleLogin} className="space-y-4">
                     <div>
                       <Label htmlFor="username" className={`font-medium text-sm ${theme === 'dark' ? 'text-slate-300' : 'text-slate-700'}`}>
-                        Email
+                        Email/Username
                       </Label>
                       <Input
                         id="username"
