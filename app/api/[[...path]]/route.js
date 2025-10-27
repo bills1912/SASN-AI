@@ -89,7 +89,11 @@ async function handleTalentManagement(segments, request, method) {
   // Made public for demo purposes with mock data
   const publicEndpoints = [
     'institutions-list',
-    'analyze-institution-bulk',
+    'analyze-institution-bulk'
+  ];
+  
+  // Semi-protected endpoints - try to get user but don't fail if no auth
+  const semiProtectedEndpoints = [
     'institution-employees',
     'institution-analysis',
     'export-institution-analysis'
@@ -97,17 +101,26 @@ async function handleTalentManagement(segments, request, method) {
   
   // Check if this is a public endpoint
   const isPublicEndpoint = publicEndpoints.includes(segments[0]);
+  const isSemiProtected = semiProtectedEndpoints.includes(segments[0]);
   
   // Verify authentication for non-public endpoints
   let user = null;
-  if (!isPublicEndpoint) {
+  if (!isPublicEndpoint && !isSemiProtected) {
     user = verifyAuth(request);
     if (!user) {
       console.error(`❌ Unauthorized access attempt to /api/talent/${segments[0]}`);
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
     console.log(`✓ Authenticated user: ${user.username} (${user.role})`);
-  } else {
+  } else if (isSemiProtected) {
+    // Try to get user for semi-protected endpoints
+    user = verifyAuth(request);
+    if (!user) {
+      console.log(`⚠️ No auth for semi-protected endpoint: /api/talent/${segments[0]}`);
+      return NextResponse.json({ error: 'Unauthorized - Login required' }, { status: 401 });
+    }
+    console.log(`✓ Semi-protected access: ${user.username} (${user.role})`);
+  } else if (isPublicEndpoint) {
     console.log(`📢 Public endpoint accessed: /api/talent/${segments[0]}`);
     // For public endpoints that need user context, try to get it but don't fail
     user = verifyAuth(request);
