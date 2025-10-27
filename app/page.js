@@ -413,18 +413,16 @@ export default function App() {
                   {/* Mobile Header */}
                   <div className="text-center md:hidden mb-6">
                     <div className="flex justify-center mb-3">
-                      <div className="bg-white/10 backdrop-blur-sm rounded-xl p-3 border border-white/20 shadow-lg">
-                        <img 
-                          src="/logo-full.png" 
-                          alt="MeritChain Logo" 
-                          className="h-12 w-auto object-contain brightness-0 invert"
-                          onError={(e) => {
-                            e.target.style.display = 'none';
-                            const parent = e.target.parentElement;
-                            parent.innerHTML = '<h1 class="text-2xl font-bold text-white">MeritChain</h1>';
-                          }}
-                        />
-                      </div>
+                      <img 
+                        src="/logo-full.png" 
+                        alt="MeritChain Logo" 
+                        className="h-12 w-auto object-contain"
+                        onError={(e) => {
+                          e.target.style.display = 'none';
+                          const parent = e.target.parentElement;
+                          parent.innerHTML = '<h1 class="text-2xl font-bold text-white">MeritChain</h1>';
+                        }}
+                      />
                     </div>
                     <h1 className="text-2xl font-bold mb-2">
                       <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">
@@ -436,11 +434,21 @@ export default function App() {
                     </p>
                   </div>
 
+                  {/* Login Header with Logo */}
                   <div className="text-center">
-                    <div className="inline-flex items-center justify-center w-16 h-16 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 mb-4">
-                      <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                      </svg>
+                    <div className="inline-flex items-center justify-center w-20 h-20 mb-4">
+                      <img 
+                        src="/logo-icon.png" 
+                        alt="MeritChain Logo" 
+                        className="w-full h-full object-contain"
+                        onError={(e) => {
+                          // Fallback to gradient icon
+                          e.target.style.display = 'none';
+                          const parent = e.target.parentElement;
+                          parent.className = 'inline-flex items-center justify-center w-16 h-16 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 mb-4';
+                          parent.innerHTML = '<svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>';
+                        }}
+                      />
                     </div>
                     <h2 className="text-2xl font-bold text-white mb-1">
                       Selamat Datang
