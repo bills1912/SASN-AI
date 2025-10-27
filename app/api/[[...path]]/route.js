@@ -947,15 +947,22 @@ Return JSON:
 
       console.log(`✓ All ${employeeResults.length} employees analyzed successfully`);
 
-      // Save to MongoDB (with fallback)
+      // Save to MongoDB (with fallback and detailed logging)
       try {
+        console.log('💾 Attempting to save analysis to MongoDB...');
+        console.log(`   Institution: ${institutionName}`);
+        console.log(`   User ID: ${user?.id || 'unknown'}`);
+        console.log(`   User Name: ${user?.name || 'Unknown User'}`);
+        console.log(`   Total employees: ${employeeResults.length}`);
+        
         const client = await clientPromise;
         const db = client.db(process.env.MONGO_DB_NAME || 'astacita');
+        console.log(`✓ MongoDB connected, DB: ${process.env.MONGO_DB_NAME || 'astacita'}`);
         
         const analysisDoc = {
           institutionName,
-          analyzedBy: user.id,
-          analyzedByName: user.name,
+          analyzedBy: user?.id || 'public-admin',
+          analyzedByName: user?.name || 'Administrator',
           analyzedAt: new Date(),
           employees: employeeResults,
           totalEmployees: employeeResults.length,
@@ -965,13 +972,19 @@ Return JSON:
           }
         };
 
-        await db.collection('institution_talent_analyses').updateOne(
+        const result = await db.collection('institution_talent_analyses').updateOne(
           { institutionName },
           { $set: analysisDoc },
           { upsert: true }
         );
         
-        console.log(`✓ Analysis saved to MongoDB for ${institutionName}`);
+        console.log(`✓ MongoDB operation result:`, {
+          matched: result.matchedCount,
+          modified: result.modifiedCount,
+          upserted: result.upsertedCount,
+          upsertedId: result.upsertedId
+        });
+        console.log(`✅ Analysis saved to MongoDB for ${institutionName}`);
 
         return NextResponse.json({
           success: true,
@@ -979,10 +992,14 @@ Return JSON:
           totalEmployees: employeeResults.length,
           employees: employeeResults,
           summary: analysisDoc.summary,
-          analyzedAt: analysisDoc.analyzedAt
+          analyzedAt: analysisDoc.analyzedAt,
+          savedToDatabase: true
         });
       } catch (mongoError) {
-        console.warn('⚠️ MongoDB save failed, returning analysis without saving:', mongoError.message);
+        console.error('❌ MongoDB save failed:', mongoError);
+        console.error('   Error name:', mongoError.name);
+        console.error('   Error message:', mongoError.message);
+        console.error('   Error stack:', mongoError.stack);
         
         // Return analysis even if MongoDB save fails
         return NextResponse.json({
@@ -995,7 +1012,9 @@ Return JSON:
             failedAnalyses: employeeResults.filter(e => e.error).length
           },
           analyzedAt: new Date(),
-          warning: 'Analysis completed but not saved to database'
+          savedToDatabase: false,
+          warning: 'Analysis completed but not saved to database',
+          error: mongoError.message
         });
       }
 
