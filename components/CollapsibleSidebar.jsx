@@ -279,7 +279,7 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
                   }}
                   title={isCollapsed ? item.label : ''}
                   className={cn(
-                    "w-full flex items-center transition-colors border-t border-slate-800",
+                    "w-full flex items-center transition-colors border-t border-border",
                     isCollapsed && !isMobile ? "justify-center px-4 py-3" : "justify-between px-6 py-3",
                     currentView.startsWith('merit') || currentView === item.id
                       ? "bg-purple-600 text-white"
