@@ -288,11 +288,11 @@ export default function App() {
                     Sistem AI untuk
                   </span>
                   <br />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">
+                  <span className={`text-transparent bg-clip-text ${theme === 'dark' ? 'bg-gradient-to-r from-blue-400 to-cyan-400' : 'bg-gradient-to-r from-blue-600 to-cyan-600'}`}>
                     Manajemen ASN
                   </span>
                 </h1>
-                <p className="text-base text-slate-300">
+                <p className={theme === 'dark' ? 'text-base text-slate-300' : 'text-base text-slate-700'}>
                   Platform terintegrasi untuk analisis talenta dan penilaian kinerja ASN berbasis Artificial Intelligence
                 </p>
               </div>
@@ -301,13 +301,13 @@ export default function App() {
               <div className="space-y-4">
                 <div className="flex items-start space-x-3">
                   <div className="flex-shrink-0">
-                    <CheckCircle className="w-5 h-5 text-purple-400" />
+                    <CheckCircle className={theme === 'dark' ? 'w-5 h-5 text-purple-400' : 'w-5 h-5 text-blue-600'} />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-white text-sm mb-0.5">
+                    <h3 className={theme === 'dark' ? 'font-semibold text-white text-sm mb-0.5' : 'font-semibold text-slate-900 text-sm mb-0.5'}>
                       Analisis Talenta Komprehensif
                     </h3>
-                    <p className="text-xs text-slate-400">
+                    <p className={theme === 'dark' ? 'text-xs text-slate-400' : 'text-xs text-slate-600'}>
                       Pemetaan kompetensi dan potensi ASN menggunakan AI
                     </p>
                   </div>
