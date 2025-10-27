@@ -538,11 +538,11 @@ export default function App() {
                           id="remember"
                           checked={rememberMe}
                           onCheckedChange={setRememberMe}
-                          className="border-slate-600"
+                          className={theme === 'dark' ? 'border-slate-600' : 'border-slate-400'}
                         />
                         <label
                           htmlFor="remember"
-                          className="text-sm text-slate-400 cursor-pointer"
+                          className={`text-sm cursor-pointer ${theme === 'dark' ? 'text-slate-400' : 'text-slate-600'}`}
                         >
                           Ingat saya
                         </label>
@@ -550,7 +550,7 @@ export default function App() {
                       <button
                         type="button"
                         onClick={() => setShowForgotPassword(true)}
-                        className="text-sm text-blue-400 hover:text-blue-300"
+                        className={`text-sm ${theme === 'dark' ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-700'}`}
                       >
                         Lupa password?
                       </button>
