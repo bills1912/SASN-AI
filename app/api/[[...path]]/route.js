@@ -200,7 +200,7 @@ Return the analysis in JSON format with these fields:
       
       // Save analysis to MongoDB
       const client = await clientPromise;
-      const db = client.db(process.env.MONGO_DB_NAME || 'astacita');
+      const db = client.db(process.env.MONGO_DB_NAME || 'text-spacing');
       await db.collection('talent_analyses').insertOne({
         nip,
         analysis,
@@ -318,7 +318,7 @@ Return JSON:
       // Save to MongoDB (with error handling for deployment)
       try {
         const client = await clientPromise;
-        const db = client.db(process.env.MONGO_DB_NAME || 'astacita');
+        const db = client.db(process.env.MONGO_DB_NAME || 'text-spacing');
         await db.collection('talent_mappings').insertOne({
           nip,
           mapping,
@@ -417,7 +417,7 @@ Return JSON:
       const { nip, portfolioLink } = await request.json();
       
       const client = await clientPromise;
-      const db = client.db(process.env.MONGO_DB_NAME || 'astacita');
+      const db = client.db(process.env.MONGO_DB_NAME || 'text-spacing');
       
       await db.collection('profiles').updateOne(
         { nip },
@@ -449,7 +449,7 @@ Return JSON:
       const { nip, certifications } = await request.json();
       
       const client = await clientPromise;
-      const db = client.db(process.env.MONGO_DB_NAME || 'astacita');
+      const db = client.db(process.env.MONGO_DB_NAME || 'text-spacing');
       
       // Store certifications
       await db.collection('certifications').insertOne({
@@ -765,7 +765,7 @@ IMPORTANT: Only include information that is actually found in the content. If a 
       
       // Save to MongoDB
       const client = await clientPromise;
-      const db = client.db(process.env.MONGO_DB_NAME || 'astacita');
+      const db = client.db(process.env.MONGO_DB_NAME || 'text-spacing');
       
       await db.collection('portfolio_data').updateOne(
         { nip },
@@ -956,7 +956,7 @@ Return JSON:
         console.log(`   Total employees: ${employeeResults.length}`);
         
         const client = await clientPromise;
-        const db = client.db(process.env.MONGO_DB_NAME || 'astacita');
+        const db = client.db(process.env.MONGO_DB_NAME || 'text-spacing');
         console.log(`✓ MongoDB connected, DB: ${process.env.MONGO_DB_NAME || 'astacita'}`);
         
         const analysisDoc = {
@@ -1105,7 +1105,7 @@ Return JSON:
 
       // Try to get analysis if exists
       const client = await clientPromise;
-      const db = client.db(process.env.MONGO_DB_NAME || 'astacita');
+      const db = client.db(process.env.MONGO_DB_NAME || 'text-spacing');
       const analysis = await db.collection('institution_talent_analyses').findOne({ institutionName });
 
       return NextResponse.json({
@@ -1137,7 +1137,7 @@ Return JSON:
       }
 
       const client = await clientPromise;
-      const db = client.db(process.env.MONGO_DB_NAME || 'astacita');
+      const db = client.db(process.env.MONGO_DB_NAME || 'text-spacing');
       
       const analysis = await db.collection('institution_talent_analyses').findOne({ institutionName });
 
@@ -1197,7 +1197,7 @@ Return JSON:
       try {
         // Try to get analysis status from MongoDB
         const client = await clientPromise;
-        const db = client.db(process.env.MONGO_DB_NAME || 'astacita');
+        const db = client.db(process.env.MONGO_DB_NAME || 'text-spacing');
         console.log(`✓ MongoDB connected, DB: ${process.env.MONGO_DB_NAME || 'astacita'}`);
         
         institutionsWithStatus = await Promise.all(
@@ -1421,7 +1421,7 @@ Extract and return valid JSON:
       
       // Save to MongoDB
       const client = await clientPromise;
-      const db = client.db(process.env.MONGO_DB_NAME || 'astacita');
+      const db = client.db(process.env.MONGO_DB_NAME || 'text-spacing');
       
       await db.collection('portfolio_data').updateOne(
         { nip },
@@ -1560,7 +1560,7 @@ Return JSON:
       
       // Save to MongoDB
       const client = await clientPromise;
-      const db = client.db(process.env.MONGO_DB_NAME || 'astacita');
+      const db = client.db(process.env.MONGO_DB_NAME || 'text-spacing');
       await db.collection('performance_analyses').insertOne({
         nip,
         analysis,
@@ -1862,7 +1862,7 @@ async function handleBlockchain(segments, request, method) {
       
       // Also save to MongoDB for persistence
       const client = await clientPromise;
-      const db = client.db(process.env.MONGO_DB_NAME || 'astacita');
+      const db = client.db(process.env.MONGO_DB_NAME || 'text-spacing');
       await db.collection('blockchain_records').insertOne({
         type: 'CREDENTIAL',
         nip: credential.nip,
@@ -1889,7 +1889,7 @@ async function handleBlockchain(segments, request, method) {
       
       // Save to MongoDB
       const client = await clientPromise;
-      const db = client.db(process.env.MONGO_DB_NAME || 'astacita');
+      const db = client.db(process.env.MONGO_DB_NAME || 'text-spacing');
       await db.collection('blockchain_records').insertOne({
         type: 'PERFORMANCE',
         nip: performance.nip,
@@ -1916,7 +1916,7 @@ async function handleBlockchain(segments, request, method) {
       
       // Save to MongoDB
       const client = await clientPromise;
-      const db = client.db(process.env.MONGO_DB_NAME || 'astacita');
+      const db = client.db(process.env.MONGO_DB_NAME || 'text-spacing');
       await db.collection('blockchain_records').insertOne({
         type: 'CAREER_MOVEMENT',
         nip: career.nip,
@@ -1943,7 +1943,7 @@ async function handleBlockchain(segments, request, method) {
       
       // Save to MongoDB
       const client = await clientPromise;
-      const db = client.db(process.env.MONGO_DB_NAME || 'astacita');
+      const db = client.db(process.env.MONGO_DB_NAME || 'text-spacing');
       await db.collection('blockchain_records').insertOne({
         type: 'TALENT_ASSESSMENT',
         nip: assessment.nip,
@@ -1973,7 +1973,7 @@ async function handleBlockchain(segments, request, method) {
       
       // Save blockchain state to MongoDB
       const client = await clientPromise;
-      const db = client.db(process.env.MONGO_DB_NAME || 'astacita');
+      const db = client.db(process.env.MONGO_DB_NAME || 'text-spacing');
       await db.collection('blockchain_seeds').insertOne({
         stats,
         seededBy: user.id,
