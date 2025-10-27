@@ -566,14 +566,14 @@ export default function App() {
                   </form>
 
                   <div className="text-center">
-                    <p className="text-xs text-slate-500">
+                    <p className={`text-xs ${theme === 'dark' ? 'text-slate-500' : 'text-slate-600'}`}>
                       Demo Mode: Gunakan email dan password apapun untuk login
                     </p>
                   </div>
 
                   {/* Mobile Partner Logos */}
-                  <div className="md:hidden pt-4 border-t border-slate-700">
-                    <p className="text-xs text-slate-400 text-center mb-3">Lembaga Partner</p>
+                  <div className={`md:hidden pt-4 border-t ${theme === 'dark' ? 'border-slate-700' : 'border-slate-200'}`}>
+                    <p className={`text-xs text-center mb-3 ${theme === 'dark' ? 'text-slate-400' : 'text-slate-600'}`}>Lembaga Partner</p>
                     <div className="flex flex-wrap items-center justify-center gap-2">
                       <div className="p-2 rounded-md bg-white/10 backdrop-blur-sm border border-white/20">
                         <img 
