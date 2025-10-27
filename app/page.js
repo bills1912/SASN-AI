@@ -567,7 +567,7 @@ export default function App() {
 
                   <div className="text-center">
                     <p className={`text-xs ${theme === 'dark' ? 'text-slate-500' : 'text-slate-600'}`}>
-                      Demo Mode: Gunakan email dan password apapun untuk login
+                      Demo Mode: Gunakan username: admin, password: admin123
                     </p>
                   </div>
 
