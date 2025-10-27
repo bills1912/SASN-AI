@@ -55,11 +55,17 @@ export default function Sidebar({ currentView, setCurrentView, user, onLogout, t
       {/* Header */}
       <div className="p-6 border-b border-slate-800">
         <div className="flex items-center space-x-3">
-          <div className="relative w-12 h-12 flex-shrink-0">
+          {/* Logo with glass background */}
+          <div className="relative w-12 h-12 flex-shrink-0 bg-white/10 backdrop-blur-sm rounded-lg p-2 border border-white/20">
             <img 
               src="/logo-icon.png" 
               alt="MeritChain Logo" 
-              className="w-full h-full object-contain"
+              className="w-full h-full object-contain brightness-0 invert"
+              onError={(e) => {
+                // Fallback if image fails to load
+                e.target.style.display = 'none';
+                e.target.parentElement.innerHTML = '<svg class="w-full h-full text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>';
+              }}
             />
           </div>
           <div>
