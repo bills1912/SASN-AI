@@ -255,7 +255,7 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
                           "w-full flex items-center space-x-3 pl-14 pr-6 py-2.5 transition-colors",
                           currentView === subitem.id
                             ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-slate-900"
-                            : "text-muted-foreground hover:text-sidebar-accent-foreground hover:bg-sidebar-accent/80"
+                            : "text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-sidebar-accent/80"
                         )}
                       >
                         <subitem.icon className="w-4 h-4 flex-shrink-0" />
