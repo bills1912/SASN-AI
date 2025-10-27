@@ -58,7 +58,7 @@ export default function Sidebar({ currentView, setCurrentView, user, onLogout, t
           {/* Logo */}
           <div className="relative w-12 h-12 flex-shrink-0">
             <img 
-              src="/logo-icon.png" 
+              src="https://customer-assets.emergentagent.com/job_text-spacing/artifacts/v42vd93c_2.png" 
               alt="MeritChain Logo" 
               className="w-full h-full object-contain"
               style={{
