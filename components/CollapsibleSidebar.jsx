@@ -358,7 +358,7 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
 
       {/* Footer */}
       <div className={cn(
-        "border-t border-slate-800 p-4 space-y-3",
+        "border-t border-border p-4 space-y-3",
         isCollapsed && !isMobile && "items-center"
       )}>
         {(!isCollapsed || isMobile) && (
@@ -368,7 +368,7 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
                 {user?.name?.charAt(0) || 'U'}
               </div>
               <div>
-                <p className="text-xs font-medium text-white">{user?.name}</p>
+                <p className="text-xs font-medium text-sidebar-foreground">{user?.name}</p>
                 <p className="text-xs text-muted-foreground">{user?.role === 'admin' ? 'Administrator' : 'ASN'}</p>
               </div>
             </div>
