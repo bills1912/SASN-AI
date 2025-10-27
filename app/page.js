@@ -412,6 +412,9 @@ export default function App() {
                         src="/logo-icon.png" 
                         alt="MeritChain Logo" 
                         className="w-full h-full object-contain"
+                        style={{
+                          filter: 'brightness(1.3) saturate(1.5) contrast(1.1)'
+                        }}
                         onError={(e) => {
                           // Fallback to gradient icon
                           e.target.style.display = 'none';
