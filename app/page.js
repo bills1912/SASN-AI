@@ -343,8 +343,8 @@ export default function App() {
               </div>
 
               {/* Partner Institutions */}
-              <div className="pt-6 border-t border-slate-700">
-                <h3 className="text-sm font-semibold text-white mb-4 text-center">
+              <div className={`pt-6 border-t ${theme === 'dark' ? 'border-slate-700' : 'border-slate-200'}`}>
+                <h3 className={`text-sm font-semibold mb-4 text-center ${theme === 'dark' ? 'text-white' : 'text-slate-900'}`}>
                   Lembaga Partner
                 </h3>
                 <div className="flex flex-wrap items-center justify-center gap-3">
