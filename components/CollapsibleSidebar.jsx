@@ -128,7 +128,7 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
             <div className="flex items-center space-x-3">
               <div className="relative w-10 h-10 flex-shrink-0">
                 <img 
-                  src="/logo-icon.png" 
+                  src="https://customer-assets.emergentagent.com/job_text-spacing/artifacts/v42vd93c_2.png" 
                   alt="MeritChain Logo" 
                   className="w-full h-full object-contain"
                   style={{
@@ -150,7 +150,7 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
           {isCollapsed && !isMobile && (
             <div className="relative w-10 h-10 flex-shrink-0 mx-auto">
               <img 
-                src="/logo-icon.png" 
+                src="https://customer-assets.emergentagent.com/job_text-spacing/artifacts/v42vd93c_2.png" 
                 alt="MeritChain Logo" 
                 className="w-full h-full object-contain"
                 style={{
