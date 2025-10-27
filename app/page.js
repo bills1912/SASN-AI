@@ -409,7 +409,7 @@ export default function App() {
                   <div className="text-center">
                     <div className="inline-flex items-center justify-center w-20 h-20 mb-4">
                       <img 
-                        src="/logo-icon.png" 
+                        src="https://customer-assets.emergentagent.com/job_text-spacing/artifacts/v42vd93c_2.png" 
                         alt="MeritChain Logo" 
                         className="w-full h-full object-contain"
                         style={{
