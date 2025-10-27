@@ -404,9 +404,16 @@ export default function App() {
                 <>
                   {/* Mobile Header */}
                   <div className="text-center md:hidden mb-6">
+                    <div className="flex justify-center mb-3">
+                      <img 
+                        src="/logo-full.png" 
+                        alt="MeritChain Logo" 
+                        className="h-12 w-auto object-contain"
+                      />
+                    </div>
                     <h1 className="text-2xl font-bold mb-2">
                       <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">
-                        ASTA-CITA AI
+                        MeritChain
                       </span>
                     </h1>
                     <p className="text-xs text-slate-400">
