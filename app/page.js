@@ -436,7 +436,7 @@ export default function App() {
 
                   <form onSubmit={handleLogin} className="space-y-4">
                     <div>
-                      <Label htmlFor="username" className="text-slate-300 font-medium text-sm">
+                      <Label htmlFor="username" className={`font-medium text-sm ${theme === 'dark' ? 'text-slate-300' : 'text-slate-700'}`}>
                         Email
                       </Label>
                       <Input
@@ -445,13 +445,17 @@ export default function App() {
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
                         required
-                        className="mt-1.5 h-11 bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500"
+                        className={`mt-1.5 h-11 ${
+                          theme === 'dark' 
+                            ? 'bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500'
+                            : 'bg-white border-slate-300 text-slate-900 placeholder:text-slate-400'
+                        }`}
                         placeholder="asn@bkn.go.id"
                       />
                     </div>
 
                     <div>
-                      <Label htmlFor="password" className="text-slate-300 font-medium text-sm">
+                      <Label htmlFor="password" className={`font-medium text-sm ${theme === 'dark' ? 'text-slate-300' : 'text-slate-700'}`}>
                         Password
                       </Label>
                       <div className="relative mt-1.5">
@@ -461,13 +465,19 @@ export default function App() {
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
                           required
-                          className="h-11 bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500 pr-10"
+                          className={`h-11 pr-10 ${
+                            theme === 'dark'
+                              ? 'bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500'
+                              : 'bg-white border-slate-300 text-slate-900 placeholder:text-slate-400'
+                          }`}
                           placeholder="••••••••"
                         />
                         <button
                           type="button"
                           onClick={() => setShowPassword(!showPassword)}
-                          className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-300"
+                          className={`absolute right-3 top-1/2 -translate-y-1/2 ${
+                            theme === 'dark' ? 'text-slate-400 hover:text-slate-300' : 'text-slate-500 hover:text-slate-700'
+                          }`}
                         >
                           {showPassword ? (
                             <EyeOff className="w-5 h-5" />
