@@ -276,7 +276,7 @@ export default function App() {
   // Full Page Login (Landing + Login Combined)
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-[#0f1d3d] flex items-center justify-center p-0">
+      <div className={`min-h-screen flex items-center justify-center p-0 ${theme === 'dark' ? 'bg-[#0f1d3d]' : 'bg-gradient-to-br from-blue-50 via-white to-cyan-50'}`}>
         <div className="w-full min-h-screen flex flex-col md:flex-row">
           {/* Left Side - Information (Hidden on mobile) */}
           <div className="hidden md:flex flex-1 items-center justify-center p-8 md:p-12">
@@ -284,7 +284,7 @@ export default function App() {
               {/* Title (Logo removed as requested) */}
               <div className="flex flex-col items-start">
                 <h1 className="text-4xl md:text-5xl font-bold mb-3">
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">
+                  <span className={`text-transparent bg-clip-text ${theme === 'dark' ? 'bg-gradient-to-r from-blue-400 to-cyan-400' : 'bg-gradient-to-r from-blue-600 to-cyan-600'}`}>
                     Sistem AI untuk
                   </span>
                   <br />
