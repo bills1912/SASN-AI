@@ -126,11 +126,15 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
         <div className="flex items-center justify-between">
           {(!isCollapsed || isMobile) && (
             <div className="flex items-center space-x-3">
-              <div className="relative w-10 h-10 flex-shrink-0">
+              <div className="relative w-10 h-10 flex-shrink-0 bg-white/10 backdrop-blur-sm rounded-lg p-2 border border-white/20">
                 <img 
                   src="/logo-icon.png" 
                   alt="MeritChain Logo" 
-                  className="w-full h-full object-contain"
+                  className="w-full h-full object-contain brightness-0 invert"
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                    e.target.parentElement.innerHTML = '<svg class="w-full h-full text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>';
+                  }}
                 />
               </div>
               <div>
@@ -141,11 +145,15 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
           )}
           
           {isCollapsed && !isMobile && (
-            <div className="relative w-10 h-10 flex-shrink-0 mx-auto">
+            <div className="relative w-10 h-10 flex-shrink-0 mx-auto bg-white/10 backdrop-blur-sm rounded-lg p-2 border border-white/20">
               <img 
                 src="/logo-icon.png" 
                 alt="MeritChain Logo" 
-                className="w-full h-full object-contain"
+                className="w-full h-full object-contain brightness-0 invert"
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                  e.target.parentElement.innerHTML = '<svg class="w-full h-full text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>';
+                }}
               />
             </div>
           )}
