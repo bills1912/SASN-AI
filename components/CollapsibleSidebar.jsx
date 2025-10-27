@@ -468,7 +468,7 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
 
       {/* Copyright */}
       {(!isCollapsed || isMobile) && (
-        <div className="px-4 py-2 text-center border-t border-slate-800">
+        <div className="px-4 py-2 text-center border-t border-border">
           <p className="text-xs text-muted-foreground">© 2024 - Proposal Hackathon BKN</p>
         </div>
       )}
@@ -483,7 +483,7 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
           variant="ghost"
           size="icon"
           onClick={() => setIsMobileOpen(true)}
-          className="fixed top-4 right-4 z-[60] lg:hidden bg-slate-900/90 backdrop-blur text-white hover:bg-sidebar-accent shadow-lg border border-sidebar-border"
+          className="fixed top-4 right-4 z-[60] lg:hidden bg-sidebar/90 backdrop-blur text-sidebar-foreground hover:bg-sidebar-accent shadow-lg border border-sidebar-border"
         >
           <Menu className="w-5 h-5" />
         </Button>
@@ -499,7 +499,7 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
 
       {/* Mobile Sidebar */}
       <div className={cn(
-        "fixed top-0 left-0 h-full bg-slate-900 z-[56] transform transition-transform duration-300 lg:hidden overflow-y-auto",
+        "fixed top-0 left-0 h-full bg-sidebar z-[56] transform transition-transform duration-300 lg:hidden overflow-y-auto",
         isMobileOpen ? "translate-x-0 w-72" : "-translate-x-full w-0"
       )}>
         <SidebarContent isMobile={true} />
@@ -507,7 +507,7 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
 
       {/* Desktop Sidebar */}
       <div className={cn(
-        "hidden lg:flex flex-col h-screen bg-slate-900 border-r border-slate-800 transition-all duration-300 relative",
+        "hidden lg:flex flex-col h-screen bg-sidebar border-r border-sidebar-border transition-all duration-300 relative",
         isCollapsed ? "w-20" : "w-72"
       )}>
         <SidebarContent />
