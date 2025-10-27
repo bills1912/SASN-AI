@@ -62,7 +62,7 @@ export default function Sidebar({ currentView, setCurrentView, user, onLogout, t
               alt="MeritChain Logo" 
               className="w-full h-full object-contain"
               style={{
-                filter: 'brightness(1.3) saturate(1.5) contrast(1.1)'
+                filter: 'brightness(2.5) saturate(2) contrast(1.2) hue-rotate(-10deg)'
               }}
               onError={(e) => {
                 // Fallback if image fails to load
