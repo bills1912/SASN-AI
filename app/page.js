@@ -413,7 +413,9 @@ export default function App() {
                         alt="MeritChain Logo" 
                         className="w-full h-full object-contain"
                         style={{
-                          filter: 'brightness(2.5) saturate(2) contrast(1.2) hue-rotate(-10deg)'
+                          filter: theme === 'dark' 
+                            ? 'brightness(2.5) saturate(2) contrast(1.2) hue-rotate(-10deg)'
+                            : 'brightness(1) saturate(1.5) contrast(1.1)'
                         }}
                         onError={(e) => {
                           // Fallback to gradient icon
@@ -424,10 +426,10 @@ export default function App() {
                         }}
                       />
                     </div>
-                    <h2 className="text-2xl font-bold text-white mb-1">
+                    <h2 className={`text-2xl font-bold mb-1 ${theme === 'dark' ? 'text-white' : 'text-slate-900'}`}>
                       Selamat Datang
                     </h2>
-                    <p className="text-sm text-slate-400">
+                    <p className={`text-sm ${theme === 'dark' ? 'text-slate-400' : 'text-slate-600'}`}>
                       Login ke sistem ASN Talent AI
                     </p>
                   </div>
