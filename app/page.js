@@ -315,13 +315,13 @@ export default function App() {
 
                 <div className="flex items-start space-x-3">
                   <div className="flex-shrink-0">
-                    <CheckCircle className="w-5 h-5 text-purple-400" />
+                    <CheckCircle className={theme === 'dark' ? 'w-5 h-5 text-purple-400' : 'w-5 h-5 text-blue-600'} />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-white text-sm mb-0.5">
+                    <h3 className={theme === 'dark' ? 'font-semibold text-white text-sm mb-0.5' : 'font-semibold text-slate-900 text-sm mb-0.5'}>
                       Penilaian Kinerja Real-time
                     </h3>
-                    <p className="text-xs text-slate-400">
+                    <p className={theme === 'dark' ? 'text-xs text-slate-400' : 'text-xs text-slate-600'}>
                       Evaluasi kinerja berbasis data dan rekomendasi AI
                     </p>
                   </div>
@@ -329,13 +329,13 @@ export default function App() {
 
                 <div className="flex items-start space-x-3">
                   <div className="flex-shrink-0">
-                    <CheckCircle className="w-5 h-5 text-purple-400" />
+                    <CheckCircle className={theme === 'dark' ? 'w-5 h-5 text-purple-400' : 'w-5 h-5 text-blue-600'} />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-white text-sm mb-0.5">
+                    <h3 className={theme === 'dark' ? 'font-semibold text-white text-sm mb-0.5' : 'font-semibold text-slate-900 text-sm mb-0.5'}>
                       Dashboard Analytics
                     </h3>
-                    <p className="text-xs text-slate-400">
+                    <p className={theme === 'dark' ? 'text-xs text-slate-400' : 'text-xs text-slate-600'}>
                       Visualisasi data dan insights untuk pengambilan keputusan
                     </p>
                   </div>
