@@ -147,7 +147,6 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
                 alt="MeritChain Logo" 
                 className="w-full h-full object-contain"
               />
-              </svg>
             </div>
           )}
           
