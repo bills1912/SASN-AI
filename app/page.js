@@ -490,14 +490,17 @@ export default function App() {
 
                     {/* Captcha */}
                     <div>
-                      <Label className="text-slate-300 font-medium text-sm">
+                      <Label className={`font-medium text-sm ${theme === 'dark' ? 'text-slate-300' : 'text-slate-700'}`}>
                         Captcha
                       </Label>
                       <div className="flex items-center gap-2 mt-1.5">
-                        <div className="flex-1 h-11 bg-slate-800 border border-slate-700 rounded-md flex items-center justify-center font-mono text-lg font-bold text-white tracking-widest select-none" style={{
+                        <div className={`flex-1 h-11 border rounded-md flex items-center justify-center font-mono text-lg font-bold tracking-widest select-none ${
+                          theme === 'dark'
+                            ? 'bg-slate-800 border-slate-700 text-white'
+                            : 'bg-gradient-to-br from-slate-100 to-slate-200 border-slate-300 text-slate-900'
+                        }`} style={{
                           letterSpacing: '0.3em',
-                          background: 'linear-gradient(135deg, #1e293b 0%, #334155 100%)',
-                          textShadow: '2px 2px 4px rgba(0,0,0,0.3)'
+                          textShadow: theme === 'dark' ? '2px 2px 4px rgba(0,0,0,0.3)' : '1px 1px 2px rgba(0,0,0,0.1)'
                         }}>
                           {captchaText}
                         </div>
@@ -505,7 +508,11 @@ export default function App() {
                           type="button"
                           onClick={generateCaptcha}
                           variant="outline"
-                          className="h-11 px-3 border-slate-700 text-slate-300 hover:bg-slate-800 hover:text-white"
+                          className={`h-11 px-3 ${
+                            theme === 'dark'
+                              ? 'border-slate-700 text-slate-300 hover:bg-slate-800 hover:text-white'
+                              : 'border-slate-300 text-slate-700 hover:bg-slate-100 hover:text-slate-900'
+                          }`}
                         >
                           <RefreshCw className="w-4 h-4" />
                         </Button>
@@ -515,7 +522,11 @@ export default function App() {
                         value={captchaInput}
                         onChange={(e) => setCaptchaInput(e.target.value)}
                         required
-                        className="mt-2 h-11 bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500"
+                        className={`mt-2 h-11 ${
+                          theme === 'dark'
+                            ? 'bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500'
+                            : 'bg-white border-slate-300 text-slate-900 placeholder:text-slate-400'
+                        }`}
                         placeholder="Masukkan captcha"
                       />
                     </div>
