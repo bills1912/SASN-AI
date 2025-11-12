@@ -360,3 +360,7 @@ agent_communication:
     message: "BUG REPORT: Career Path layout is messy and not responsive. Need to fix layout to be neat on desktop, tablet, and mobile devices."
   - agent: "main"
     message: "FIX: Completely redesigned Career Path component layout. Replaced absolute positioning with responsive CSS Grid layout (grid-cols-1 md:grid-cols-2). Changed from SVG curved path to card-based grid that adapts to all screen sizes. Each stage now displays in a card with proper spacing and responsive design."
+  - agent: "user"
+    message: "FEATURE REQUEST: 1) Reduce analysis buttons from 3 to 1 button that generates all analyses at once. 2) Redesign Career Path to vertical timeline with curved connecting path and START/FINISH labels."
+  - agent: "main"
+    message: "IMPLEMENTED: 1) Combined 3 analysis buttons into single 'Generate Semua Analisis' button in InputData.jsx that runs all 3 analyses (Pemetaan Talenta, Analisis Skill, Analisis Kinerja) sequentially. 2) Completely redesigned CareerPath.jsx to vertical timeline layout with curved SVG path connecting stages, START/FINISH badges, alternating left-right card placement on desktop, and proper mobile responsiveness."
