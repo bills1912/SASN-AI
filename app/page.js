@@ -102,6 +102,24 @@ export default function App() {
     }
   };
 
+  // Toggle theme
+  const toggleTheme = () => {
+    const themes = ['light', 'dark', 'system'];
+    const currentIndex = themes.indexOf(theme);
+    const nextIndex = (currentIndex + 1) % themes.length;
+    const nextTheme = themes[nextIndex];
+    
+    setTheme(nextTheme);
+    localStorage.setItem('theme', nextTheme);
+    applyTheme(nextTheme);
+    
+    toast({
+      title: 'Theme Changed',
+      description: `Theme set to ${nextTheme.charAt(0).toUpperCase() + nextTheme.slice(1)} mode`,
+      duration: 2000
+    });
+  };
+
   // Listen to system theme changes when in system mode
   useEffect(() => {
     if (theme === 'system') {
