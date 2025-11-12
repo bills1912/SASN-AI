@@ -770,6 +770,8 @@ export default function App() {
               <ApplicationDocumentation user={user} />
             )}
             {currentView === 'system-info' && <SystemInfo />}
+            {currentView === 'system-overview' && <SystemOverview />}
+            {currentView === 'technical-docs' && <TechnicalDocumentation />}
           </div>
         </div>
       </div>
