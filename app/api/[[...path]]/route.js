@@ -1846,7 +1846,11 @@ Ensure resources have real, working URLs to actual courses, certifications, or l
     return NextResponse.json({ news: mockASNNews });
   }
   
-  return null;
+  // If no endpoint matches, return 404
+  return NextResponse.json(
+    { error: 'Endpoint not found', path: `/api/talent/${segments.join('/')}` },
+    { status: 404 }
+  );
 }
 
 // Helper function to generate template-based career path
