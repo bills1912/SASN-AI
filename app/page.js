@@ -407,7 +407,24 @@ export default function App() {
           </div>
 
           {/* Right Side - Login (Full screen on mobile) */}
-          <div className="flex-1 flex items-center justify-center p-6 md:p-12 min-h-screen">
+          <div className="flex-1 flex items-center justify-center p-6 md:p-12 min-h-screen relative">
+            {/* Theme Switcher - Top Right */}
+            <Button
+              onClick={toggleTheme}
+              variant="outline"
+              size="icon"
+              className={`absolute top-6 right-6 z-10 ${
+                theme === 'dark'
+                  ? 'border-slate-700 bg-slate-800/50 text-slate-300 hover:bg-slate-700 hover:text-white'
+                  : 'border-slate-300 bg-white text-slate-700 hover:bg-slate-100'
+              }`}
+              title={`Current: ${theme.charAt(0).toUpperCase() + theme.slice(1)} mode`}
+            >
+              {theme === 'light' && <Sun className="w-5 h-5" />}
+              {theme === 'dark' && <Moon className="w-5 h-5" />}
+              {theme === 'system' && <Monitor className="w-5 h-5" />}
+            </Button>
+
             <div className="w-full max-w-md space-y-6">
               {!showForgotPassword ? (
                 <>
