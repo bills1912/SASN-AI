@@ -139,8 +139,15 @@ export default function App() {
 
   // Watch theme changes and apply
   useEffect(() => {
-    console.log('Theme changed to:', theme);
+    console.log('=== Theme effect triggered ===');
+    console.log('Current theme:', theme);
+    console.log('System prefers dark:', window.matchMedia('(prefers-color-scheme: dark)').matches);
+    console.log('Document has dark class before:', document.documentElement.classList.contains('dark'));
+    
     applyTheme(theme);
+    
+    console.log('Document has dark class after:', document.documentElement.classList.contains('dark'));
+    console.log('=== Theme effect complete ===');
   }, [theme]);
 
   // Listen to system theme changes when in system mode
