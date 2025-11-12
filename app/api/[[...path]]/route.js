@@ -19,6 +19,11 @@ import {
 import mockInstitutions, { generateInstitutionAnalysis } from '@/lib/mockMeritData';
 import { getBlockchainInstance } from '@/lib/blockchain';
 import { seedBlockchainData } from '@/lib/seedBlockchainData';
+import { testOllamaConnection, analyzeTalentWithOllama } from '@/lib/ollamaClient';
+import { exec } from 'child_process';
+import { promisify } from 'util';
+
+const execAsync = promisify(exec);
 
 // Helper to extract path segments
 function getPathSegments(request) {
