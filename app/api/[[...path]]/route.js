@@ -2048,7 +2048,7 @@ async function handleSystemTests(segments, request, method) {
       
       // Run Python SVM classifier
       const { stdout, stderr } = await execAsync(
-        `cd /app && python3 -c "
+        `/root/.venv/bin/python3 -c "
 import sys
 sys.path.append('/app/lib')
 from svmClassifier import TalentClassifier
