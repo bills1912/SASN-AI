@@ -2041,6 +2041,11 @@ async function handleSystemTests(segments, request, method) {
       console.log('🧪 Testing SVM classification...');
       const { employeeData } = await request.json();
       
+      // Write employee data to temporary file
+      const tempFile = `/tmp/employee_${Date.now()}.json`;
+      const fs = require('fs');
+      fs.writeFileSync(tempFile, JSON.stringify(employeeData));
+      
       // Run Python SVM classifier
       const { stdout, stderr } = await execAsync(
         `cd /app && python3 -c "
@@ -2050,11 +2055,15 @@ from svmClassifier import TalentClassifier
 import json
 
 classifier = TalentClassifier()
-employee_data = ${JSON.stringify(JSON.stringify(employeeData))}
-result = classifier.classify(json.loads(employee_data))
+with open('${tempFile}', 'r') as f:
+    employee_data = json.load(f)
+result = classifier.classify(employee_data)
 print(json.dumps(result))
 "`
       );
+      
+      // Clean up temp file
+      fs.unlinkSync(tempFile);
       
       if (stderr && !stderr.includes('FutureWarning')) {
         console.error('Python stderr:', stderr);
