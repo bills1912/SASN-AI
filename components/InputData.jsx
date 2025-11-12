@@ -648,118 +648,67 @@ export default function InputData({ user, selectedProfile: globalSelectedProfile
         </Card>
       )}
 
-      {/* Analysis Actions */}
-      <div className="grid md:grid-cols-3 gap-6">
-        {/* Talent Mapping */}
-        <Card className="p-6">
-          <div className="flex items-center space-x-3 mb-4">
-            <div className="w-12 h-12 rounded-lg bg-blue-500/10 flex items-center justify-center">
-              <Target className="w-6 h-6 text-blue-500" />
-            </div>
-            <div>
-              <h3 className="font-semibold text-foreground">Pemetaan Talenta</h3>
-              <p className="text-xs text-muted-foreground">9-Box Grid Analysis</p>
+      {/* Analysis Actions - Single Button */}
+      <Card className="p-8 bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-950/20 dark:to-cyan-950/20 border-2 border-blue-200 dark:border-blue-800">
+        <div className="text-center space-y-6">
+          <div className="flex justify-center">
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full blur-2xl opacity-30 animate-pulse"></div>
+              <div className="relative w-20 h-20 rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center shadow-2xl">
+                <Target className="w-10 h-10 text-white" />
+              </div>
             </div>
           </div>
-          <p className="text-sm text-muted-foreground mb-4">
-            Generate analisis pemetaan talenta dengan 9-box grid matrix, mencakup performance vs potential analysis.
-          </p>
-          <Button
-            onClick={generateTalentMapping}
-            disabled={loading || !selectedProfile}
-            className="w-full"
-          >
-            {loading ? (
-              <>
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                Menganalisis...
-              </>
-            ) : (
-              <>
-                <Target className="w-4 h-4 mr-2" />
-                Generate Pemetaan Talenta
-              </>
-            )}
-          </Button>
-          <p className="text-xs text-muted-foreground mt-3 text-center">
-            Hasil di: <span className="font-medium text-blue-500">Manajemen Talenta → Pemetaan Talenta</span>
-          </p>
-        </Card>
+          
+          <div>
+            <h3 className="text-2xl font-bold text-foreground mb-2">Generate Analisis Komprehensif</h3>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Klik tombol di bawah untuk menjalankan semua analisis sekaligus: Pemetaan Talenta (9-Box Grid), 
+              Analisis Skill (Technical & Soft Skills), dan Analisis Kinerja (Performance Assessment).
+            </p>
+          </div>
 
-        {/* Skill Analysis */}
-        <Card className="p-6">
-          <div className="flex items-center space-x-3 mb-4">
-            <div className="w-12 h-12 rounded-lg bg-purple-500/10 flex items-center justify-center">
-              <Code2 className="w-6 h-6 text-purple-500" />
+          <div className="flex flex-wrap justify-center gap-4 text-sm">
+            <div className="flex items-center gap-2 px-4 py-2 bg-white/50 dark:bg-slate-900/50 rounded-lg border border-blue-200 dark:border-blue-800">
+              <Target className="w-4 h-4 text-blue-500" />
+              <span className="text-foreground">Pemetaan Talenta</span>
             </div>
-            <div>
-              <h3 className="font-semibold text-foreground">Analisis Skill</h3>
-              <p className="text-xs text-muted-foreground">Deep Skill Assessment</p>
+            <div className="flex items-center gap-2 px-4 py-2 bg-white/50 dark:bg-slate-900/50 rounded-lg border border-purple-200 dark:border-purple-800">
+              <Code2 className="w-4 h-4 text-purple-500" />
+              <span className="text-foreground">Analisis Skill</span>
+            </div>
+            <div className="flex items-center gap-2 px-4 py-2 bg-white/50 dark:bg-slate-900/50 rounded-lg border border-cyan-200 dark:border-cyan-800">
+              <TrendingUp className="w-4 h-4 text-cyan-500" />
+              <span className="text-foreground">Analisis Kinerja</span>
             </div>
           </div>
-          <p className="text-sm text-muted-foreground mb-4">
-            Generate analisis mendalam terhadap technical & soft skills, identifikasi skill gaps dan emerging skills.
-          </p>
-          <Button
-            onClick={generateSkillAnalysis}
-            disabled={loading || !selectedProfile}
-            className="w-full"
-            variant="outline"
-          >
-            {loading ? (
-              <>
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                Menganalisis...
-              </>
-            ) : (
-              <>
-                <Code2 className="w-4 h-4 mr-2" />
-                Generate Analisis Skill
-              </>
-            )}
-          </Button>
-          <p className="text-xs text-muted-foreground mt-3 text-center">
-            Hasil di: <span className="font-medium text-purple-500">Manajemen Talenta → Analisis Skill</span>
-          </p>
-        </Card>
 
-        {/* Performance Analysis */}
-        <Card className="p-6">
-          <div className="flex items-center space-x-3 mb-4">
-            <div className="w-12 h-12 rounded-lg bg-cyan-500/10 flex items-center justify-center">
-              <TrendingUp className="w-6 h-6 text-cyan-500" />
-            </div>
-            <div>
-              <h3 className="font-semibold text-foreground">Analisis Kinerja</h3>
-              <p className="text-xs text-muted-foreground">Performance Assessment</p>
-            </div>
-          </div>
-          <p className="text-sm text-muted-foreground mb-4">
-            Generate analisis kinerja komprehensif dengan quadrant classification dan development recommendations.
-          </p>
           <Button
-            onClick={generatePerformanceAnalysis}
+            onClick={generateAllAnalysis}
             disabled={loading || !selectedProfile}
-            className="w-full"
-            variant="outline"
+            size="lg"
+            className="h-14 px-8 text-base font-semibold bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 shadow-xl hover:shadow-2xl transition-all duration-300"
           >
             {loading ? (
               <>
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                Menganalisis...
+                <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                Sedang Menganalisis...
               </>
             ) : (
               <>
-                <TrendingUp className="w-4 h-4 mr-2" />
-                Generate Analisis Kinerja
+                <Target className="w-5 h-5 mr-2" />
+                Generate Semua Analisis
               </>
             )}
           </Button>
-          <p className="text-xs text-muted-foreground mt-3 text-center">
-            Hasil di: <span className="font-medium text-cyan-500">Penilaian Kinerja</span>
+
+          <p className="text-sm text-muted-foreground">
+            Hasil analisis dapat dilihat di menu{' '}
+            <span className="font-semibold text-blue-500">Manajemen Talenta</span> dan{' '}
+            <span className="font-semibold text-cyan-500">Penilaian Kinerja</span>
           </p>
-        </Card>
-      </div>
+        </div>
+      </Card>
 
       {/* Info Card */}
       <Card className="p-6 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border-blue-500/20">
