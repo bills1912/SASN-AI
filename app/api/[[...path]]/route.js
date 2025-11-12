@@ -846,61 +846,120 @@ IMPORTANT: Only include information that is actually found in the content. If a 
           if (USE_MOCK_MODE) {
             mapping = getMockTalentMapping(profile);
           } else {
-            const prompt = `Based on this ASN profile, perform a comprehensive talent mapping analysis:
+            // Step 1: Use SVM for 9-box classification
+            const fs = require('fs');
+            const tempFile = `/tmp/employee_${Date.now()}_${profile.nip}.json`;
+            
+            const employeeData = {
+              name: profile.name,
+              position: profile.position,
+              education: profile.education,
+              workExperience: profile.yearsOfService || 0,
+              grade: profile.grade || 'III/c',
+              skills: profile.skills || [],
+              achievements: profile.achievements || [],
+              performanceScore: profile.performanceScore || 80
+            };
+            
+            fs.writeFileSync(tempFile, JSON.stringify(employeeData));
+            
+            // Run SVM classification
+            const { stdout: svmOutput } = await execAsync(
+              `/root/.venv/bin/python3 -c "
+import sys
+sys.path.append('/app/lib')
+from svmClassifier import TalentClassifier
+import json
 
-Profile:
+classifier = TalentClassifier()
+with open('${tempFile}', 'r') as f:
+    employee_data = json.load(f)
+result = classifier.classify(employee_data)
+print(json.dumps(result))
+"`
+            );
+            
+            fs.unlinkSync(tempFile);
+            
+            const svmResult = JSON.parse(svmOutput.trim());
+            
+            // Step 2: Use Ollama for detailed recommendations and insights
+            const ollamaPrompt = `Analyze this civil service employee and provide detailed career recommendations:
+
+Employee Profile:
 - Name: ${profile.name}
 - Position: ${profile.position}
 - Agency: ${profile.agency}
 - Years of Service: ${profile.yearsOfService}
 - Education: ${profile.education}
 - Performance Score: ${profile.performanceScore}
-- Skills: ${JSON.stringify(profile.skills)}
-- Achievements: ${JSON.stringify(profile.achievements)}
-- Projects: ${JSON.stringify(profile.projects)}
-- Trainings: ${JSON.stringify(profile.trainings)}
+- Skills: ${profile.skills?.join(', ')}
+- Achievements: ${profile.achievements?.join(', ')}
+- Projects: ${profile.projects?.length || 0} projects completed
+- Trainings: ${profile.trainings?.length || 0} trainings attended
 
-Performance Data: ${JSON.stringify(performanceData)}
+9-Box Classification:
+- Talent Box: ${svmResult.talentBox}
+- Performance: ${svmResult.performance.level} (Score: ${svmResult.performance.score})
+- Potential: ${svmResult.potential.level} (Score: ${svmResult.potential.score})
+- Priority: ${svmResult.priority}
 
-Provide a 9-box talent matrix mapping with:
-1. Performance axis (1-3): Low, Medium, High
-2. Potential axis (1-3): Low, Medium, High
-3. Quadrant classification
-4. Career recommendations
-5. Development areas
-6. Suitable positions
-7. Risk assessment
-
-Return JSON:
+Please provide in JSON format:
 {
-  "performance": {"score": 1-3, "level": "Low|Medium|High", "justification": "why"},
-  "potential": {"score": 1-3, "level": "Low|Medium|High", "justification": "why"},
-  "quadrant": {"x": 1-3, "y": 1-3, "category": "category name", "description": "description"},
-  "talentBox": "High Performer|High Potential|Solid Professional|Underperformer|etc",
-  "careerPath": ["recommended positions"],
-  "developmentAreas": ["areas to develop"],
-  "suitablePositions": [{"position": "title", "fit": 0-100, "reason": "why"}],
-  "riskLevel": "Low|Medium|High",
-  "recommendations": ["detailed recommendations"]
-}`;
-          
-            const response = await openai.chat.completions.create({
-              model: process.env.OPENAI_MODEL || 'gpt-4o',
-              messages: [
-                {
-                  role: 'system',
-                  content: 'You are an expert in talent management and 9-box grid analysis for civil service personnel.'
-                },
-                {
-                  role: 'user',
-                  content: prompt
+  "careerPath": ["3 recommended next career positions"],
+  "developmentAreas": ["3 specific areas for skill development"],
+  "suitablePositions": [
+    {"position": "Position Name", "fit": 85, "reason": "Why this fits"},
+    {"position": "Position Name", "fit": 75, "reason": "Why this fits"},
+    {"position": "Position Name", "fit": 65, "reason": "Why this fits"}
+  ],
+  "riskLevel": "Low|Medium|High - based on current performance and potential",
+  "recommendations": ["3 detailed actionable recommendations"],
+  "strengthsToLeverage": ["3 key strengths to utilize"],
+  "trainingNeeds": ["3 specific training programs needed"]
+}
+
+Return ONLY valid JSON, no additional text.`;
+
+            try {
+              const ollamaResponse = await analyzeTalentWithOllama(employeeData);
+              
+              // Combine SVM classification with Ollama recommendations
+              mapping = {
+                ...svmResult,
+                ...ollamaResponse,
+                quadrant: {
+                  x: svmResult.performance.score,
+                  y: svmResult.potential.score,
+                  category: svmResult.talentBox,
+                  description: `${svmResult.performance.level} Performance, ${svmResult.potential.level} Potential`
                 }
-              ],
-              temperature: 0.3,
-              response_format: { type: "json_object" }
-            });
-          
-            mapping = JSON.parse(response.choices[0].message.content);
+              };
+            } catch (ollamaError) {
+              console.log(`⚠️ Ollama failed for ${profile.name}, using SVM only`);
+              // Fallback: Use SVM result only with basic recommendations
+              mapping = {
+                ...svmResult,
+                careerPath: [`Senior ${profile.position}`, `${profile.position} Specialist`, `Team Lead`],
+                suitablePositions: [
+                  { position: `Senior ${profile.position}`, fit: 80, reason: 'Natural career progression' },
+                  { position: `${profile.position} Specialist`, fit: 75, reason: 'Specialization path' },
+                  { position: 'Team Lead', fit: 70, reason: 'Leadership opportunity' }
+                ],
+                riskLevel: svmResult.performance.score >= 3 ? 'Low' : svmResult.performance.score >= 2 ? 'Medium' : 'High',
+                recommendations: [
+                  'Continue professional development',
+                  'Focus on skill enhancement',
+                  'Seek mentorship opportunities'
+                ],
+                quadrant: {
+                  x: svmResult.performance.score,
+                  y: svmResult.potential.score,
+                  category: svmResult.talentBox,
+                  description: `${svmResult.performance.level} Performance, ${svmResult.potential.level} Potential`
+                }
+              };
+            }
           }
 
           // Store result
