@@ -286,6 +286,21 @@ frontend:
       - working: true
         agent: "main"
         comment: "Added routing for InstitutionTalentAnalysis and KepalaInstansiDashboard components with role-based access control"
+  
+  - task: "Fix Career Path responsive layout"
+    implemented: true
+    working: true
+    file: "/app/components/CareerPath.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "user"
+        comment: "Layout was messy with overlapping elements and not responsive across devices"
+      - working: true
+        agent: "main"
+        comment: "Redesigned with CSS Grid layout (1 column mobile, 2 columns desktop). Removed absolute positioning and SVG curved path. Now uses card-based responsive design that works on all screen sizes."
 
   - task: "Add Merit System Index component (Admin-only)"
     implemented: false
