@@ -397,8 +397,11 @@ Blockchain:
 • Dual storage (Memory + MongoDB)
 
 AI/ML:
-• Multi-provider support (OpenAI, Claude, Gemini)
-• Emergent Universal LLM Key
+• Ollama LLM (llama3.2:1b) - Self-hosted language model
+• SVM (scikit-learn) - 9-Box talent classification
+• Python Machine Learning Pipeline
+• Open WebUI API integration
+• Hybrid AI approach (ML + LLM)
 • Fallback mock mode
 
 SECURITY ARCHITECTURE:
