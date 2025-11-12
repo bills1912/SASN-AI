@@ -15,6 +15,7 @@ export default function CareerPath({ user }) {
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
   const [selectedStage, setSelectedStage] = useState(null);
+  const { toast } = useToast();
 
   useEffect(() => {
     fetchCareerPath();
