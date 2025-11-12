@@ -55,9 +55,10 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
       submenu: [
         { id: 'talent-mapping', label: 'Pemetaan Talenta', icon: BarChart3 },
         { id: 'analysis-summary', label: 'Ringkasan Analisis', icon: ChartBar },
+        { id: 'career-path', label: 'Career Path', icon: TrendingUp },
         { id: 'job-recommendation', label: 'Rekomendasi Jabatan', icon: CheckCircle },
         { id: 'skill-analysis', label: 'Analisis Skill', icon: Code },
-        { id: 'development-area', label: 'Area Pengembangan', icon: TrendingUp }
+        { id: 'development-area', label: 'Area Pengembangan', icon: Target }
       ]
     }
   ];
