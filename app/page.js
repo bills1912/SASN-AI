@@ -748,12 +748,18 @@ export default function App() {
                 setSelectedProfile={setSelectedProfile}
               />
             )}
-            {(currentView === 'talent-management' || currentView.startsWith('talent-') || currentView.startsWith('analysis-') || currentView.startsWith('job-') || currentView.startsWith('skill-') || currentView.startsWith('development-')) && (user?.role === 'admin' || user?.role === 'asn') && (
-              <TalentManagement 
-                user={user} 
-                currentView={currentView}
-                selectedProfile={selectedProfile}
-              />
+            {(currentView === 'talent-management' || currentView.startsWith('talent-') || currentView.startsWith('analysis-') || currentView.startsWith('career-') || currentView.startsWith('job-') || currentView.startsWith('skill-') || currentView.startsWith('development-')) && (user?.role === 'admin' || user?.role === 'asn') && (
+              <>
+                {currentView === 'career-path' ? (
+                  <CareerPath user={user} />
+                ) : (
+                  <TalentManagement 
+                    user={user} 
+                    currentView={currentView}
+                    selectedProfile={selectedProfile}
+                  />
+                )}
+              </>
             )}
             
             {/* Admin Only Views */}
