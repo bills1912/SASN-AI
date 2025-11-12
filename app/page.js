@@ -13,6 +13,7 @@ import InputData from '@/components/InputData';
 import SystemInfo from '@/components/SystemInfo';
 import SystemOverview from '@/components/SystemOverview';
 import TechnicalDocumentation from '@/components/TechnicalDocumentation';
+import CareerPath from '@/components/CareerPath';
 import MeritSystemIndex from '@/components/MeritSystemIndex';
 import MeritSystemBlockchain from '@/components/MeritSystemBlockchain';
 import InstitutionTalentAnalysis from '@/components/InstitutionTalentAnalysis';
