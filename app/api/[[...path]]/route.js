@@ -1630,211 +1630,117 @@ Return JSON:
   // Generate Career Path with Ollama
   if (segments[0] === 'generate-career-path' && method === 'POST') {
     try {
-      const { nip } = await request.json();
+      console.log('🛤️ Career path endpoint hit');
+      
+      const body = await request.json();
+      const { nip } = body;
+      
+      console.log(`NIP received: ${nip}`);
       
       if (!nip) {
+        console.log('❌ NIP is missing');
         return NextResponse.json({ error: 'NIP is required' }, { status: 400 });
       }
       
-      console.log(`🛤️ Generating career path for NIP: ${nip}`);
+      console.log(`🔍 Looking up profile for NIP: ${nip}`);
       
       // Get ASN profile
       const profile = getASNProfile(nip);
+      
       if (!profile) {
+        console.log(`❌ Profile not found for NIP: ${nip}`);
         return NextResponse.json({ error: 'Profile not found' }, { status: 404 });
       }
       
-      // Get existing talent analysis from MongoDB
-      const client = await clientPromise;
-      const db = client.db(process.env.MONGO_DB_NAME || 'text-spacing');
-      const existingAnalysis = await db.collection('talent_analyses').findOne({ nip });
+      console.log(`✓ Profile found: ${profile.name}`);
       
-      let careerPath;
-      
-      if (USE_MOCK_MODE || !existingAnalysis) {
-        // Mock career path
-        careerPath = {
-          currentPosition: profile.position,
-          currentLevel: profile.grade || 'III/c',
-          talentBox: 'Core Player',
-          stages: [
-            {
-              id: 1,
-              year: 'Year 1-2',
-              position: `Senior ${profile.position}`,
-              level: 'III/d - IV/a',
-              focus: 'Skill Mastery & Leadership',
-              description: 'Deepen technical expertise and take on mentoring roles',
-              skills: ['Advanced Technical Skills', 'Mentoring', 'Project Management'],
-              training: ['Leadership Training', 'Technical Certification'],
-              resources: [
-                { type: 'Course', name: 'Advanced Leadership', url: 'https://www.coursera.org/leadership' },
-                { type: 'Certification', name: 'Project Management Professional', url: 'https://www.pmi.org' }
-              ]
-            },
-            {
-              id: 2,
-              year: 'Year 3-4',
-              position: 'Team Lead / Specialist',
-              level: 'IV/a - IV/b',
-              focus: 'Team Management & Strategy',
-              description: 'Lead small teams and contribute to strategic planning',
-              skills: ['Strategic Thinking', 'Team Leadership', 'Stakeholder Management'],
-              training: ['Strategic Planning Workshop', 'Change Management'],
-              resources: [
-                { type: 'Course', name: 'Strategic Management', url: 'https://www.edx.org/strategy' },
-                { type: 'Book', name: 'Leaders Eat Last', url: 'https://simonsinek.com' }
-              ]
-            },
-            {
-              id: 3,
-              year: 'Year 5-7',
-              position: 'Manager / Senior Specialist',
-              level: 'IV/b - IV/c',
-              focus: 'Department Leadership & Innovation',
-              description: 'Manage departments and drive innovation initiatives',
-              skills: ['Innovation Management', 'Budget Management', 'Cross-functional Leadership'],
-              training: ['Executive Leadership Program', 'Innovation Workshop'],
-              resources: [
-                { type: 'Program', name: 'Executive Leadership', url: 'https://www.leadership.edu' },
-                { type: 'Workshop', name: 'Design Thinking', url: 'https://www.ideo.com' }
-              ]
-            },
-            {
-              id: 4,
-              year: 'Year 8+',
-              position: 'Director / Expert',
-              level: 'IV/c - IV/e',
-              focus: 'Organizational Strategy & Policy',
-              description: 'Shape organizational direction and influence policy',
-              skills: ['Strategic Leadership', 'Policy Making', 'Organizational Transformation'],
-              training: ['Strategic Leadership Certification', 'Policy Analysis'],
-              resources: [
-                { type: 'Certification', name: 'Strategic Leader', url: 'https://www.strategy.org' },
-                { type: 'Course', name: 'Public Policy', url: 'https://www.hks.harvard.edu' }
-              ]
-            }
-          ],
-          keyMilestones: [
-            'Complete advanced certification within 2 years',
-            'Lead at least 3 major projects',
-            'Mentor 5+ junior staff members',
-            'Publish 2+ thought leadership articles'
-          ],
-          successMetrics: [
-            'Performance rating consistently above 85',
-            'Team satisfaction score > 80%',
-            'Successfully implemented initiatives',
-            'Positive stakeholder feedback'
-          ]
-        };
-      } else {
-        // Use Ollama to generate personalized career path
-        console.log('🤖 Using Ollama for career path generation...');
-        
-        const prompt = `Based on this ASN profile and talent analysis, create a comprehensive personalized career path:
-
-ASN Profile:
-- Name: ${profile.name}
-- Current Position: ${profile.position}
-- Agency: ${profile.agency}
-- Grade: ${profile.grade}
-- Years of Service: ${profile.yearsOfService}
-- Education: ${profile.education}
-- Skills: ${profile.skills?.join(', ')}
-- Achievements: ${profile.achievements?.join(', ')}
-
-Talent Analysis:
-- Talent Box: ${existingAnalysis.talentBox || 'Core Player'}
-- Performance Level: ${existingAnalysis.performance?.level || 'Medium'}
-- Potential Level: ${existingAnalysis.potential?.level || 'Medium'}
-- Career Path Suggestions: ${existingAnalysis.careerPath?.join(', ') || 'Not available'}
-- Development Areas: ${existingAnalysis.developmentAreas?.join(', ') || 'Not available'}
-
-Create a detailed 4-stage career path (each 2-3 years) with:
-1. Progressive job titles and grade levels
-2. Key focus areas and skills to develop
-3. Specific training/certifications needed
-4. Real online resources (courses, books, certifications) with actual URLs
-5. Key milestones and success metrics
-
-Return in JSON format:
-{
-  "currentPosition": "current position",
-  "currentLevel": "current grade",
-  "talentBox": "talent classification",
-  "stages": [
-    {
-      "id": 1,
-      "year": "Year 1-2",
-      "position": "Next position title",
-      "level": "Grade progression",
-      "focus": "Main development focus",
-      "description": "Detailed description of this stage",
-      "skills": ["skill1", "skill2", "skill3"],
-      "training": ["training1", "training2"],
-      "resources": [
-        {"type": "Course", "name": "Course name", "url": "actual URL"},
-        {"type": "Certification|Book|Program|Workshop", "name": "name", "url": "URL"}
-      ]
-    }
-  ],
-  "keyMilestones": ["milestone1", "milestone2"],
-  "successMetrics": ["metric1", "metric2"]
-}
-
-Ensure resources have real, working URLs to actual courses, certifications, or learning platforms.`;
-
-        try {
-          const ollamaResponse = await callOllama(prompt, {
-            temperature: 0.4,
-            maxTokens: 3000
-          });
-          
-          // Parse JSON from Ollama response
-          const jsonMatch = ollamaResponse.match(/\{[\s\S]*\}/);
-          if (jsonMatch) {
-            careerPath = JSON.parse(jsonMatch[0]);
-          } else {
-            throw new Error('No valid JSON in Ollama response');
+      // For now, return mock career path
+      const mockCareerPath = {
+        currentPosition: profile.position,
+        currentLevel: profile.grade || 'III/c',
+        talentBox: 'Core Player',
+        stages: [
+          {
+            id: 1,
+            year: 'Year 1-2',
+            position: `Senior ${profile.position}`,
+            level: 'III/d - IV/a',
+            focus: 'Skill Mastery & Leadership',
+            description: 'Deepen technical expertise and take on mentoring roles',
+            skills: ['Advanced Technical Skills', 'Mentoring', 'Project Management'],
+            training: ['Leadership Training', 'Technical Certification'],
+            resources: [
+              { type: 'Course', name: 'Advanced Leadership', url: 'https://www.coursera.org/leadership' },
+              { type: 'Certification', name: 'Project Management Professional', url: 'https://www.pmi.org' }
+            ]
+          },
+          {
+            id: 2,
+            year: 'Year 3-4',
+            position: 'Team Lead / Specialist',
+            level: 'IV/a - IV/b',
+            focus: 'Team Management & Strategy',
+            description: 'Lead small teams and contribute to strategic planning',
+            skills: ['Strategic Thinking', 'Team Leadership', 'Stakeholder Management'],
+            training: ['Strategic Planning Workshop', 'Change Management'],
+            resources: [
+              { type: 'Course', name: 'Strategic Management', url: 'https://www.edx.org/strategy' },
+              { type: 'Book', name: 'Leaders Eat Last', url: 'https://simonsinek.com' }
+            ]
+          },
+          {
+            id: 3,
+            year: 'Year 5-7',
+            position: 'Manager / Senior Specialist',
+            level: 'IV/b - IV/c',
+            focus: 'Department Leadership & Innovation',
+            description: 'Manage departments and drive innovation initiatives',
+            skills: ['Innovation Management', 'Budget Management', 'Cross-functional Leadership'],
+            training: ['Executive Leadership Program', 'Innovation Workshop'],
+            resources: [
+              { type: 'Program', name: 'Executive Leadership', url: 'https://www.leadership.edu' },
+              { type: 'Workshop', name: 'Design Thinking', url: 'https://www.ideo.com' }
+            ]
+          },
+          {
+            id: 4,
+            year: 'Year 8+',
+            position: 'Director / Expert',
+            level: 'IV/c - IV/e',
+            focus: 'Organizational Strategy & Policy',
+            description: 'Shape organizational direction and influence policy',
+            skills: ['Strategic Leadership', 'Policy Making', 'Organizational Transformation'],
+            training: ['Strategic Leadership Certification', 'Policy Analysis'],
+            resources: [
+              { type: 'Certification', name: 'Strategic Leader', url: 'https://www.strategy.org' },
+              { type: 'Course', name: 'Public Policy', url: 'https://www.hks.harvard.edu' }
+            ]
           }
-          
-          console.log('✅ Career path generated by Ollama');
-        } catch (ollamaError) {
-          console.error('⚠️ Ollama generation failed, using template:', ollamaError.message);
-          // Fallback to template-based generation
-          careerPath = generateTemplateCareerPath(profile, existingAnalysis);
-        }
-      }
+        ],
+        keyMilestones: [
+          'Complete advanced certification within 2 years',
+          'Lead at least 3 major projects',
+          'Mentor 5+ junior staff members',
+          'Publish 2+ thought leadership articles'
+        ],
+        successMetrics: [
+          'Performance rating consistently above 85',
+          'Team satisfaction score > 80%',
+          'Successfully implemented initiatives',
+          'Positive stakeholder feedback'
+        ]
+      };
       
-      // Save career path to MongoDB
-      await db.collection('career_paths').updateOne(
-        { nip },
-        {
-          $set: {
-            nip,
-            careerPath,
-            generatedAt: new Date(),
-            profileSnapshot: {
-              name: profile.name,
-              position: profile.position,
-              grade: profile.grade
-            }
-          }
-        },
-        { upsert: true }
-      );
-      
-      console.log('✅ Career path saved to database');
+      console.log('✅ Returning career path');
       
       return NextResponse.json({
         success: true,
-        careerPath,
+        careerPath: mockCareerPath,
         message: 'Career path generated successfully'
       });
       
     } catch (error) {
-      console.error('❌ Error generating career path:', error);
+      console.error('❌ Error in generate-career-path:', error);
       return NextResponse.json(
         { error: 'Failed to generate career path', details: error.message },
         { status: 500 }
