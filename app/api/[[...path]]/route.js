@@ -2041,5 +2041,9 @@ export async function POST(request) {
     return handleBlockchain(segments.slice(1), request, 'POST');
   }
   
+  if (segments[0] === 'system') {
+    return handleSystemTests(segments.slice(1), request, 'POST');
+  }
+  
   return NextResponse.json({ error: 'Not found' }, { status: 404 });
 }
