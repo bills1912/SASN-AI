@@ -15,7 +15,6 @@ import SystemOverview from '@/components/SystemOverview';
 import TechnicalDocumentation from '@/components/TechnicalDocumentation';
 import MeritSystemIndex from '@/components/MeritSystemIndex';
 import MeritSystemBlockchain from '@/components/MeritSystemBlockchain';
-import ApplicationDocumentation from '@/components/ApplicationDocumentation';
 import InstitutionTalentAnalysis from '@/components/InstitutionTalentAnalysis';
 import KepalaInstansiDashboard from '@/components/KepalaInstansiDashboard';
 import { CheckCircle, Target, TrendingUp, BarChart3, Eye, EyeOff, RefreshCw, Sun, Moon, Monitor } from 'lucide-react';
