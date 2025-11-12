@@ -341,3 +341,7 @@ agent_communication:
     message: "BUG REPORT: 'Posisi Pegawai' text still overlapping with 'Med' label on X-axis in InstitutionTalentAnalysis and KepalaInstansiDashboard components"
   - agent: "main"
     message: "CONTINUATION TASK: Making all UI elements bright in light mode. Fixed hardcoded dark theme elements in login page (form inputs, labels, captcha, buttons) and CollapsibleSidebar (submenu items, borders, user name text). All components now properly adapt to light/dark themes using conditional styling."
+  - agent: "user"
+    message: "BUG REPORT: Career Path layout is messy and not responsive. Need to fix layout to be neat on desktop, tablet, and mobile devices."
+  - agent: "main"
+    message: "FIX: Completely redesigned Career Path component layout. Replaced absolute positioning with responsive CSS Grid layout (grid-cols-1 md:grid-cols-2). Changed from SVG curved path to card-based grid that adapts to all screen sizes. Each stage now displays in a card with proper spacing and responsive design."
