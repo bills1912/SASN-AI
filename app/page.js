@@ -263,23 +263,6 @@ export default function App() {
     });
   };
 
-  const toggleTheme = (newTheme) => {
-    setTheme(newTheme);
-    localStorage.setItem('theme', newTheme);
-    applyTheme(newTheme);
-    
-    const themeNames = {
-      'light': 'Terang',
-      'dark': 'Gelap', 
-      'system': 'Sistem'
-    };
-    
-    toast({
-      title: 'Tema Diubah',
-      description: `Tema ${themeNames[newTheme]} diaktifkan`,
-    });
-  };
-
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
