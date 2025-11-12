@@ -58,7 +58,7 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
         { id: 'career-path', label: 'Career Path', icon: TrendingUp },
         { id: 'job-recommendation', label: 'Rekomendasi Jabatan', icon: CheckCircle },
         { id: 'skill-analysis', label: 'Analisis Skill', icon: Code },
-        { id: 'development-area', label: 'Area Pengembangan', icon: Target }
+        { id: 'development-area', label: 'Area Pengembangan', icon: TargetIcon }
       ]
     }
   ];
