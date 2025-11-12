@@ -120,9 +120,15 @@ export default function App() {
     const nextIndex = (currentIndex + 1) % themes.length;
     const nextTheme = themes[nextIndex];
     
+    console.log('Toggling theme from', theme, 'to', nextTheme);
+    
     setTheme(nextTheme);
     localStorage.setItem('theme', nextTheme);
-    applyTheme(nextTheme);
+    
+    // Apply theme immediately
+    setTimeout(() => {
+      applyTheme(nextTheme);
+    }, 0);
     
     toast({
       title: 'Theme Changed',
@@ -130,6 +136,12 @@ export default function App() {
       duration: 2000
     });
   };
+
+  // Watch theme changes and apply
+  useEffect(() => {
+    console.log('Theme changed to:', theme);
+    applyTheme(theme);
+  }, [theme]);
 
   // Listen to system theme changes when in system mode
   useEffect(() => {
