@@ -461,7 +461,9 @@ PERFORMANCE:
 • Page Load: < 2 seconds
 • API Response: < 100ms average
 • Blockchain Verification: < 50ms
-• 9-Box Calculation: < 10ms
+• 9-Box SVM Classification: < 1 second
+• Ollama LLM Analysis: < 5 seconds
+• Complete Talent Analysis: < 6 seconds
 
 
 5. DAMPAK & POTENSI SKALA (25%)
