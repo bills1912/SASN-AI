@@ -316,6 +316,97 @@ export default function InputData({ user, selectedProfile: globalSelectedProfile
     }
   };
 
+  // Generate All Analysis at once
+  const generateAllAnalysis = async () => {
+    if (!selectedProfile) {
+      toast({
+        title: 'Error',
+        description: 'Pilih pegawai terlebih dahulu',
+        variant: 'destructive'
+      });
+      return;
+    }
+
+    setLoading(true);
+    const token = localStorage.getItem('token');
+    let successCount = 0;
+    let failedAnalysis = [];
+
+    try {
+      // 1. Generate Talent Mapping
+      try {
+        const response1 = await fetch('/api/talent/talent-mapping', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ nip: selectedProfile.nip })
+        });
+        if (response1.ok) successCount++;
+        else failedAnalysis.push('Pemetaan Talenta');
+      } catch (e) {
+        failedAnalysis.push('Pemetaan Talenta');
+      }
+
+      // 2. Generate Skill Analysis
+      try {
+        const response2 = await fetch('/api/talent/skill-analysis', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ nip: selectedProfile.nip })
+        });
+        if (response2.ok) successCount++;
+        else failedAnalysis.push('Analisis Skill');
+      } catch (e) {
+        failedAnalysis.push('Analisis Skill');
+      }
+
+      // 3. Generate Performance Analysis
+      try {
+        const response3 = await fetch('/api/performance/analyze', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ nip: selectedProfile.nip })
+        });
+        if (response3.ok) successCount++;
+        else failedAnalysis.push('Analisis Kinerja');
+      } catch (e) {
+        failedAnalysis.push('Analisis Kinerja');
+      }
+
+      // Show result
+      if (successCount === 3) {
+        toast({
+          title: '✓ Semua Analisis Berhasil!',
+          description: 'Pemetaan Talenta, Analisis Skill, dan Analisis Kinerja telah selesai. Lihat hasilnya di menu Manajemen Talenta.',
+        });
+      } else if (successCount > 0) {
+        toast({
+          title: `${successCount} dari 3 Analisis Berhasil`,
+          description: `Gagal: ${failedAnalysis.join(', ')}. Silakan coba lagi.`,
+          variant: 'destructive'
+        });
+      } else {
+        throw new Error('Semua analisis gagal dijalankan');
+      }
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: error.message,
+        variant: 'destructive'
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="max-w-7xl mx-auto space-y-6 px-4 md:px-6">
       <div>
