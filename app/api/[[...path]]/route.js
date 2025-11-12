@@ -2018,6 +2018,67 @@ export async function GET(request) {
   return NextResponse.json({ message: 'ASTA-CITA AI API' });
 }
 
+// System Testing endpoints (Ollama, SVM, etc.)
+async function handleSystemTests(segments, request, method) {
+  // Test Ollama connection
+  if (segments[0] === 'test-ollama' && method === 'POST') {
+    try {
+      console.log('🧪 Testing Ollama connection...');
+      const result = await testOllamaConnection();
+      return NextResponse.json(result);
+    } catch (error) {
+      console.error('❌ Ollama test failed:', error);
+      return NextResponse.json({
+        success: false,
+        message: error.message
+      }, { status: 500 });
+    }
+  }
+  
+  // Test SVM classification
+  if (segments[0] === 'test-svm' && method === 'POST') {
+    try {
+      console.log('🧪 Testing SVM classification...');
+      const { employeeData } = await request.json();
+      
+      // Run Python SVM classifier
+      const { stdout, stderr } = await execAsync(
+        `cd /app && python3 -c "
+import sys
+sys.path.append('/app/lib')
+from svmClassifier import TalentClassifier
+import json
+
+classifier = TalentClassifier()
+employee_data = ${JSON.stringify(JSON.stringify(employeeData))}
+result = classifier.classify(json.loads(employee_data))
+print(json.dumps(result))
+"`
+      );
+      
+      if (stderr && !stderr.includes('FutureWarning')) {
+        console.error('Python stderr:', stderr);
+      }
+      
+      const result = JSON.parse(stdout.trim());
+      
+      return NextResponse.json({
+        success: true,
+        data: result
+      });
+    } catch (error) {
+      console.error('❌ SVM test failed:', error);
+      return NextResponse.json({
+        success: false,
+        message: error.message,
+        details: error.stderr || error.stdout
+      }, { status: 500 });
+    }
+  }
+  
+  return NextResponse.json({ error: 'Invalid system test endpoint' }, { status: 404 });
+}
+
 export async function POST(request) {
   const segments = getPathSegments(request);
   
