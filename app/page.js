@@ -87,7 +87,7 @@ export default function App() {
     }
 
     // Load theme preference and apply
-    const savedTheme = localStorage.getItem('theme') || 'light';
+    const savedTheme = localStorage.getItem('theme') || 'system'; // Default to system instead of light
     setTheme(savedTheme);
     applyTheme(savedTheme);
   }, []);
