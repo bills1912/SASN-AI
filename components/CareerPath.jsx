@@ -26,7 +26,7 @@ export default function CareerPath({ user }) {
       setLoading(true);
       const token = localStorage.getItem('token');
       
-      const response = await fetch('/api/talent/generate-career-path', {
+      const response = await fetch('/api/career-path', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
