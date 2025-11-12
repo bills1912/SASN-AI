@@ -37,6 +37,7 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [talentExpanded, setTalentExpanded] = useState(true);
   const [meritExpanded, setMeritExpanded] = useState(false);
+  const [systemInfoExpanded, setSystemInfoExpanded] = useState(false);
 
   // ASN-only menus
   const asnMenuItems = [
