@@ -275,15 +275,24 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
                     if (isCollapsed && !isMobile) {
                       setIsCollapsed(false);
                     }
-                    setMeritExpanded(!meritExpanded);
+                    // Toggle appropriate state based on menu item
+                    if (item.id === 'merit-system-index') {
+                      setMeritExpanded(!meritExpanded);
+                    } else if (item.id === 'system-info') {
+                      setSystemInfoExpanded(!systemInfoExpanded);
+                    }
                     setCurrentView(item.id);
                   }}
                   title={isCollapsed ? item.label : ''}
                   className={cn(
                     "w-full flex items-center transition-colors border-t border-border",
                     isCollapsed && !isMobile ? "justify-center px-4 py-3" : "justify-between px-6 py-3",
-                    currentView.startsWith('merit') || currentView === item.id
-                      ? "bg-purple-600 text-white"
+                    (item.id === 'merit-system-index' && currentView.startsWith('merit')) ||
+                    (item.id === 'system-info' && (currentView.startsWith('system') || currentView.startsWith('technical'))) ||
+                    currentView === item.id
+                      ? item.id === 'merit-system-index' 
+                        ? "bg-purple-600 text-white"
+                        : "bg-blue-600 text-white"
                       : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                   )}
                 >
@@ -297,11 +306,15 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
                     )}
                   </div>
                   {(!isCollapsed || isMobile) && (
-                    meritExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />
+                    (item.id === 'merit-system-index' ? meritExpanded : systemInfoExpanded) 
+                      ? <ChevronUp className="w-4 h-4" /> 
+                      : <ChevronDown className="w-4 h-4" />
                   )}
                 </button>
 
-                {meritExpanded && (!isCollapsed || isMobile) && item.submenu && (
+                {((item.id === 'merit-system-index' && meritExpanded) || 
+                  (item.id === 'system-info' && systemInfoExpanded)) && 
+                  (!isCollapsed || isMobile) && item.submenu && (
                   <div className="bg-sidebar-accent/50">
                     {item.submenu.map((subitem) => (
                       <button
@@ -316,7 +329,9 @@ export default function CollapsibleSidebar({ currentView, setCurrentView, user, 
                         className={cn(
                           "w-full flex items-center space-x-3 pl-14 pr-6 py-2.5 transition-colors",
                           currentView === subitem.id
-                            ? "text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-slate-900"
+                            ? item.id === 'merit-system-index'
+                              ? "text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-slate-900"
+                              : "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-slate-900"
                             : "text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-sidebar-accent/80"
                         )}
                       >
