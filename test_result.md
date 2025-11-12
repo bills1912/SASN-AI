@@ -301,6 +301,27 @@ frontend:
       - working: true
         agent: "main"
         comment: "Redesigned with CSS Grid layout (1 column mobile, 2 columns desktop). Removed absolute positioning and SVG curved path. Now uses card-based responsive design that works on all screen sizes."
+      - working: false
+        agent: "user"
+        comment: "User wants vertical timeline with curved path like in reference image, with START and FINISH labels"
+      - working: true
+        agent: "main"
+        comment: "Completely redesigned to vertical timeline with curved SVG S-path connecting stages, START/FINISH badges, alternating left-right card placement (desktop), centered with connecting nodes, proper gradient coloring per stage."
+  
+  - task: "Simplify analysis buttons from 3 to 1"
+    implemented: true
+    working: true
+    file: "/app/components/InputData.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "user"
+        comment: "User wants only 1 button instead of 3 separate buttons for generating analyses"
+      - working: true
+        agent: "main"
+        comment: "Created generateAllAnalysis function that runs all 3 API calls sequentially. Redesigned UI to single prominent button with visual indicators showing all 3 analysis types included. Shows success count and failed analyses in toast notification."
 
   - task: "Add Merit System Index component (Admin-only)"
     implemented: false
