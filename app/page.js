@@ -11,6 +11,8 @@ import CollapsibleSidebar from '@/components/CollapsibleSidebar';
 import TalentManagement from '@/components/TalentManagement';
 import InputData from '@/components/InputData';
 import SystemInfo from '@/components/SystemInfo';
+import SystemOverview from '@/components/SystemOverview';
+import TechnicalDocumentation from '@/components/TechnicalDocumentation';
 import MeritSystemIndex from '@/components/MeritSystemIndex';
 import MeritSystemBlockchain from '@/components/MeritSystemBlockchain';
 import ApplicationDocumentation from '@/components/ApplicationDocumentation';
