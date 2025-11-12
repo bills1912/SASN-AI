@@ -344,18 +344,51 @@ Keunggulan:
 
 SOLUSI 3: AI-Powered Talent Analytics
 ────────────────────────────────────────
-🏆 Machine Learning untuk predictive insights
+🏆 Hybrid AI: Machine Learning + Large Language Model
 
-AI Capabilities:
-1. NLP untuk CV/Resume Parsing
+AI Architecture:
+1. SVM Classification (scikit-learn)
+   • Supervised learning untuk 9-Box classification
+   • Training data: Education, Experience, Grade, Skills
+   • 9 kategori output: Underperformer → Star/Top Talent
+   • Accuracy: Konsisten & reproducible
+
+2. Ollama LLM (llama3.2:1b) - Self-Hosted
+   • Open source language model
+   • Deployment: Open WebUI (http://72.61.143.3:8080)
+   • Personalized career recommendations
+   • Context-aware skill development suggestions
+   • Natural language analysis untuk insights
+
+AI Workflow:
+Step 1: SVM → Klasifikasi 9-Box otomatis
+  ├─ Performance level (High/Medium/Low)
+  ├─ Potential level (High/Medium/Low)
+  └─ Box position (1-9)
+
+Step 2: Ollama LLM → Personalized recommendations
+  ├─ Career path suggestions (3 positions)
+  ├─ Development areas (3 specific skills)
+  ├─ Training needs analysis
+  └─ Risk assessment & mitigation
+
+Benefits:
+✓ Self-hosted - No external API dependencies
+✓ Cost-effective - No per-request charges
+✓ Privacy-compliant - Data stays in-house
+✓ Customizable - Can fine-tune for ASN context
+✓ Fast - < 2 seconds for complete analysis
+
+Additional AI Capabilities:
+3. NLP untuk CV/Resume Parsing
    • Auto-extract skills, experience, education
    • Sentiment analysis untuk recommendation letters
 
-2. Computer Vision untuk Credential Verification
+4. Computer Vision untuk Credential Verification
    • OCR untuk scan sertifikat/ijazah
    • Fake document detection
 
-3. Predictive Analytics
+5. Predictive Analytics
    • Forecast high-potential employees
    • Churn risk prediction
    • Succession gap analysis
