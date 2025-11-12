@@ -98,7 +98,8 @@ async function handleTalentManagement(segments, request, method) {
     'institution-analysis',
     'export-institution-analysis',
     'talent-mapping',
-    'profiles'
+    'profiles',
+    'generate-career-path'
   ];
   
   const isPublicEndpoint = publicEndpoints.includes(segments[0]);
