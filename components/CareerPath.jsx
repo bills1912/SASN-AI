@@ -8,7 +8,7 @@ import {
   TrendingUp, Target, Award, BookOpen, ExternalLink, 
   CheckCircle, Clock, Sparkles, RefreshCw, X, ChevronRight
 } from 'lucide-react';
-import { toast } from '@/components/ui/use-toast';
+import { useToast } from '@/hooks/use-toast';
 
 export default function CareerPath({ user }) {
   const [careerPath, setCareerPath] = useState(null);
