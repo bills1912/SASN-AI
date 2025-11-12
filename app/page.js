@@ -95,11 +95,22 @@ export default function App() {
   // Apply theme based on preference
   const applyTheme = (themeMode) => {
     if (themeMode === 'system') {
+      // Check system preference
       const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      document.documentElement.classList.toggle('dark', systemPrefersDark);
+      console.log('System prefers dark mode:', systemPrefersDark);
+      
+      if (systemPrefersDark) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    } else if (themeMode === 'dark') {
+      document.documentElement.classList.add('dark');
     } else {
-      document.documentElement.classList.toggle('dark', themeMode === 'dark');
+      document.documentElement.classList.remove('dark');
     }
+    
+    console.log('Theme applied:', themeMode, 'Dark mode active:', document.documentElement.classList.contains('dark'));
   };
 
   // Toggle theme
